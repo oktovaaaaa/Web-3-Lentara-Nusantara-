@@ -62,12 +62,16 @@
   function moveIndicator(targetBtn) {
     if (!indicator || !targetBtn || isMobile() || !navLinksBox) return;
 
-    const boxRect = navLinksBox.getBoundingClientRect();
-    const btnRect = targetBtn.getBoundingClientRect();
-
-    // ukuran & posisi (lebih stabil daripada offsetLeft untuk case dropdown/flex)
-    const w = btnRect.width;
-    const x = btnRect.left - boxRect.left;
+    // Gunakan offsetWidth & offsetLeft agar tidak terpengaruh oleh transform scale (.nav-pill.scrolling)
+    const w = targetBtn.offsetWidth;
+    
+    // Hitung offset left relatif terhadap navLinksBox
+    let x = 0;
+    let current = targetBtn;
+    while (current && current !== navLinksBox) {
+      x += current.offsetLeft;
+      current = current.offsetParent;
+    }
 
     // napas, biar mirip style lama
     const pad = 6;
@@ -92,6 +96,23 @@
   const initial = document.querySelector('.nav-btn.is-active') || getDefaultBtn();
   if (!isMobile()) moveIndicator(initial);
   else hideIndicator();
+
+  // Hitung ulang setelah seluruh halaman & font termuat untuk presisi maksimal
+  window.addEventListener('load', () => {
+    if (!isMobile()) {
+      const active = document.querySelector('.nav-btn.is-active') || getDefaultBtn();
+      moveIndicator(active);
+    }
+  });
+
+  if (document.fonts) {
+    document.fonts.ready.then(() => {
+      if (!isMobile()) {
+        const active = document.querySelector('.nav-btn.is-active') || getDefaultBtn();
+        moveIndicator(active);
+      }
+    });
+  }
 
   // ===== CLICK HANDLER (SCROLL / REDIRECT) =====
   navBtns.forEach(btn => {

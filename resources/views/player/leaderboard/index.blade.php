@@ -53,6 +53,7 @@ $myAvatarKey = (int)($player->avatar_key ?? 1);
 if($myAvatarKey < 1) $myAvatarKey = 1;
 if($myAvatarKey > 5) $myAvatarKey = 5;
 $myAvatarUrl = asset('images/avatars/avatar-'.$myAvatarKey.'.png');
+$avatarUrl = $myAvatarUrl;
 
 // MENU (manual)
 $menu = [
@@ -145,6 +146,7 @@ $top3 = $rows->take(3)->values();
 
     .main{ min-width:0; }
 
+    /* ===== Right panel desktop ===== */
     .right{
       position: sticky;
       top: 14px;
@@ -152,6 +154,24 @@ $top3 = $rows->take(3)->values();
       display:grid;
       gap: 12px;
       align-content:start;
+    }
+    .right .card {
+      background: color-mix(in oklab, var(--card) 95%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .right .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
     }
 
     .panel-head{
@@ -174,16 +194,50 @@ $top3 = $rows->take(3)->values();
       display:inline-flex;
       align-items:center;
       gap: 8px;
-      padding: 10px 12px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: color-mix(in oklab, var(--card) 92%, transparent);
+      padding: 8px 12px;
+      border-radius: 14px;
       font-weight: 950;
+      font-size: 13px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: default;
     }
     .pill svg{ width: 18px; height: 18px; }
-    .pill.heart{ color: var(--danger); }
-    .pill.money{ color: #22c55e; }
-    .pill.xp{ color: #3b82f6; }
+    .pill:hover {
+      transform: translateY(-2px);
+    }
+    .pill.xp {
+      color: #3b82f6;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.06);
+    }
+    .pill.xp:hover {
+      background: rgba(59, 130, 246, 0.12);
+      border-color: rgba(59, 130, 246, 0.35);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    }
+    .pill.heart {
+      color: var(--danger);
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      box-shadow: 0 4px 10px rgba(239, 68, 68, 0.06);
+    }
+    .pill.heart:hover {
+      background: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.35);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+    }
+    .pill.money {
+      color: #eab308;
+      background: rgba(234, 179, 8, 0.08);
+      border: 1px solid rgba(234, 179, 8, 0.2);
+      box-shadow: 0 4px 10px rgba(234, 179, 8, 0.06);
+    }
+    .pill.money:hover {
+      background: rgba(234, 179, 8, 0.12);
+      border-color: rgba(234, 179, 8, 0.35);
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.15);
+    }
 
     .right-bottom{
       padding: 14px;
@@ -191,35 +245,104 @@ $top3 = $rows->take(3)->values();
       display:grid;
       gap: 10px;
     }
-    .hello{
-      font-weight: 900;
-      color: var(--muted);
-      line-height: 1.3;
+
+    .profile-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: color-mix(in oklab, var(--card) 95%, transparent);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
     }
-    .hello b{ color: var(--txt-body); }
+    .profile-card:hover {
+      border-color: var(--brand);
+      box-shadow: 0 4px 12px color-mix(in oklab, var(--brand) 8%, transparent);
+    }
+    .profile-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid var(--brand);
+      background: var(--bg-body);
+      box-shadow: 0 0 10px color-mix(in oklab, var(--brand) 25%, transparent);
+      flex-shrink: 0;
+    }
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .profile-name {
+      font-weight: 950;
+      font-size: 15px;
+      color: var(--txt-body);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .profile-tier {
+      font-weight: 900;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .profile-tier span {
+      color: var(--brand);
+      font-weight: 950;
+    }
 
     .btn{
-      border-radius: 16px;
-      padding: 12px 14px;
-      border: 1px solid var(--line);
-      background: color-mix(in oklab, var(--card) 92%, transparent);
-      color: var(--txt-body);
-      cursor:pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 44px;
+      border-radius: 14px;
       font-weight: 950;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--brand);
+      color: #ffffff;
+      border: 1px solid var(--brand);
+      box-shadow: 0 4px 12px color-mix(in oklab, var(--brand) 20%, transparent);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      background: color-mix(in oklab, var(--brand) 85%, #fff);
+      box-shadow: 0 6px 16px color-mix(in oklab, var(--brand) 30%, transparent);
     }
     .btn-logout{
-      width:100%;
-      border-radius: 16px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      background: color-mix(in oklab, var(--card) 92%, transparent);
-      cursor:pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 44px;
+      border-radius: 14px;
       font-weight: 950;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background: transparent;
       color: var(--txt-body);
+      border: 1px solid var(--line);
+    }
+    .btn-logout:hover {
+      transform: translateY(-2px);
+      color: var(--danger);
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.06);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.08);
     }
 
     .board{
@@ -622,10 +745,15 @@ $top3 = $rows->take(3)->values();
         </div>
 
         <div class="right-bottom">
-          <div class="hello">
-            Halo, <b>{{ $nickname }}</b><br>
-Tier: <b>{{ $tierLabel }}</b>
-        </div>
+          <div class="profile-card">
+            <div class="profile-avatar">
+              <img src="{{ $myAvatarUrl }}" alt="Avatar" onerror="this.style.display='none'">
+            </div>
+            <div class="profile-info">
+              <div class="profile-name">{{ $nickname }}</div>
+              <div class="profile-tier">Tier: <span>{{ $tierLabel }}</span></div>
+            </div>
+          </div>
 
           <a class="btn" href="{{ $safeRoute('player.profile') }}">Profil</a>
 

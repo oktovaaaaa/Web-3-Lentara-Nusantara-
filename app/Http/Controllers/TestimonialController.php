@@ -43,6 +43,13 @@ class TestimonialController extends Controller
         // ===============================
         Testimonial::create($data);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Terima kasih atas testimoni Anda!'
+            ]);
+        }
+
         return back()->with('success', 'Terima kasih atas testimoni Anda!');
     }
 

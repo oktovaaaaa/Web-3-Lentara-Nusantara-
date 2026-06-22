@@ -50,7 +50,8 @@ class WikiImageResolverService
 
         // 1) Cari halaman paling relevan via "search"
         // lalu ambil detail page (extract + pageimage + fullurl) via pageid.
-        $search = Http::timeout(20)
+        $search = Http::withOptions(['verify' => false])
+            ->timeout(20)
             ->withHeaders([
                 // penting untuk beberapa konfigurasi hosting/proxy
                 'Accept' => 'application/json',
@@ -74,7 +75,8 @@ class WikiImageResolverService
         }
 
         // 2) Ambil info halaman + intro extract + thumbnail + fullurl
-        $detail = Http::timeout(20)
+        $detail = Http::withOptions(['verify' => false])
+            ->timeout(20)
             ->withHeaders([
                 'Accept' => 'application/json',
                 'User-Agent' => 'LentaraPiforrr/1.0 (contact: admin@localhost)',

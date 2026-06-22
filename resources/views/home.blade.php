@@ -104,8 +104,8 @@
 
             {{-- ================= ABOUT INDONESIA (SINGLE CARD LAYOUT) ================= --}}
             <section id="about" class="py-12">
-                <h2 class="neon-title">Tentang Indonesia</h2>
-                <div class="title-decoration"></div>
+                <h2 class="neon-title scroll-reveal reveal-fade-up">Tentang Indonesia</h2>
+                <div class="title-decoration scroll-reveal reveal-fade-up delay-100"></div>
                 <style>
                     /* =========================================================
                            ORANGE NEON THEME - ABOUT (FIXED STRUCTURE + LIGHT MODE)
@@ -539,7 +539,7 @@
                 </style>
 
                 {{-- ✅ DESKRIPSI (SEKARANG DI DALAM CARD) --}}
-                <div class="desc-wrap">
+                <div class="desc-wrap scroll-reveal reveal-fade-up delay-150">
                     <p class="description-text">
                         Indonesia adalah negara kepulauan yang kaya akan
                         <span class="about-strong">keanekaragaman alam dan budaya</span>,
@@ -568,7 +568,7 @@
                     </p>
 
 
-                    <div class="highlight-box">
+                    <div class="highlight-box scroll-reveal reveal-zoom-in delay-200">
                         <p class="highlight-text">
                             Keragaman wilayah, bahasa, dan suku bangsa Indonesia tercermin dalam ringkasan data nasional
                             berikut.
@@ -579,13 +579,13 @@
 
 
                 {{-- ✅ SEMUA KONTEN UTAMA MASUK KE DALAM CARD --}}
-                <div class="main-card">
+                <div class="main-card scroll-reveal reveal-scale-up">
 
 
                     {{-- ✅ 4 CARD STATISTIK --}}
                     <div class="points-grid">
                         {{-- PULAU --}}
-                        <div class="point-item-enhanced">
+                        <div class="point-item-enhanced scroll-reveal reveal-fade-up delay-100">
                             <div class="point-icon-enhanced">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
@@ -617,7 +617,7 @@
                         </div>
 
                         {{-- BAHASA --}}
-                        <div class="point-item-enhanced">
+                        <div class="point-item-enhanced scroll-reveal reveal-fade-up delay-200">
                             <div class="point-icon-enhanced">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
@@ -647,7 +647,7 @@
                         </div>
 
                         {{-- SUKU --}}
-                        <div class="point-item-enhanced">
+                        <div class="point-item-enhanced scroll-reveal reveal-fade-up delay-300">
                             <div class="point-icon-enhanced">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
@@ -677,7 +677,7 @@
                         </div>
 
                         {{-- PROVINSI --}}
-                        <div class="point-item-enhanced">
+                        <div class="point-item-enhanced scroll-reveal reveal-fade-up delay-400">
                             <div class="point-icon-enhanced">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
@@ -710,7 +710,7 @@
                     {{-- ✅ BHINNEKA TETAP DI DALAM CARD --}}
                     <div class="divider"></div>
 
-                    <div class="bhinneka-section">
+                    <div class="bhinneka-section scroll-reveal reveal-zoom-in delay-100">
                         <h3 class="bhinneka-title">Bhinneka Tunggal Ika: Berbeda-beda, Tetap Satu</h3>
 
                         <p class="bhinneka-text">
@@ -756,7 +756,7 @@
                 </div>
 
                 {{-- MAP (tetap di luar card seperti sebelumnya) --}}
-                <div class="mt-12">
+                <div class="mt-12 scroll-reveal reveal-fade-up">
                     @include('partials.map-indonesia')
                 </div>
             </section>
@@ -985,17 +985,17 @@
                 </style>
 
                 <div class="history-container">
-                    <h2 class="neon-title">Sejarah Nama-Nama Pulau Besar di Indonesia</h2>
-                    <div class="mi-title-decoration"></div>
-                    <p class="history-subtitle">
+                    <h2 class="neon-title scroll-reveal reveal-fade-up">Sejarah Nama-Nama Pulau Besar di Indonesia</h2>
+                    <div class="mi-title-decoration scroll-reveal reveal-fade-up delay-100"></div>
+                    <p class="history-subtitle scroll-reveal reveal-fade-up delay-150">
                         Banyak nama pulau di Indonesia berasal dari bahasa Sanskerta, bahasa lokal, hingga catatan para
                         pelaut dan penjelajah asing. Berikut beberapa kisah singkat di balik namanya.
                     </p>
 
-                    <div class="timeline">
+                    <div class="timeline scroll-reveal">
                         {{-- SUMATERA --}}
                         <div class="timeline-item">
-                            <div class="timeline-card">
+                            <div class="timeline-card scroll-reveal reveal-timeline-left">
                                 <div class="timeline-card-glow"></div>
                                 <div class="timeline-card-inner">
                                     <div class="timeline-badge">Sumatera</div>
@@ -1013,7 +1013,7 @@
 
                         {{-- JAWA --}}
                         <div class="timeline-item">
-                            <div class="timeline-card">
+                            <div class="timeline-card scroll-reveal reveal-timeline-right">
                                 <div class="timeline-card-glow"></div>
                                 <div class="timeline-card-inner">
                                     <div class="timeline-badge">Jawa</div>
@@ -1031,7 +1031,7 @@
 
                         {{-- KALIMANTAN --}}
                         <div class="timeline-item">
-                            <div class="timeline-card">
+                            <div class="timeline-card scroll-reveal reveal-timeline-left">
                                 <div class="timeline-card-glow"></div>
                                 <div class="timeline-card-inner">
                                     <div class="timeline-badge">Kalimantan</div>
@@ -1049,7 +1049,7 @@
 
                         {{-- SULAWESI --}}
                         <div class="timeline-item">
-                            <div class="timeline-card">
+                            <div class="timeline-card scroll-reveal reveal-timeline-right">
                                 <div class="timeline-card-glow"></div>
                                 <div class="timeline-card-inner">
                                     <div class="timeline-badge">Sulawesi</div>
@@ -1067,7 +1067,7 @@
 
                         {{-- PAPUA --}}
                         <div class="timeline-item">
-                            <div class="timeline-card">
+                            <div class="timeline-card scroll-reveal reveal-timeline-left">
                                 <div class="timeline-card-glow"></div>
                                 <div class="timeline-card-inner">
                                     <div class="timeline-badge">Papua</div>
@@ -1086,7 +1086,7 @@
 
                         {{-- BALI & NUSA TENGGARA --}}
                         <div class="timeline-item">
-                            <div class="timeline-card">
+                            <div class="timeline-card scroll-reveal reveal-timeline-right">
                                 <div class="timeline-card-glow"></div>
                                 <div class="timeline-card-inner">
                                     <div class="timeline-badge">Bali &amp; Nusa Tenggara</div>
@@ -1105,7 +1105,7 @@
 
                         {{-- MALUKU --}}
                         <div class="timeline-item">
-                            <div class="timeline-card">
+                            <div class="timeline-card scroll-reveal reveal-timeline-left">
                                 <div class="timeline-card-glow"></div>
                                 <div class="timeline-card-inner">
                                     <div class="timeline-badge">Maluku</div>
@@ -1123,7 +1123,7 @@
 
                         {{-- NUSANTARA --}}
                         <div class="timeline-item">
-                            <div class="timeline-card">
+                            <div class="timeline-card scroll-reveal reveal-timeline-right">
                                 <div class="timeline-card-glow"></div>
                                 <div class="timeline-card-inner">
                                     <div class="timeline-badge">Nusantara</div>
@@ -1144,11 +1144,11 @@
 
             {{-- ================= ISLANDS LIST / JELAJAH PULAU ================= --}}
             <section id="islands" class="py-12">
-                <h2 class="neon-title">
+                <h2 class="neon-title scroll-reveal reveal-fade-up">
                     Jelajahi Pulau-Pulau Indonesia
                 </h2>
-                <div class="title-decoration"></div>
-                <div class="neon-subtitle">
+                <div class="title-decoration scroll-reveal reveal-fade-up delay-100"></div>
+                <div class="neon-subtitle scroll-reveal reveal-fade-up delay-150">
                     <p>
                         Setiap pulau di Indonesia menyimpan keragaman suku, budaya, dan cara hidup yang berbeda. Di balik
                         bentang alamnya, terdapat sejarah, tradisi, dan kebiasaan yang tumbuh bersama masyarakatnya dari
@@ -1673,8 +1673,11 @@
                 @endphp
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach ($islandCards as $c)
-                        <div class="nus-card text-[var(--txt-body)]">
+                    @foreach ($islandCards as $index => $c)
+                        @php
+                            $staggerDelay = (($index % 3) + 1) * 100;
+                        @endphp
+                        <div class="nus-card text-[var(--txt-body)] scroll-reveal reveal-fade-up" style="transition-delay: {{ $staggerDelay }}ms;">
                             {{-- THUMB (klik -> modal) --}}
                             <button type="button" class="island-thumb w-full" data-island-modal="1"
                                 data-title="{{ $c['name'] }}" data-desc="{{ $c['desc'] }}"
@@ -1798,11 +1801,11 @@
 
             {{-- ================= STATISTIK INDONESIA (NEON THEME) ================= --}}
             <section id="stats" class="py-12">
-                <h2 class="neon-title">
+                <h2 class="neon-title scroll-reveal reveal-fade-up">
                     Statistik Budaya Indonesia
                 </h2>
-                <div class="title-decoration"></div>
-                <p class="neon-subtitle">
+                <div class="title-decoration scroll-reveal reveal-fade-up delay-100"></div>
+                <p class="neon-subtitle scroll-reveal reveal-fade-up delay-150">
                     Gambaran menyeluruh tentang keragaman Indonesia, mencakup sebaran pulau, warisan budaya takbenda yang
                     diakui dunia, serta komposisi penduduk berdasarkan suku, bahasa, dan agama. Data disajikan untuk
                     membantu memahami dinamika sosial dan budaya Nusantara secara utuh.
@@ -1826,7 +1829,7 @@
                         padding: 1.5rem;
                         overflow: hidden;
                         cursor: pointer;
-                        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, box-shadow 0.3s ease;
                         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 
                         /* Base gradient background */
@@ -1835,10 +1838,6 @@
                                 rgba(34, 211, 238, 0.8),
                                 rgba(52, 211, 153, 0.9));
                         border: 1px solid rgba(255, 255, 255, 0.1);
-
-                        opacity: 0;
-                        transform: translateY(20px);
-                        animation: statsFadeUp 0.7s ease-out forwards;
                     }
 
                     /* EFEK NEON BORDER SAMA DENGAN QUIZ */
@@ -2007,11 +2006,7 @@
                             0 20px 60px rgba(0, 0, 0, 0.4),
                             0 0 0 1px rgba(255, 255, 255, 0.06);
                         overflow: hidden;
-                        transition: all 0.3s ease;
-
-                        opacity: 0;
-                        transform: translateY(20px);
-                        animation: statsFadeUp 0.7s ease-out forwards;
+                        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, box-shadow 0.3s ease;
                         color: var(--txt-body);
 
                         cursor: pointer;
@@ -2110,27 +2105,27 @@
 
                     /* Stagger animation delay */
                     #stats .stat-card[data-stat="islands"] {
-                        animation-delay: 0.1s;
+                        transition-delay: 0.1s;
                     }
 
                     #stats .stat-card[data-stat="unesco"] {
-                        animation-delay: 0.2s;
+                        transition-delay: 0.2s;
                     }
 
                     #stats .stat-card[data-stat="population"] {
-                        animation-delay: 0.3s;
+                        transition-delay: 0.3s;
                     }
 
                     #stats .chart-card[data-chart="ethnic"] {
-                        animation-delay: 0.4s;
+                        transition-delay: 0.1s;
                     }
 
                     #stats .chart-card[data-chart="language"] {
-                        animation-delay: 0.5s;
+                        transition-delay: 0.2s;
                     }
 
                     #stats .chart-card[data-chart="religion"] {
-                        animation-delay: 0.6s;
+                        transition-delay: 0.3s;
                     }
 
                     /* ================= MODAL ================= */
@@ -2321,10 +2316,9 @@
                     }
                 </style>
 
-                {{-- TIGA CARD UTAMA --}}
                 <div class="grid gap-6 lg:grid-cols-3 mb-8">
                     {{-- Pulau di Indonesia --}}
-                    <button type="button" class="stat-card stat-card--red text-left text-white" data-stat="islands">
+                    <button type="button" class="stat-card stat-card--red text-left text-white scroll-reveal reveal-fade-up" data-stat="islands">
                         <div class="flex items-start justify-between gap-3">
                             <div class="flex-1">
                                 <div class="stat-number">17.380</div>
@@ -2348,7 +2342,7 @@
                     </button>
 
                     {{-- Warisan Budaya Takbenda UNESCO --}}
-                    <button type="button" class="stat-card stat-card--purple text-left text-white" data-stat="unesco">
+                    <button type="button" class="stat-card stat-card--purple text-left text-white scroll-reveal reveal-fade-up" data-stat="unesco">
                         <div class="flex items-start justify-between gap-3">
                             <div class="flex-1">
                                 <div class="stat-number">16</div>
@@ -2372,7 +2366,7 @@
                     </button>
 
                     {{-- Jumlah Penduduk Indonesia --}}
-                    <button type="button" class="stat-card stat-card--green text-left text-white"
+                    <button type="button" class="stat-card stat-card--green text-left text-white scroll-reveal reveal-fade-up"
                         data-stat="population">
                         <div class="flex items-start justify-between gap-3">
                             <div class="flex-1">
@@ -2401,7 +2395,7 @@
                 {{-- TIGA CHART: SUKU (BAR), BAHASA (DONUT), AGAMA (PIE) --}}
                 <div class="grid gap-6 lg:grid-cols-3 mb-6">
                     {{-- 1. SUKU BANGSA – BAR CHART --}}
-                    <div class="chart-card" role="button" tabindex="0" data-chart="ethnic"
+                    <div class="chart-card scroll-reveal reveal-fade-up" role="button" tabindex="0" data-chart="ethnic"
                         aria-label="Buka detail chart suku">
                         <div class="flex items-center justify-between mb-3">
                             <p class="chart-title">Keberagaman Suku di Indonesia</p>
@@ -2416,7 +2410,7 @@
                     </div>
 
                     {{-- 2. BAHASA SEHARI-HARI – DONUT CHART --}}
-                    <div class="chart-card" role="button" tabindex="0" data-chart="language"
+                    <div class="chart-card scroll-reveal reveal-fade-up" role="button" tabindex="0" data-chart="language"
                         aria-label="Buka detail chart bahasa">
                         <div class="flex items-center justify-between mb-3">
                             <p class="chart-title">Keberagaman Bahasa Nusantara</p>
@@ -2431,7 +2425,7 @@
                     </div>
 
                     {{-- 3. AGAMA – PIE CHART --}}
-                    <div class="chart-card" role="button" tabindex="0" data-chart="religion"
+                    <div class="chart-card scroll-reveal reveal-fade-up" role="button" tabindex="0" data-chart="religion"
                         aria-label="Buka detail chart agama">
                         <div class="flex items-center justify-between mb-3">
                             <p class="chart-title">Keberagaman Agama di Indonesia</p>
@@ -2841,21 +2835,142 @@
 
             {{-- ================= QUIZ INDONESIA ================= --}}
             <section id="quiz" class="py-12">
-                <h2 class="neon-title">
+                <h2 class="neon-title scroll-reveal reveal-fade-up">
                     Kuis Budaya Indonesia
                 </h2>
-                <div class="title-decoration"></div>
-                <p class="neon-subtitle">
+                <div class="title-decoration scroll-reveal reveal-fade-up delay-100"></div>
+                <p class="neon-subtitle scroll-reveal reveal-fade-up delay-150">
                     Kuis ini menyajikan pertanyaan seputar sejarah, dan warisan budaya Nusantara sebagai bagian dari upaya
                     memahami identitas budaya Indonesia.
                 </p>
 
-                @include('partials.quiz-section', ['quiz' => $quiz ?? null])
+                <div class="scroll-reveal reveal-zoom-in delay-200">
+                    @include('partials.quiz-section', ['quiz' => $quiz ?? null])
+                </div>
             </section>
 
             @include('partials.testimonial')
         </div>
     </section>
 
+    {{-- =========================================================
+       SCROLL REVEAL STYLES & SCRIPTS
+    ========================================================= --}}
+    <style>
+        .scroll-reveal {
+            opacity: 0;
+            will-change: opacity, transform;
+            transition-duration: 0.8s;
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+            transition-property: opacity, transform;
+        }
 
+        .delay-100 { transition-delay: 100ms; }
+        .delay-150 { transition-delay: 150ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+        .delay-500 { transition-delay: 500ms; }
+
+        .reveal-fade-up {
+            transform: translateY(30px);
+        }
+        .reveal-fade-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-zoom-in {
+            transform: scale(0.95) translateY(15px);
+        }
+        .reveal-zoom-in.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .reveal-scale-up {
+            transform: scale(0.9);
+            transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .reveal-scale-up.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .reveal-timeline-left {
+            transform: translateX(-50px);
+        }
+        .reveal-timeline-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-timeline-right {
+            transform: translateX(50px);
+        }
+        .reveal-timeline-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline.scroll-reveal {
+            opacity: 1;
+        }
+
+        .timeline::before {
+            transform-origin: top;
+            transform: translateX(-50%) scaleY(0);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .timeline.active::before {
+            transform: translateX(-50%) scaleY(1);
+        }
+
+        @media (max-width: 767px) {
+            .reveal-timeline-left {
+                transform: translateY(30px);
+            }
+            .reveal-timeline-left.active {
+                transform: translateY(0);
+            }
+            .reveal-timeline-right {
+                transform: translateY(30px);
+            }
+            .reveal-timeline-right.active {
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const revealElements = document.querySelectorAll('.scroll-reveal');
+            
+            if ('IntersectionObserver' in window) {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.08
+                };
+                
+                const revealObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        } else {
+                            const bounding = entry.target.getBoundingClientRect();
+                            if (bounding.top > window.innerHeight || bounding.bottom < 0) {
+                                entry.target.classList.remove('active');
+                            }
+                        }
+                    });
+                }, observerOptions);
+                
+                revealElements.forEach(function(el) {
+                    revealObserver.observe(el);
+                });
+            } else {
+                revealElements.forEach(el => el.classList.add('active'));
+            }
+        });
+    </script>
 @endsection

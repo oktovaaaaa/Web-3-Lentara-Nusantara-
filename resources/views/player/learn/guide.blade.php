@@ -5,6 +5,7 @@
     $player = $player ?? (object)[
         'display_name' => 'Player',
         'nickname' => null,
+        'avatar_key' => 1,
         'xp_total' => 0,
         'coins' => 0,
         'hearts' => 0,
@@ -14,6 +15,9 @@
     $tierLabel = $tierLabel ?? '—';
 
     $nickname = (string)($player->nickname ?? $player->display_name ?? 'Player');
+    $avatarKey = (int) ($player->avatar_key ?? 1);
+    if ($avatarKey < 1 || $avatarKey > 5) $avatarKey = 1;
+    $avatarUrl = asset('images/avatars/avatar-'.$avatarKey.'.png');
 
     $safeRoute = function($name, $params = []) {
         if (\Illuminate\Support\Facades\Route::has($name)) return route($name, $params);
@@ -36,7 +40,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panduan — Lentara Nusantara</title>
     <link rel="icon" type="image/png" href="{{ asset('images/icon/icon_lentara.png') }}">
-<link rel="shortcut icon" type="image/png" href="{{ asset('images/icon/icon_lentara.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/icon/icon_lentara.png') }}">
 
     {{-- ✅ THEME CONNECT (SAMA DENGAN INDEX): localStorage piforrr-theme --}}
     <script>
@@ -63,7 +67,7 @@
 
           --nav-w: 280px;
           --nav-w-collapsed: 72px;
-          --right-w: 0px; /* ✅ guide tidak pakai right panel */
+          --right-w: 320px;
 
           --r-xl: 22px;
           --r-lg: 18px;
@@ -109,15 +113,229 @@
                 radial-gradient(circle at 85% 85%, rgba(34,197,94,.08), transparent 45%);
         }
 
-        /* ✅ override layout untuk guide: 2 kolom (sidebar + main) */
+        /* ✅ override layout untuk guide: 3 kolom (sidebar + main + right) */
         .shell{
             position: relative;
             z-index: 1;
-            grid-template-columns: var(--nav-w) 1fr !important;
+            display: grid;
+            grid-template-columns: var(--nav-w) 1fr var(--right-w) !important;
+            gap: 14px;
+            padding: 14px;
+            align-items: start;
+        }
+        body.nav-collapsed{ --nav-w: var(--nav-w-collapsed); }
+
+        .card{
+            background: color-mix(in oklab, var(--card) 94%, transparent);
+            border: 1px solid var(--line);
+            border-radius: var(--r-xl);
+            box-shadow: var(--shadow);
+            overflow:hidden;
         }
 
         /* ===== Main Guide ===== */
         .main{ min-width:0; position:relative; z-index:1; }
+
+        /* ===== Right panel desktop ===== */
+        .right{
+            position: sticky;
+            top: 14px;
+            height: calc(100vh - 28px);
+            display:grid;
+            gap: 12px;
+            align-content:start;
+        }
+
+        .right .card {
+            background: color-mix(in oklab, var(--card) 95%, transparent);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--line);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .right .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand), var(--brand-2));
+        }
+
+        .panel-head{
+            padding: 14px;
+            border-bottom: 1px solid var(--line);
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+        }
+        .panel-title{ margin:0; font-size: 16px; font-weight: 950; }
+
+        .metrics{
+            padding: 14px;
+            display:flex;
+            gap: 10px;
+            flex-wrap:wrap;
+        }
+
+        .pill{
+            display:inline-flex;
+            align-items:center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-weight: 950;
+            font-size: 13px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: default;
+        }
+        .pill svg{ width: 18px; height: 18px; }
+        .pill:hover {
+            transform: translateY(-2px);
+        }
+        .pill.xp {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.06);
+        }
+        .pill.xp:hover {
+            background: rgba(59, 130, 246, 0.12);
+            border-color: rgba(59, 130, 246, 0.35);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        .pill.heart {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.06);
+        }
+        .pill.heart:hover {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.35);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+        }
+        .pill.money {
+            color: #eab308;
+            background: rgba(234, 179, 8, 0.08);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            box-shadow: 0 4px 10px rgba(234, 179, 8, 0.06);
+        }
+        .pill.money:hover {
+            background: rgba(234, 179, 8, 0.12);
+            border-color: rgba(234, 179, 8, 0.35);
+            box-shadow: 0 4px 12px rgba(234, 179, 8, 0.15);
+        }
+
+        .right-bottom{
+            padding: 14px;
+            border-top: 1px solid var(--line);
+            display:grid;
+            gap: 10px;
+        }
+
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: color-mix(in oklab, var(--card) 95%, transparent);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+        .profile-card:hover {
+            border-color: var(--brand);
+            box-shadow: 0 4px 12px color-mix(in oklab, var(--brand) 8%, transparent);
+        }
+        .profile-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid var(--brand);
+            background: var(--bg-body);
+            box-shadow: 0 0 10px color-mix(in oklab, var(--brand) 25%, transparent);
+            flex-shrink: 0;
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+        .profile-name {
+            font-weight: 950;
+            font-size: 15px;
+            color: var(--txt-body);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .profile-tier {
+            font-weight: 900;
+            font-size: 11px;
+            color: var(--muted);
+        }
+        .profile-tier span {
+            color: var(--brand);
+            font-weight: 950;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 44px;
+            border-radius: 14px;
+            font-weight: 950;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--brand);
+            color: #ffffff;
+            border: 1px solid var(--brand);
+            box-shadow: 0 4px 12px color-mix(in oklab, var(--brand) 20%, transparent);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            background: color-mix(in oklab, var(--brand) 85%, #fff);
+            box-shadow: 0 6px 16px color-mix(in oklab, var(--brand) 30%, transparent);
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 44px;
+            border-radius: 14px;
+            font-weight: 950;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+            color: var(--txt-body);
+            border: 1px solid var(--line);
+        }
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            color: var(--danger);
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.06);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.08);
+        }
 
         .topbar{
             border-radius: var(--r-xl);
@@ -241,7 +459,9 @@
 
         /* mobile spacing */
         @media (max-width: 1024px){
+            .shell{ grid-template-columns: 1fr !important; padding: 0 14px 14px; }
             .main{ padding-bottom: 14px; }
+            .right{ display:none !important; }
         }
     </style>
 
@@ -387,6 +607,61 @@
 
         </section>
     </main>
+
+    {{-- Right panel desktop --}}
+    <aside class="right" aria-label="Panel Status Desktop">
+        <section class="card">
+            <div class="panel-head">
+                <h3 class="panel-title">Status</h3>
+            </div>
+
+            <div class="metrics">
+                <div class="pill xp" title="XP Total">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M13 2s2 3 2 6-2 4-2 4 4-1 4-6 2-4 2-4-1 7-4 10-1 8-1 8-6-3-6-8 4-10 5-10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>{{ (int)($player->xp_total ?? 0) }}</span>
+                </div>
+
+                <div class="pill heart" title="Hati">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 21s-7-4.6-9.2-9.1C1.4 8.9 3.4 6 6.6 6c1.8 0 3.1 1 3.9 2 0.8-1 2.1-2 3.9-2 3.2 0 5.2 2.9 3.8 5.9C19 16.4 12 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    <span id="heartsNowDesktop">{{ (int)($player->hearts ?? 0) }}</span>/<span>{{ (int)($player->hearts_max ?? 5) }}</span>
+                </div>
+
+                <div class="pill money" title="Uang">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M3 7h18v10H3V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M7 7V5h10v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span>{{ number_format((int)($player->coins ?? 0), 0, ',', '.') }}</span>
+                </div>
+            </div>
+
+            <div class="right-bottom">
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <img src="{{ $avatarUrl }}" alt="Avatar" onerror="this.style.display='none'">
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">{{ $nickname }}</div>
+                        <div class="profile-tier">Tier: <span>{{ $tierLabel }}</span></div>
+                    </div>
+                </div>
+
+                <a class="btn" href="{{ $safeRoute('player.profile') }}">Profil</a>
+
+                @if(Route::has('player.logout'))
+                    <form method="POST" action="{{ route('player.logout') }}">
+                        @csrf
+                        <button class="btn-logout" type="submit">Keluar</button>
+                    </form>
+                @endif
+            </div>
+        </section>
+    </aside>
 </div>
 
 {{-- ✅ SIDEBAR JS (INCLUDE) --}}

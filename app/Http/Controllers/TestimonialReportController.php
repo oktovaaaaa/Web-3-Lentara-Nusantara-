@@ -16,6 +16,13 @@ class TestimonialReportController extends Controller
 
         $testimonial->reports()->create($data);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Laporan berhasil dikirim!'
+            ]);
+        }
+
         return back()->with('success','Laporan dikirim');
     }
 }

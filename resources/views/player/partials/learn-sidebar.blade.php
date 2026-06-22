@@ -102,7 +102,15 @@
         border: 1px solid var(--line);
         background: color-mix(in oklab, var(--card) 92%, transparent);
     }
-    .nav-item.is-active{ border-color: var(--brand); }
+    .nav-item.is-active{
+        border-color: var(--brand);
+        background: color-mix(in oklab, var(--brand) 8%, var(--card));
+    }
+    .nav-item.is-active .nav-ico {
+        color: var(--brand);
+        border-color: var(--brand);
+        background: color-mix(in oklab, var(--brand) 10%, var(--card));
+    }
 
     .nav-ico{
         width: 40px; height: 40px;
@@ -113,6 +121,7 @@
         place-items:center;
         flex: 0 0 auto;
         color: var(--muted);
+        transition: all 0.2s ease;
     }
     .nav-ico svg{ width: 18px; height: 18px; }
 
@@ -161,23 +170,139 @@
     .theme-left{ display:flex; align-items:center; gap: 10px; }
     .theme-left svg{ width: 18px; height: 18px; }
 
-    /* ✅ COLLAPSED BEHAVIOR SESUAI REQUEST:
-       - hidden logo & menu
-       - yang keliatan cuma tombol "..." + icon mode
+    /* ✅ COLLAPSED BEHAVIOR:
+       - Tampilkan menu berupa icon saja ketika desktop sidebar di-collapse
+       - Batasi selector agar mobile drawer (.nav-mobile) tidak ikut tersembunyi
     */
-    body.nav-collapsed .brand-box,
-    body.nav-collapsed .brand-text,
-    body.nav-collapsed .nav-menu{ display:none; }
-
-    body.nav-collapsed .nav-head{ justify-content:flex-start; }
-    body.nav-collapsed .nav-actions{ margin-left:0; }
-
-    body.nav-collapsed .theme-toggle{
-        justify-content:center;
-        padding: 12px 0;
+    /* ✅ COLLAPSED BEHAVIOR:
+       - Tampilkan menu berupa icon saja ketika desktop sidebar di-collapse
+       - Batasi selector agar mobile drawer (.nav-mobile) tidak ikut tersembunyi
+    */
+    body.nav-collapsed .nav {
+        width: 72px;
     }
-    body.nav-collapsed #themeLabelDesktop{ display:none; }
-    body.nav-collapsed .theme-left span{ display:none; }
+    body.nav-collapsed .nav .nav-head {
+        padding: 12px 0;
+        justify-content: center;
+    }
+    body.nav-collapsed .nav .brand-box,
+    body.nav-collapsed .nav .brand-text,
+    body.nav-collapsed .nav .nav-label {
+        display: none !important;
+    }
+    body.nav-collapsed .nav .nav-actions {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    body.nav-collapsed .nav .icon-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: color-mix(in oklab, var(--card) 92%, transparent);
+        color: var(--txt-body);
+        display: grid;
+        place-items: center;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.nav-collapsed .nav .icon-btn:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand);
+        box-shadow: 0 4px 12px color-mix(in oklab, var(--brand) 15%, transparent);
+    }
+    body.nav-collapsed .nav .nav-menu {
+        padding: 16px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+    body.nav-collapsed .nav .nav-item {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: color-mix(in oklab, var(--card) 92%, transparent);
+        color: var(--txt-body);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.nav-collapsed .nav .nav-item:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand);
+        color: var(--brand);
+        box-shadow: 0 4px 12px color-mix(in oklab, var(--brand) 15%, transparent);
+    }
+    body.nav-collapsed .nav .nav-item.is-active {
+        border-color: var(--brand);
+        background: color-mix(in oklab, var(--brand) 12%, transparent);
+        box-shadow: 0 0 12px color-mix(in oklab, var(--brand) 25%, transparent);
+        color: var(--brand);
+    }
+    body.nav-collapsed .nav .nav-ico {
+        border: none !important;
+        background: transparent !important;
+        width: auto !important;
+        height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: inherit;
+    }
+    body.nav-collapsed .nav .nav-ico svg {
+        width: 22px;
+        height: 22px;
+        transition: transform 0.2s ease;
+    }
+    body.nav-collapsed .nav .nav-item:hover .nav-ico svg {
+        transform: scale(1.1);
+    }
+    body.nav-collapsed .nav .nav-foot {
+        padding: 16px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+    body.nav-collapsed .nav .theme-toggle {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: color-mix(in oklab, var(--card) 92%, transparent);
+        color: var(--txt-body);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.nav-collapsed .nav .theme-toggle:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand);
+        color: var(--brand);
+        box-shadow: 0 4px 12px color-mix(in oklab, var(--brand) 15%, transparent);
+    }
+    body.nav-collapsed .nav .theme-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+    body.nav-collapsed .nav #themeLabelDesktop {
+        display: none !important;
+    }
+    body.nav-collapsed .nav .theme-left span {
+        display: none !important;
+    }
 
     /* Mobile sticky topbar */
     .mobile-bar{
@@ -367,27 +492,32 @@
             <a class="nav-item {{ $m['active'] ? 'is-active' : '' }}" href="{{ $safeRoute($m['route']) }}">
                 <span class="nav-ico" aria-hidden="true">
                     @if($m['icon']==='book')
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17.5H6.5A2.5 2.5 0 0 0 4 23V5.5Z" stroke="currentColor" stroke-width="2"/>
-                            <path d="M20 3v17.5" stroke="currentColor" stroke-width="2"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5a2.5 2.5 0 0 0-2.5 2.5v14Z" fill="currentColor" fill-opacity="0.12"/>
+                            <path d="M6 6h10M6 10h10M6 14h6" opacity="0.6" />
+                            <path d="M20 21H6.5A2.5 2.5 0 0 1 4 18.5" />
                         </svg>
                     @elseif($m['icon']==='help')
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" stroke="currentColor" stroke-width="2"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" fill="currentColor" fill-opacity="0.1" />
+                            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" fill-opacity="0.3" />
+                            <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                            <path d="M12 2v2M12 20v2M2 12h2M20 12h2" opacity="0.8" />
                         </svg>
                     @elseif($m['icon']==='gear')
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" stroke-width="2"/>
-                            <path d="M19.4 15a7.94 7.94 0 0 0 .1-1 7.94 7.94 0 0 0-.1-1l2-1.5-2-3.5-2.3 1a8.3 8.3 0 0 0-1.7-1L15 2h-6l-.4 3.5a8.3 8.3 0 0 0-1.7 1l-2.3-1-2 3.5 2 1.5a7.94 7.94 0 0 0-.1 1c0 .34.03.67.1 1l-2 1.5 2 3.5 2.3-1a8.3 8.3 0 0 0 1.7 1L9 22h6l.4-3.5a8.3 8.3 0 0 0 1.7-1l2.3 1 2-3.5-2-1.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" fill="currentColor" fill-opacity="0.08" />
+                            <path d="M18 19.5v-1a4 4 0 0 0-4-4H10a4 4 0 0 0-4 4v1" />
+                            <circle cx="12" cy="8.5" r="3.5" fill="currentColor" fill-opacity="0.2" />
                         </svg>
                     @else
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M8 21h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M12 17a5 5 0 0 0 5-5V4H7v8a5 5 0 0 0 5 5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                            <path d="M17 6h3a2 2 0 0 1-2 3h-1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M7 6H4a2 2 0 0 0 2 3h1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                            <path d="M4 22h16" />
+                            <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34" />
+                            <path d="M12 2a6 6 0 0 1 6 6v3.5c0 3.3-2.7 6-6 6s-6-2.7-6-6V8a6 6 0 0 1 6-6Z" fill="currentColor" fill-opacity="0.1" />
+                            <polygon points="12 6 13.5 9 16.5 9.5 14.25 11.75 14.85 14.85 12 13.3 9.15 14.85 9.75 11.75 7.5 9.5 10.5 9 12 6" fill="currentColor" fill-opacity="0.5" stroke="none" />
                         </svg>
                     @endif
                 </span>
@@ -444,30 +574,38 @@
 
     <nav class="nav-menu" aria-label="Menu">
         @foreach($menu as $m)
+            @if($m['route'] === 'player.profile')
+                @continue
+            @endif
             <a class="nav-item {{ $m['active'] ? 'is-active' : '' }}" href="{{ $safeRoute($m['route']) }}">
                 <span class="nav-ico" aria-hidden="true">
                     @if($m['icon']==='book')
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17.5H6.5A2.5 2.5 0 0 0 4 23V5.5Z" stroke="currentColor" stroke-width="2"/>
-                            <path d="M20 3v17.5" stroke="currentColor" stroke-width="2"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5a2.5 2.5 0 0 0-2.5 2.5v14Z" fill="currentColor" fill-opacity="0.12"/>
+                            <path d="M6 6h10M6 10h10M6 14h6" opacity="0.6" />
+                            <path d="M20 21H6.5A2.5 2.5 0 0 1 4 18.5" />
                         </svg>
                     @elseif($m['icon']==='help')
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" stroke="currentColor" stroke-width="2"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" fill="currentColor" fill-opacity="0.1" />
+                            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" fill-opacity="0.3" />
+                            <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                            <path d="M12 2v2M12 20v2M2 12h2M20 12h2" opacity="0.8" />
                         </svg>
                     @elseif($m['icon']==='gear')
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" stroke-width="2"/>
-                            <path d="M19.4 15a7.94 7.94 0 0 0 .1-1 7.94 7.94 0 0 0-.1-1l2-1.5-2-3.5-2.3 1a8.3 8.3 0 0 0-1.7-1L15 2h-6l-.4 3.5a8.3 8.3 0 0 0-1.7 1l-2.3-1-2 3.5 2 1.5a7.94 7.94 0 0 0-.1 1c0 .34.03.67.1 1l-2 1.5 2 3.5 2.3-1a8.3 8.3 0 0 0 1.7 1L9 22h6l.4-3.5a8.3 8.3 0 0 0 1.7-1l2.3 1 2-3.5-2-1.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" fill="currentColor" fill-opacity="0.08" />
+                            <path d="M18 19.5v-1a4 4 0 0 0-4-4H10a4 4 0 0 0-4 4v1" />
+                            <circle cx="12" cy="8.5" r="3.5" fill="currentColor" fill-opacity="0.2" />
                         </svg>
                     @else
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M8 21h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M12 17a5 5 0 0 0 5-5V4H7v8a5 5 0 0 0 5 5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                            <path d="M17 6h3a2 2 0 0 1-2 3h-1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M7 6H4a2 2 0 0 0 2 3h1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                            <path d="M4 22h16" />
+                            <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34" />
+                            <path d="M12 2a6 6 0 0 1 6 6v3.5c0 3.3-2.7 6-6 6s-6-2.7-6-6V8a6 6 0 0 1 6-6Z" fill="currentColor" fill-opacity="0.1" />
+                            <polygon points="12 6 13.5 9 16.5 9.5 14.25 11.75 14.85 14.85 12 13.3 9.15 14.85 9.75 11.75 7.5 9.5 10.5 9 12 6" fill="currentColor" fill-opacity="0.5" stroke="none" />
                         </svg>
                     @endif
                 </span>

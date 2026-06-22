@@ -111,7 +111,7 @@ PROMPT;
 
         $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
 
-        $resp = Http::timeout(60)->post($url, [
+        $resp = Http::withOptions(['verify' => false])->timeout(60)->post($url, [
             "contents" => [
                 [
                     "role"  => "user",

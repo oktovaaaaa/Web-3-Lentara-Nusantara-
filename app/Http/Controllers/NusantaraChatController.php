@@ -76,10 +76,11 @@ TXT;
 
             // Model Gemini yang cepat & cocok untuk chat
             $model = 'gemini-2.5-flash'; // kalau error model, bisa diganti 'gemini-1.5-flash'
-            $url   = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent";
+            $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent";
 
-            $response = Http::withHeaders([
-                    'Content-Type'   => 'application/json',
+            $response = Http::withOptions(['verify' => false])
+                ->withHeaders([
+                    'Content-Type' => 'application/json',
                     'x-goog-api-key' => $apiKey,
                 ])
                 ->post($url, [
@@ -127,7 +128,7 @@ TXT;
 
         } catch (\Throwable $e) {
             // Log supaya kamu bisa cek di storage/logs/laravel.log
-            \Log::error('NusantaraChat Gemini error: '.$e->getMessage());
+            \Log::error('NusantaraChat Gemini error: ' . $e->getMessage());
 
             // Pesan ramah ke user
             return response()->json([

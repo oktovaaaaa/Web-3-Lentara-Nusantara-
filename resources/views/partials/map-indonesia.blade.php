@@ -1219,6 +1219,12 @@ FULL JS (REPLACE SEMUA <script> MAP KAMU DENGAN INI)
         attribution: '© OpenStreetMap'
     });
 
+    const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        detectRetina: true,
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+
     const maptilerSatellite = maptilerKey
         ? L.tileLayer(`https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=${maptilerKey}`, {
             maxZoom: 20,
@@ -1255,8 +1261,8 @@ FULL JS (REPLACE SEMUA <script> MAP KAMU DENGAN INI)
           })
         : null;
 
-    // Default basemap: Satellite kalau ada key, kalau tidak → OSM
-    const defaultBase = (maptilerSatellite || osmTiles);
+    // Default basemap: Satellite (Esri) sebagai default agar langsung memukau tanpa butuh key
+    const defaultBase = esriSatellite;
     defaultBase.addTo(map);
 
     // ===== GEOJSON LAYER =====
@@ -1277,10 +1283,10 @@ FULL JS (REPLACE SEMUA <script> MAP KAMU DENGAN INI)
         const dark = isDarkMode();
 
         return {
-            color: dark ? '#ffffff' : '#1f2937',
-            weight: dark ? 1.2 : 1.5,
+            color: '#ffffff', // Putih agar terlihat jelas di atas background gelap satelit
+            weight: 1.5,
             fillColor: warna,
-            fillOpacity: dark ? 0.86 : 0.78,
+            fillOpacity: 0.45, // Diturunkan agar detail satelit di bawahnya terlihat
             dashArray: '3',
             lineJoin: 'round',
             lineCap: 'round'
@@ -1395,7 +1401,7 @@ const warna = props.warna || '#FF6B00';
                 const l = e.target;
                 l.setStyle({
                     weight: 3,
-                    fillOpacity: 0.98,
+                    fillOpacity: 0.7, // Hover lebih kontras, namun detail satelit tetap terbayang
                     dashArray: '',
                     color: '#ffffff'
                 });
@@ -1455,11 +1461,13 @@ const warna = props.warna || '#FF6B00';
     }
 
     // ===== LAYERS CONTROL =====
-const baseChoices = {};
+const baseChoices = {
+    'Satelit (Esri)': esriSatellite
+};
 if (maptilerSatellite) baseChoices['Satelit (MapTiler)'] = maptilerSatellite;
 if (maptilerLight) baseChoices['Terang (MapTiler)'] = maptilerLight;
 if (maptilerDark) baseChoices['Gelap (MapTiler)'] = maptilerDark;
-baseChoices['OpenStreetMap'] = osmTiles;
+baseChoices['Peta Standar (OSM)'] = osmTiles;
 
 
     const overlays = {};

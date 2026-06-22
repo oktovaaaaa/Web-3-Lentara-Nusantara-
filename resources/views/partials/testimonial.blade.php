@@ -714,6 +714,42 @@ html[data-theme="dark"] .t-read-more-btn {
     animation: fadeIn 0.2s ease-out;
 }
 
+.t-status-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 1100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-out;
+}
+.t-status-modal.active {
+    display: flex;
+}
+
+.t-status-content {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 107, 0, 0.2);
+    animation: slideUp 0.3s ease-out;
+    text-align: center !important;
+}
+
+html[data-theme="dark"] .t-status-content {
+    background: rgba(17, 24, 39, 0.95);
+    border-color: rgba(255, 107, 0, 0.3);
+}
+
 .t-detail-modal.active {
     display: flex;
 }
@@ -939,16 +975,16 @@ html[data-theme="dark"] .t-detail-close {
 
     <div class="max-w-6xl mx-auto px-4">
         <div class="t-wrap">
-            <h2 class="neon-title">
+            <h2 class="neon-title scroll-reveal reveal-fade-up">
                 Testimoni Pengunjung
             </h2>
-            <div class="title-decoration"></div>
-            <p class="neon-subtitle">
+            <div class="title-decoration scroll-reveal reveal-fade-up delay-100"></div>
+            <p class="neon-subtitle scroll-reveal reveal-fade-up delay-150">
 Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masukan membantu kami menghadirkan konten yang lebih akurat, informatif, dan bermanfaat bagi semua.
                 </p>
 
             {{-- ===== SUMMARY (TOP) ===== --}}
-            <div class="grid gap-6 lg:grid-cols-3 mb-8">
+            <div class="grid gap-6 lg:grid-cols-3 mb-8 scroll-reveal reveal-fade-up delay-200" id="testimonialSummaryGrid">
 
                 {{-- Left: distribution (NEON) --}}
                 <div class="t-neon-shell lg:col-span-2">
@@ -1017,7 +1053,7 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
             </div>
 
             {{-- ===== MARQUEE ===== --}}
-            <div class="t-marquee-wrap mb-10">
+            <div class="t-marquee-wrap mb-10 scroll-reveal reveal-fade-up delay-100" id="testimonialMarqueeWrap">
                 <div class="t-marquee">
                     @if($items->count() === 0)
                         <div class="t-muted text-center py-10">Belum ada testimoni. Jadilah yang pertama</div>
@@ -1176,7 +1212,7 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
             </div>
 
             {{-- ===== MAIN (BOTTOM): Tambahkan Testimoni (NEON) ===== --}}
-            <div class="grid gap-6 lg:grid-cols-1">
+            <div class="grid gap-6 lg:grid-cols-1 scroll-reveal reveal-fade-up delay-100">
                 <div class="t-neon-shell">
                     <div class="t-neon-glow"></div>
                     <div class="t-neon-inner t-card">
@@ -1364,6 +1400,20 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
         </div>
     </div>
 
+    {{-- ================= MODAL STATUS (AJAX SUCCESS/ERROR POPUP) ================= --}}
+    <div class="t-status-modal" id="testimonialStatusModal">
+        <div class="t-status-content">
+            <div id="statusModalIcon" class="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 text-3xl">
+                <!-- Icon will be filled by JS -->
+            </div>
+            <h3 id="statusModalTitle" class="text-xl font-extrabold mb-2" style="color: var(--txt-body);"></h3>
+            <div id="statusModalMessage" class="t-muted text-sm mb-6 leading-relaxed"></div>
+            <button type="button" onclick="closeStatusModal()" class="t-btn !w-auto !px-8 !py-2.5 mx-auto">
+                Tutup
+            </button>
+        </div>
+    </div>
+
     <script>
         function openReportModal(actionUrl) {
             const modal = document.getElementById('reportModal');
@@ -1379,6 +1429,57 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
         }
         document.getElementById('reportModal')?.addEventListener('click', (e) => {
             if (e.target.id === 'reportModal') closeReportModal();
+        });
+
+        document.getElementById('reportForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const submitBtn = form.querySelector('.t-btn');
+            const originalBtnText = submitBtn.textContent;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Mengirim Laporan...';
+
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(async response => {
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    closeReportModal();
+                    form.reset();
+                    showStatusModal(true, 'Berhasil', data.message || 'Laporan berhasil dikirim!');
+                } else {
+                    if (data.errors) {
+                        let errorMsg = '<ul class="list-disc list-inside text-left space-y-1 mt-2">';
+                        for (const key in data.errors) {
+                            data.errors[key].forEach(err => {
+                                errorMsg += `<li>${err}</li>`;
+                            });
+                        }
+                        errorMsg += '</ul>';
+                        showStatusModal(false, 'Gagal Mengirim Laporan', errorMsg);
+                    } else {
+                        showStatusModal(false, 'Gagal Mengirim Laporan', data.message || 'Terjadi kesalahan saat mengirim laporan.');
+                    }
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showStatusModal(false, 'Error', 'Terjadi kesalahan koneksi saat mengirim laporan.');
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+            });
         });
 
         // Fungsi untuk menampilkan detail lengkap testimoni
@@ -1538,26 +1639,149 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
             textarea?.addEventListener('input', () => hideAlert());
             nameInput?.addEventListener('input', () => hideAlert());
 
+            // Custom Status Modal JS Functions
+            window.showStatusModal = function(isSuccess, title, message) {
+                const modal = document.getElementById('testimonialStatusModal');
+                const iconDiv = document.getElementById('statusModalIcon');
+                const titleEl = document.getElementById('statusModalTitle');
+                const messageEl = document.getElementById('statusModalMessage');
+
+                if (!modal || !iconDiv || !titleEl || !messageEl) return;
+
+                titleEl.textContent = title;
+                messageEl.innerHTML = message;
+
+                if (isSuccess) {
+                    iconDiv.innerHTML = `
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    `;
+                    iconDiv.style.background = 'rgba(34, 197, 94, 0.15)';
+                    iconDiv.style.color = '#22c55e';
+                    iconDiv.style.border = '1px solid rgba(34, 197, 94, 0.3)';
+                    titleEl.style.color = '#22c55e';
+                } else {
+                    iconDiv.innerHTML = `
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    `;
+                    iconDiv.style.background = 'rgba(239, 68, 68, 0.15)';
+                    iconDiv.style.color = '#ef4444';
+                    iconDiv.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+                    titleEl.style.color = '#ef4444';
+                }
+
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.closeStatusModal = function() {
+                const modal = document.getElementById('testimonialStatusModal');
+                if (modal) modal.classList.remove('active');
+                document.body.style.overflow = '';
+            };
+
+            document.getElementById('testimonialStatusModal')?.addEventListener('click', (e) => {
+                if (e.target.id === 'testimonialStatusModal') {
+                    closeStatusModal();
+                }
+            });
+
             form?.addEventListener('submit', (e) => {
+                e.preventDefault();
+
                 const v = parseInt(input.value || '0', 10);
                 const msg = (textarea?.value || '').trim();
                 const nm  = (nameInput?.value || '').trim();
 
                 if (!v || v < 1) {
-                    e.preventDefault();
-                    showAlert('Silakan pilih rating bintang terlebih dahulu.');
-                    return;
-                }
-                if (!msg) {
-                    e.preventDefault();
-                    showAlert('Silakan isi deskripsi/pesan testimoni terlebih dahulu.');
+                    showStatusModal(false, 'Gagal', 'Silakan pilih rating bintang terlebih dahulu.');
                     return;
                 }
                 if (!nm) {
-                    e.preventDefault();
-                    showAlert('Silakan isi nama terlebih dahulu.');
+                    showStatusModal(false, 'Gagal', 'Silakan isi nama terlebih dahulu.');
                     return;
                 }
+                if (!msg) {
+                    showStatusModal(false, 'Gagal', 'Silakan isi deskripsi/pesan testimoni terlebih dahulu.');
+                    return;
+                }
+
+                const submitBtn = form.querySelector('.t-btn');
+                const originalBtnText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Mengirim...';
+
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(async response => {
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        showStatusModal(true, 'Berhasil', data.message || 'Terima kasih atas testimoni Anda!');
+                        form.reset();
+                        input.value = 0;
+                        paint(0);
+                        const photoName = document.getElementById('photoName');
+                        if (photoName) photoName.textContent = 'Belum ada foto dipilih';
+
+                        // Fetch updated HTML dynamically to refresh marquee & summary without reloading
+                        fetch(window.location.href)
+                            .then(res => res.text())
+                            .then(html => {
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(html, 'text/html');
+                                
+                                // Replace summary grid
+                                const newSummary = doc.getElementById('testimonialSummaryGrid');
+                                const oldSummary = document.getElementById('testimonialSummaryGrid');
+                                if (newSummary && oldSummary) {
+                                    oldSummary.innerHTML = newSummary.innerHTML;
+                                }
+                                
+                                // Replace marquee wrap
+                                const newMarquee = doc.getElementById('testimonialMarqueeWrap');
+                                const oldMarquee = document.getElementById('testimonialMarqueeWrap');
+                                if (newMarquee && oldMarquee) {
+                                    oldMarquee.innerHTML = newMarquee.innerHTML;
+                                }
+                            })
+                            .catch(err => console.warn('[TESTIMONIAL] Gagal memperbarui daftar testimoni:', err));
+
+                    } else {
+                        if (data.errors) {
+                            let errorMsg = '<ul class="list-disc list-inside text-left space-y-1 mt-2">';
+                            for (const key in data.errors) {
+                                data.errors[key].forEach(err => {
+                                    errorMsg += `<li>${err}</li>`;
+                                });
+                            }
+                            errorMsg += '</ul>';
+                            showStatusModal(false, 'Gagal Mengirim', errorMsg);
+                        } else {
+                            showStatusModal(false, 'Gagal Mengirim', data.message || 'Terjadi kesalahan saat mengirim testimoni.');
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    showStatusModal(false, 'Error', 'Terjadi kesalahan koneksi saat mengirim testimoni.');
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                });
             });
         })();
 
