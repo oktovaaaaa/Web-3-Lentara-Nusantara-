@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             IslandSeeder::class,
             AdminUserSeeder::class,
+            LegendaDanauTobaSeeder::class,
+            RoroJonggrangSeeder::class,
+            PangeranSamudraSeeder::class,
+            AcehGame3DSeeder::class,
         ]);
     }
 }

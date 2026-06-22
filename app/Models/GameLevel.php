@@ -12,6 +12,7 @@ class GameLevel extends Model
         'order',
         'is_active',
         'time_limit_seconds',
+        'level_type',
     ];
 
     public function island()
@@ -22,5 +23,10 @@ class GameLevel extends Model
     public function questions()
     {
         return $this->hasMany(GameQuestion::class, 'game_level_id');
+    }
+
+    public function storylineSteps()
+    {
+        return $this->hasMany(GameStorylineStep::class, 'game_level_id');
     }
 }

@@ -602,6 +602,93 @@
                     </div>
                 </div>
 
+                <!-- ─── Game Storyline FAQ ──────────────────────────────── -->
+                <div class="qa-item">
+                    <button class="qa-q" type="button">
+                        <span class="left">
+                            <span class="qa-ico" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M4 6h16M4 10h12M4 14h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                            <span>Apa itu Game Storyline & cara mainnya?</span>
+                        </span>
+                        <span class="chev">▾</span>
+                    </button>
+                    <div class="qa-a">
+                        🎭 <b>Game Storyline</b> adalah mode cerita bergaya visual novel.<br><br>
+                        • Layar menampilkan <b>dialog antar karakter</b> dengan ilustrasi dan latar belakang.<br>
+                        • <b>Klik layar</b> atau tekan <b>Space/Enter</b> untuk lanjut ke dialog berikutnya.<br>
+                        • Di beberapa titik cerita muncul <b>pilihan jawaban</b> — pilih yang benar untuk melanjutkan.<br>
+                        • Jawaban <b>salah</b> akan mengurangi ❤️ satu hati dan kamu harus mencoba lagi.<br>
+                        • Cerita selesai ketika semua dialog dan pilihan telah dijawab dengan benar.<br><br>
+                        💡 <b>Tips:</b> Baca dialog dengan seksama karena jawaban pilihan selalu ada di teks cerita!
+                    </div>
+                </div>
+
+                <!-- ─── Game Soal (Kuis) FAQ ──────────────────────────────── -->
+                <div class="qa-item">
+                    <button class="qa-q" type="button">
+                        <span class="left">
+                            <span class="qa-ico" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="12" cy="17" r="1" fill="currentColor"/>
+                                </svg>
+                            </span>
+                            <span>Apa itu Game Soal (Kuis) & cara mainnya?</span>
+                        </span>
+                        <span class="chev">▾</span>
+                    </button>
+                    <div class="qa-a">
+                        📝 <b>Game Soal</b> adalah mode kuis pilihan ganda tentang budaya Nusantara.<br><br>
+                        • Setiap level berisi <b>5 soal</b> dengan 3-4 pilihan jawaban.<br>
+                        • Pilih jawaban dengan <b>mengklik tombol pilihan</b>.<br>
+                        • Jawaban <b>benar</b> → <b>+2 XP</b> dan lanjut ke soal berikutnya.<br>
+                        • Jawaban <b>salah</b> → ❤️ berkurang 1, soal bisa dicoba ulang.<br>
+                        • Selesaikan semua 5 soal untuk menyelesaikan level.<br>
+                        • Skor maksimal: <b>10 XP</b> jika semua 5 soal dijawab benar.<br><br>
+                        💡 <b>Tips:</b> Perhatikan kata kunci di soal — jawabannya sering tersembunyi di kalimat pertanyaan!
+                    </div>
+                </div>
+
+                <!-- ─── Game 3D FAQ ──────────────────────────────── -->
+                <div class="qa-item">
+                    <button class="qa-q" type="button">
+                        <span class="left">
+                            <span class="qa-ico" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                            <span>Apa itu Game Eksplorasi 3D & cara mainnya?</span>
+                        </span>
+                        <span class="chev">▾</span>
+                    </button>
+                    <div class="qa-a">
+                        🗺️ <b>Game Eksplorasi 3D</b> adalah mode petualangan interaktif di desa budaya Aceh.<br><br>
+                        <b>Cara Gerak:</b><br>
+                        • <b>W / ↑</b> = Maju &nbsp; <b>S / ↓</b> = Mundur &nbsp; <b>A / ←</b> = Kiri &nbsp; <b>D / →</b> = Kanan<br>
+                        • <b>Space</b> = Lompat<br>
+                        • <b>Klik + Drag</b> mouse = Putar kamera<br>
+                        • Di mobile: gunakan <b>joystick</b> di layar kiri bawah<br><br>
+                        <b>Cara Bermain:</b><br>
+                        • Cerita dimulai dengan <b>intro dialog</b> — baca dan klik Lanjut.<br>
+                        • Jelajahi desa dan cari <b>4 barang budaya Aceh</b> yang tersebar di warung dan balai.<br>
+                        • Dekati warung/balai lalu tekan <b>E</b> atau klik prompt yang muncul untuk memeriksa barang.<br>
+                        • Pilih barang yang <b>sesuai dengan petunjuk</b> di panel kiri — jangan tertipu barang decoy!<br>
+                        • Jawaban <b>salah</b> (barang bukan budaya Aceh) → ❤️ berkurang 1.<br>
+                        • Setelah 4 barang terkumpul, temui <b>Laksamana Malahayati</b> di dermaga.<br>
+                        • Jawab pertanyaan finalnya untuk menyelesaikan level.<br>
+                        • Setelah level selesai, ada <b>outro cerita</b> — kapal berlayar membawa barang budaya ke pulau berikutnya!<br><br>
+                        ⏱️ <b>Perhatikan timer!</b> Jika waktu habis, hati berkurang dan level diulang.<br>
+                        🔇 <b>Tombol 🔊</b> di kanan bawah untuk menyalakan/mematikan musik pengiring.
+                    </div>
+                </div>
+
             </div>
 
 

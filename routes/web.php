@@ -237,6 +237,13 @@ Route::delete('abouts/item/{item}', [\App\Http\Controllers\Admin\TribeAboutContr
         Route::put('game-levels/{level}/questions/{question}', [AdminGameQuestionController::class, 'update'])->name('game-questions.update');
 
         Route::delete('game-levels/{level}/questions/{question}', [AdminGameQuestionController::class, 'destroy'])->name('game-questions.destroy');
+
+        // GAME STORYLINES per level
+        Route::get('game-levels/{level}/storyline', [\App\Http\Controllers\Admin\GameStorylineController::class, 'index'])->name('game-storylines.index');
+        Route::post('game-levels/{level}/storyline', [\App\Http\Controllers\Admin\GameStorylineController::class, 'store'])->name('game-storylines.store');
+        Route::get('game-levels/{level}/storyline/{step}/edit', [\App\Http\Controllers\Admin\GameStorylineController::class, 'edit'])->name('game-storylines.edit');
+        Route::put('game-levels/{level}/storyline/{step}', [\App\Http\Controllers\Admin\GameStorylineController::class, 'update'])->name('game-storylines.update');
+        Route::delete('game-levels/{level}/storyline/{step}', [\App\Http\Controllers\Admin\GameStorylineController::class, 'destroy'])->name('game-storylines.destroy');
     });
 
 
@@ -268,6 +275,15 @@ Route::post('/belajar/level/{level}/submit', [GameController::class, 'submit'])-
 // cek per soal (AJAX)
 Route::post('/belajar/level/{level}/check', [GameController::class, 'check'])
     ->name('game.check')
+    ->middleware('player');
+
+// Storyline player actions
+Route::post('/belajar/level/{level}/storyline/deduct-heart', [GameController::class, 'deductHeart'])
+    ->name('game.storyline.deduct-heart')
+    ->middleware('player');
+
+Route::post('/belajar/level/{level}/storyline/complete', [GameController::class, 'completeStoryline'])
+    ->name('game.storyline.complete')
     ->middleware('player');
 
 // refill hati (10 uang)

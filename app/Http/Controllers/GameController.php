@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\GameLevel;
+use App\Models\GameStorylineStep;
 use App\Models\PlayerIslandProgress;
 use App\Models\PlayerLevelProgress;
 use App\Models\Island;
-use App\Models\Player; 
+use App\Models\Player;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -221,6 +222,33 @@ class GameController extends Controller
             return redirect()->route('game.learn')->with('error', 'Level ini masih terkunci.');
         }
 
+        // ✅ Route ke view berbeda berdasarkan level_type
+        $levelType = $level->level_type ?? 'quiz';
+
+        if ($levelType === 'storyline') {
+            $steps = $level->storylineSteps()->orderBy('order')->get();
+
+            if ($steps->isEmpty()) {
+                return redirect()->route('game.learn')->with('error', 'Level Storyline ini belum punya langkah cerita.');
+            }
+
+            return view('player.learn.play-storyline', [
+                'player'       => $player,
+                'level'        => $level,
+                'steps'        => $steps,
+                'islandColors' => $this->islandColors,
+            ]);
+        }
+
+        if ($levelType === 'game3d') {
+            return view('player.learn.play-3d', [
+                'player'       => $player,
+                'level'        => $level,
+                'islandColors' => $this->islandColors,
+            ]);
+        }
+
+        // Quiz flow (default)
         $questions = $level->questions()
             ->where('is_active', true)
             ->orderBy('order')
@@ -235,9 +263,9 @@ class GameController extends Controller
         session()->forget('game_run_'.$level->id);
 
         return view('player.learn.play', [
-            'player' => $player,
-            'level' => $level,
-            'questions' => $questions,
+            'player'       => $player,
+            'level'        => $level,
+            'questions'    => $questions,
             'islandColors' => $this->islandColors,
         ]);
     }
@@ -362,10 +390,9 @@ class GameController extends Controller
             $run['wrong_count'] = (int)$run['wrong_count'] + 1;
             $player->hearts = max(0, (int)$player->hearts - 1);
 
-            // kalau hati habis, jangan lupa set timestamp regen
-            if ((int)$player->hearts <= 0) {
-                $player->hearts_updated_at = Carbon::now();
-            }
+            // ✅ PENTING: selalu update timestamp saat hati berkurang
+            // biar syncHearts tahu kapan mulai hitung regen dari titik ini
+            $player->hearts_updated_at = Carbon::now();
         }
 
         $player->save();
@@ -504,6 +531,91 @@ class GameController extends Controller
             $prevCompleted = (bool) ($progress[$island->id]->is_completed ?? false);
         }
         return false;
+    }
+
+    /**
+     * KURANGI HATI — Storyline AJAX
+     */
+    public function deductHeart(Request $request, GameLevel $level)
+    {
+        $player = Auth::guard('player')->user();
+        $this->syncHearts($player);
+        $player->refresh();
+
+        if ((int)$player->hearts <= 0) {
+            return response()->json([
+                'ok'         => false,
+                'code'       => 'HEARTS_EMPTY',
+                'hearts'     => 0,
+                'hearts_max' => (int)$player->hearts_max,
+                'coins'      => (int)$player->coins,
+                'xp_total'   => (int)$player->xp_total,
+            ], 403);
+        }
+
+        $player->hearts = max(0, (int)$player->hearts - 1);
+        // ✅ selalu update timestamp saat hati berkurang
+        $player->hearts_updated_at = Carbon::now();
+        $player->save();
+
+        return response()->json([
+            'ok'          => true,
+            'hearts'      => (int)$player->hearts,
+            'hearts_max'  => (int)$player->hearts_max,
+            'coins'       => (int)$player->coins,
+            'xp_total'    => (int)$player->xp_total,
+            'out_of_hearts' => ((int)$player->hearts <= 0),
+        ]);
+    }
+
+    /**
+     * SELESAIKAN LEVEL STORYLINE — AJAX
+     */
+    public function completeStoryline(Request $request, GameLevel $level)
+    {
+        $player = Auth::guard('player')->user();
+        $this->syncHearts($player);
+        $player->refresh();
+
+        // Cek akses
+        if (!$this->isIslandUnlocked($player->id, $level->island_id) || !$this->isLevelUnlocked($player->id, $level)) {
+            return response()->json(['ok' => false, 'message' => 'Akses tidak valid.'], 403);
+        }
+
+        // Tambah XP untuk menyelesaikan storyline
+        $xpGained = 10;
+        $player->xp_total = (int)$player->xp_total + $xpGained;
+        $player->save();
+
+        // Tandai level selesai
+        $prog = PlayerLevelProgress::firstOrCreate(
+            ['player_id' => $player->id, 'game_level_id' => $level->id],
+            ['best_correct' => 0, 'is_completed' => false]
+        );
+
+        if (!$prog->is_completed) {
+            $prog->is_completed  = true;
+            $prog->completed_at  = Carbon::now();
+            $prog->best_correct  = 5; // storyline = perfect
+            $prog->save();
+        }
+
+        // Cek apakah pulau selesai
+        [$islandCompletedNow, $coinsRewarded] = $this->checkAndCompleteIsland($player->id, $level->island_id);
+        if ($islandCompletedNow) {
+            $player->refresh();
+        }
+
+        return response()->json([
+            'ok'                   => true,
+            'xp_gained'            => $xpGained,
+            'xp_total'             => (int)$player->xp_total,
+            'hearts'               => (int)$player->hearts,
+            'hearts_max'           => (int)$player->hearts_max,
+            'coins'                => (int)$player->coins,
+            'island_completed_now' => (bool)$islandCompletedNow,
+            'coins_rewarded'       => (int)$coinsRewarded,
+        ]);
     }
 
     private function isLevelUnlocked(int $playerId, GameLevel $level): bool

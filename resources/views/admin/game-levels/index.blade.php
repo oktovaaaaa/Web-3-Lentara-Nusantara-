@@ -368,6 +368,15 @@
           />
         </div>
 
+        <div class="gl-field">
+          <label class="gl-label">Tipe Level</label>
+          <select name="level_type" class="gl-select">
+            <option value="quiz">Quiz (Pilihan Ganda / Isian)</option>
+            <option value="storyline">Storyline (Visual Novel)</option>
+            <option value="game3d">3D Game (Eksplorasi Budaya)</option>
+          </select>
+        </div>
+
         <label class="gl-check">
           <input type="checkbox" name="is_active" value="1" checked />
           Aktif
@@ -390,6 +399,8 @@
                   {{ $lv->island->name }} — {{ $lv->title }}
                 </div>
                 <div class="gl-item-meta">
+                  Tipe: <b style="text-transform: uppercase;">{{ $lv->level_type ?? 'quiz' }}</b>
+                  <span style="opacity:.6;">•</span>
                   Order: <b>{{ $lv->order }}</b>
                   <span style="opacity:.6;">•</span>
                   Aktif: <b>{{ $lv->is_active ? 'Ya' : 'Tidak' }}</b>
@@ -402,10 +413,18 @@
             </div>
 
             <div class="gl-actions">
-              <a
-                href="{{ route('admin.game-questions.index', $lv->id) }}"
-                class="gl-btn gl-btn-ghost"
-              >Kelola Soal</a>
+              @if(($lv->level_type ?? 'quiz') === 'storyline')
+                <a
+                  href="{{ route('admin.game-storylines.index', $lv->id) }}"
+                  class="gl-btn gl-btn-ghost"
+                  style="border-color: var(--brand);"
+                >Kelola Storyline</a>
+              @else
+                <a
+                  href="{{ route('admin.game-questions.index', $lv->id) }}"
+                  class="gl-btn gl-btn-ghost"
+                >Kelola Soal</a>
+              @endif
 
               <a
                 href="{{ route('admin.game-levels.edit', $lv->id) }}"

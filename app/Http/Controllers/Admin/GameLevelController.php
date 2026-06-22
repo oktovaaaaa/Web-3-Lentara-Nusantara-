@@ -23,10 +23,11 @@ class GameLevelController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'island_id' => ['required','exists:islands,id'],
-            'title'     => ['required','string','max:120'],
-            'order'     => ['required','integer','min:1'],
-            'is_active' => ['nullable'],
+            'island_id'  => ['required','exists:islands,id'],
+            'title'      => ['required','string','max:120'],
+            'order'      => ['required','integer','min:1'],
+            'is_active'  => ['nullable'],
+            'level_type' => ['required','in:quiz,storyline,game3d'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
@@ -45,10 +46,11 @@ class GameLevelController extends Controller
     public function update(Request $request, GameLevel $gameLevel)
     {
         $data = $request->validate([
-            'island_id' => ['required','exists:islands,id'],
-            'title'     => ['required','string','max:120'],
-            'order'     => ['required','integer','min:1'],
-            'is_active' => ['nullable'],
+            'island_id'  => ['required','exists:islands,id'],
+            'title'      => ['required','string','max:120'],
+            'order'      => ['required','integer','min:1'],
+            'is_active'  => ['nullable'],
+            'level_type' => ['required','in:quiz,storyline,game3d'],
         ]);
 
         $data['is_active'] = $request->boolean('is_active');

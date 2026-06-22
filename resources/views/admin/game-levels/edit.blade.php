@@ -582,6 +582,15 @@
                     />
                 </div>
 
+                <div class="gl-field" style="margin-bottom: 12px;">
+                    <label class="gl-label">Tipe Level</label>
+                    <select name="level_type" class="gl-select" required>
+                        <option value="quiz" @selected(old('level_type', $gameLevel->level_type) === 'quiz')>Quiz (Pilihan Ganda / Isian)</option>
+                        <option value="storyline" @selected(old('level_type', $gameLevel->level_type) === 'storyline')>Storyline (Visual Novel)</option>
+                        <option value="game3d" @selected(old('level_type', $gameLevel->level_type) === 'game3d')>3D Game (Eksplorasi Budaya)</option>
+                    </select>
+                </div>
+
                 <label class="gl-check">
                     <input type="checkbox" name="is_active" value="1" @checked((bool)old('is_active', $gameLevel->is_active)) />
                     <span>Aktifkan level ini</span>
