@@ -48,6 +48,7 @@ Route::post('/nusantara-ai/chat', [NusantaraChatController::class, 'chat'])
 |--------------------------------------------------------------------------
 */
 Route::get('/', [IslandController::class, 'landing'])->name('home');
+Route::get('/api/destinations', [IslandController::class, 'apiDestinations'])->name('api.destinations');
 
 Route::get('/islands/{island:slug}', [IslandController::class, 'show'])
     ->name('islands.show');

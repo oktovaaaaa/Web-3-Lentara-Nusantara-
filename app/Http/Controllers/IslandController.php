@@ -402,4 +402,30 @@ if ($tribeKey !== '') {
             'avg'     => $avg,
         ]];
     }
+
+    public function apiDestinations()
+    {
+        $destinations = Destination::where('is_active', true)
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->get()
+            ->map(function ($dest) {
+                return [
+                    'id' => 'db-' . $dest->id,
+                    'name' => $dest->name,
+                    'location' => $dest->location,
+                    'description' => $dest->description,
+                    'rating' => $dest->rating,
+                    'image_url' => $dest->image_display_url,
+                    'pano_maps_url' => $dest->pano_maps_url,
+                    'latitude' => (float) $dest->latitude,
+                    'longitude' => (float) $dest->longitude,
+                    'category' => 'wisata',
+                    'is_db' => true,
+                ];
+            });
+
+        return response()->json($destinations);
+    }
 }
+

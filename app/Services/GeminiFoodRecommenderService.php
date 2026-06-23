@@ -102,6 +102,10 @@ Kamu adalah asisten kurator kuliner Nusantara.$islandLine
 Buat {$itemCount} rekomendasi makanan/minuman yang sangat identik dengan Suku "{$tribeKey}" di Indonesia.
 Fokus pada nama makanan (dish). Jika ada varian yang terkait tempat (contoh: "BPK Balige"), isi "where_to_find" dengan 1-2 lokasi yang wajar (kota/daerah), tanpa alamat lengkap.
 
+ATURAN KHUSUS UNTUK SUKU:
+- Jika suku adalah "Batak", Anda WAJIB hanya merekomendasikan makanan khas tradisional Batak autentik seperti: Babi Panggang Karo (BPK), Saksang, Arsik Ikan Mas, Naniura, Mie Gomak, Lappet, Natinombur, Manuk Na Pinadar. DILARANG KERAS merekomendasikan makanan generic seperti "Bakmi", "Nasi Goreng", atau "Bakso" biasa yang tidak spesifik budaya Batak.
+- Untuk suku lainnya, pastikan makanan yang direkomendasikan adalah kuliner tradisional yang khas dan sangat identik dengan adat/suku tersebut, bukan makanan umum Indonesia.
+
 Kembalikan output HANYA JSON VALID (tanpa markdown, tanpa teks tambahan).
 Format output boleh SALAH SATU dari dua opsi ini (pilih salah satu saja):
 1) Array langsung: [ { ... }, { ... } ]

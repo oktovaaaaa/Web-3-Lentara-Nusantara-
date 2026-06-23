@@ -19,6 +19,8 @@ class Destination extends Model
         'rating',
         'sort_order',
         'is_active',
+        'latitude',
+        'longitude',
 
         // ===== 360 / Google Maps Embed =====
         'pano_embed_url', // contoh: https://www.google.com/maps/embed?pb=...
@@ -30,6 +32,18 @@ class Destination extends Model
         'rating' => 'float',
         'is_active' => 'boolean',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($destination) {
+            if ($destination->pano_embed_url && preg_match('/!2d([0-9.-]+)!3d([0-9.-]+)/', $destination->pano_embed_url, $matches)) {
+                $destination->latitude = (float) $matches[2];
+                $destination->longitude = (float) $matches[1];
+            }
+        });
+    }
 
     public function island(): BelongsTo
     {
