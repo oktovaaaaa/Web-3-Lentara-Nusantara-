@@ -3,6 +3,8 @@
 
 @section('title', 'Admin - About Pulau + Statistik')
 
+@section('page-title', 'About Pulau & Statistik')
+
 @section('content')
 <div class="a-wrap" data-page="admin-about-islands-stats">
 

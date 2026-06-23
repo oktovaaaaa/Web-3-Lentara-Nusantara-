@@ -3,6 +3,8 @@
 
 @section('title', 'Edit History')
 
+@section('page-title', 'Edit History')
+
 @section('content')
 <div class="a-wrap" data-page="admin-histories-edit">
 

@@ -61,7 +61,7 @@
             --muted: #616161;
         }
         *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { height: 100%; overflow: hidden; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; }
+        html, body { height: 100%; overflow: hidden; background: #000; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial; }
 
         /* ═══════════════════════════
            VISUAL NOVEL STAGE
@@ -106,15 +106,15 @@
 
         /* Shake animation */
         @keyframes stageShake {
-            0%  { transform: translateX(0); }
-            15% { transform: translateX(-10px) rotate(-0.5deg); }
-            30% { transform: translateX(10px) rotate(0.5deg); }
-            45% { transform: translateX(-8px); }
-            60% { transform: translateX(8px); }
-            75% { transform: translateX(-4px); }
-            100%{ transform: translateX(0); }
+            0%  { transform: scale(1.03) translateX(0) translateY(0) rotate(0deg); }
+            15% { transform: scale(1.03) translateX(-12px) translateY(-2px) rotate(-0.5deg); }
+            30% { transform: scale(1.03) translateX(12px) translateY(2px) rotate(0.5deg); }
+            45% { transform: scale(1.03) translateX(-8px) translateY(-1px) rotate(-0.3deg); }
+            60% { transform: scale(1.03) translateX(8px) translateY(1px) rotate(0.3deg); }
+            75% { transform: scale(1.03) translateX(-4px) translateY(0) rotate(-0.1deg); }
+            100%{ transform: scale(1) translateX(0) translateY(0) rotate(0); }
         }
-        .shake-stage { animation: stageShake 0.5s ease; }
+        .shake-stage { animation: stageShake 0.45s cubic-bezier(.36,.07,.19,.97) both; transform-origin: center center; }
 
         /* Character sprite */
         #vnChar {
@@ -345,12 +345,15 @@
 <body>
 
 <div id="vnStage">
-    <!-- Background -->
-    <div id="vnBg"></div>
-    <div id="vnOverlay"></div>
+    <!-- Visual layers container (will shake on wrong answer) -->
+    <div id="vnVisuals" style="position: absolute; inset: 0; pointer-events: none; z-index: 1;">
+        <!-- Background -->
+        <div id="vnBg"></div>
+        <div id="vnOverlay"></div>
 
-    <!-- Character sprite -->
-    <img id="vnChar" src="" alt="" class="hidden">
+        <!-- Character sprite -->
+        <img id="vnChar" src="" alt="" class="hidden">
+    </div>
 
     <!-- TOP BAR -->
     <div id="vnTopbar">
@@ -487,7 +490,7 @@
     const xpNumEl     = document.getElementById('xpNum');
     const coinNumEl   = document.getElementById('coinNum');
     const feedbackEl  = document.getElementById('vnFeedback');
-    const stageEl     = document.getElementById('vnStage');
+    const stageEl     = document.getElementById('vnVisuals');
     const sfxOk       = document.getElementById('sfxCorrect');
     const sfxBad      = document.getElementById('sfxWrong');
 

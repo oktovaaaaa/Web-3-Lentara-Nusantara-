@@ -3,6 +3,8 @@
 
 @section('title', 'Warisan')
 
+@section('page-title', 'Warisan')
+
 @section('content')
 @php
     // ====== Build tribe map langsung dari config, supaya island->tribes bisa di-populate via JS tanpa route tambahan ======

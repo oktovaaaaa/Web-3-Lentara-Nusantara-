@@ -56,8 +56,8 @@ class IslandSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'name'   => 'Sunda Kecil',
-                'slug'   => 'sundakecil',
+                'name'   => 'Bali & Nusa Tenggara',
+                'slug'   => 'bali-nusa-tenggara',
                 'place_label' => 'Masyarakat Bali',
                 'title'  => 'Pulau',
                 'subtitle' => 'BALI & NUSA TENGGARA',
@@ -68,8 +68,8 @@ class IslandSeeder extends Seeder
             ],
 
             [
-                'name'   => 'Pulau Papua & Maluku',
-                'slug'   => 'papua&maluku',
+                'name'   => 'Papua & Maluku',
+                'slug'   => 'papua-maluku',
                 'place_label' => 'Raja Ampat',
                 'title'  => 'Pulau',
                 'subtitle' => 'PAPUA & MALUKU',

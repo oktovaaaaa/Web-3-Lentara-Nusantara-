@@ -3,6 +3,8 @@
 
 @section('title', 'Tambah History')
 
+@section('page-title', 'Tambah History')
+
 @section('content')
 @php
     // UI only: tidak mengubah logika program

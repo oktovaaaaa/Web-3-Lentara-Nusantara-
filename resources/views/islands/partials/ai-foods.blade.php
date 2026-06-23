@@ -68,15 +68,60 @@
 
         return ['full'=>$full,'half'=>$half,'empty'=>$empty];
     };
+
+    // Format generated_at date
+    $generatedAt = $payload['generated_at'] ?? null;
+    $formattedUpdateDate = '—';
+    if ($generatedAt) {
+        try {
+            $dt = new \DateTime($generatedAt);
+            $dt->setTimezone(new \DateTimeZone('Asia/Jakarta'));
+            
+            $days = [
+                'Sunday'    => 'Minggu',
+                'Monday'    => 'Senin',
+                'Tuesday'   => 'Selasa',
+                'Wednesday' => 'Rabu',
+                'Thursday'  => 'Kamis',
+                'Friday'    => 'Jumat',
+                'Saturday'  => 'Sabtu'
+            ];
+            
+            $months = [
+                'January'   => 'Januari',
+                'February'  => 'Februari',
+                'March'     => 'Maret',
+                'April'     => 'April',
+                'May'       => 'Mei',
+                'June'      => 'Juni',
+                'July'      => 'Juli',
+                'August'    => 'Agustus',
+                'September' => 'September',
+                'October'   => 'Oktober',
+                'November'  => 'November',
+                'December'  => 'Desember'
+            ];
+            
+            $dayEng = $dt->format('l');
+            $monthEng = $dt->format('F');
+            
+            $dayInd = $days[$dayEng] ?? $dayEng;
+            $monthInd = $months[$monthEng] ?? $monthEng;
+            
+            $formattedUpdateDate = $dayInd . ', ' . $dt->format('d') . ' ' . $monthInd . ' ' . $dt->format('Y');
+        } catch (\Exception $e) {
+            $formattedUpdateDate = $generatedAt;
+        }
+    }
 @endphp
 
 <section id="foods" class="py-12">
     {{-- IMPORTANT: neon-title/title-decoration/neon-subtitle pakai CSS GLOBAL dari islands.blade --}}
-    <h2 class="neon-title">
+    <h2 class="neon-title scroll-reveal reveal-fade-up">
         Kuliner Khas Suku {{ $tribeKey !== '' ? $tribeKey : '—' }}
     </h2>
-    <div class="title-decoration"></div>
-    <p class="neon-subtitle">
+    <div class="title-decoration scroll-reveal reveal-fade-up delay-100"></div>
+    <p class="neon-subtitle scroll-reveal reveal-fade-up delay-150">
         Rekomendasi kuliner khas yang dikurasi otomatis per minggu untuk Suku {{ $tribeKey !== '' ? $tribeKey : '—' }}.
     </p>
 
@@ -136,10 +181,11 @@
                 @endphp
 
                 <article
-                    class="food-card food-theme-{{ $theme }}"
+                    class="food-card food-theme-{{ $theme }} scroll-reveal reveal-fade-up"
                     role="button"
                     tabindex="0"
                     data-food-card
+                    style="transition-delay: {{ ($idx % 3) * 120 + 200 }}ms"
                     data-name="{{ $dataName }}"
                     data-desc="{{ $dataDesc }}"
                     data-img="{{ $dataImg }}"
@@ -264,23 +310,97 @@
                     <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" />
                 </svg>
                 <span class="text-xs font-medium text-green-700 dark:text-green-300">
-                    Update mingguan: {{ $payload['generated_at'] ?? '—' }} (Senin 00:00)
+                    Update mingguan terakhir diupdate: {{ $formattedUpdateDate }}
                 </span>
             </div>
         </div>
     @else
-        <div class="text-center py-12">
-            <div class="inline-block p-6 rounded-2xl bg-gradient-to-br from-orange-50 to-green-50 dark:from-orange-900/10 dark:to-green-900/10 border border-[var(--line)]">
-                <svg class="w-16 h-16 mx-auto mb-4 text-[var(--muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        <style>
+            .empty-state-card {
+                position: relative;
+                max-width: 580px;
+                margin: 2rem auto;
+                padding: 3.5rem 2rem;
+                border-radius: 24px;
+                background: linear-gradient(145deg, 
+                    color-mix(in srgb, var(--card) 40%, transparent), 
+                    color-mix(in srgb, var(--card) 20%, transparent));
+                border: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+                box-shadow: 
+                    0 20px 40px rgba(0, 0, 0, 0.2), 
+                    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                overflow: hidden;
+                text-align: center;
+            }
+
+            html[data-theme="dark"] .empty-state-card {
+                background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.005));
+                border-color: rgba(255, 255, 255, 0.05);
+            }
+
+            .empty-state-card::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                padding: 1.5px;
+                background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), transparent 70%);
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                pointer-events: none;
+            }
+
+            .empty-state-icon svg {
+                color: var(--brand, #f97316);
+                filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.4));
+                animation: pulseGlow 3s infinite ease-in-out;
+            }
+
+            @keyframes pulseGlow {
+                0%, 100% {
+                    transform: scale(1);
+                    filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.3));
+                }
+                50% {
+                    transform: scale(1.05);
+                    filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.6));
+                }
+            }
+
+            .empty-state-title {
+                font-family: 'Cinzel', serif !important;
+                font-size: 1.35rem;
+                font-weight: 700;
+                margin: 1rem 0 0.5rem 0;
+                color: var(--txt-body);
+                letter-spacing: 0.02em;
+            }
+
+            .empty-state-desc {
+                font-size: 0.95rem;
+                line-height: 1.6;
+                color: var(--muted);
+                max-width: 420px;
+                margin: 0 auto;
+            }
+        </style>
+
+        <div class="empty-state-card scroll-reveal reveal-zoom-in">
+            <div class="empty-state-icon">
+                <svg class="w-16 h-16 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v4M12 22v-3M3 15h18" />
+                    <path d="M3 15a9 9 0 0 1 18 0H3z" />
+                    <path d="M16 19a4 4 0 0 1-8 0" />
+                    <path d="M9 5l1.5-1.5M15 5l-1.5-1.5" opacity="0.6" />
                 </svg>
-                <p class="text-sm text-[var(--muted)] mb-2">
-                    Rekomendasi kuliner untuk {{ $tribeKey }} minggu ini belum tersedia.
-                </p>
-                <p class="text-xs text-[var(--muted)]">
-                    Rekomendasi akan diperbarui setiap minggu pada hari Senin pukul 00:00 WIB.
-                </p>
             </div>
+            <h3 class="empty-state-title">Kuliner Suku Belum Tersedia</h3>
+            <p class="empty-state-desc">
+                Rekomendasi kuliner khas Suku {{ $tribeKey }} minggu ini belum tersedia. Rekomendasi akan diperbarui secara otomatis setiap Senin pukul 00:00 WIB.
+            </p>
         </div>
     @endif
 

@@ -328,24 +328,24 @@
 
         {{-- HEADER (ABOUT PULAU) --}}
         <div class="text-center">
-            <div class="inline-block text-xs tracking-[0.18em] uppercase font-semibold px-3 py-1 rounded"
+            <div class="inline-block text-xs tracking-[0.18em] uppercase font-semibold px-3 py-1 rounded scroll-reveal reveal-fade-up"
                  style="color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, transparent);">
                 {{ $labelSmall }}
             </div>
 
             {{-- TITLE + DECORATION (HARUS SAMA PERSIS DENGAN HOME SYSTEM) --}}
             <div class="mt-3">
-                <h2 class="neon-title">{{ $heroTitle }}</h2>
-                <div class="title-decoration"></div>
+                <h2 class="neon-title scroll-reveal reveal-fade-up delay-100">{{ $heroTitle }}</h2>
+                <div class="title-decoration scroll-reveal reveal-fade-up delay-150"></div>
             </div>
 
             @if($heroDesc)
-                <p class="neon-subtitle whitespace-pre-line break-words">
+                <p class="neon-subtitle whitespace-pre-line break-words scroll-reveal reveal-fade-up delay-200">
                     {!! nl2br(e($heroDesc)) !!}
                 </p>
             @else
                 {{-- kalau tidak ada subtitle dari admin, kita buat default supaya konsisten dengan HOME --}}
-                <p class="neon-subtitle">
+                <p class="neon-subtitle scroll-reveal reveal-fade-up delay-200">
                     Pulau ini merupakan bagian dari kekayaan Nusantara yang memiliki keberagaman budaya dan alam, tercermin dari suku-suku yang hidup dan berkembang, kuliner khas daerah, destinasi wisata, serta flora dan fauna yang menjadi identitas pulau ini.
                 </p>
             @endif
@@ -381,7 +381,7 @@
                     $plainOnly = (!$hasImage && !$hasPoints && empty($link));
                 @endphp
 
-                <div class="about-item-shell">
+                <div class="about-item-shell scroll-reveal reveal-fade-up" style="transition-delay: {{ ($loop->index % 2) * 150 }}ms">
                     {{-- ======================================
                        CASE A: ADA GAMBAR
                        - KIRI: gambar (NEON)
@@ -481,9 +481,92 @@
                 </div>
 
             @empty
-                <div class="border border-[var(--line)] rounded-2xl bg-[var(--card)] p-6 text-center">
-                    <p class="text-sm text-[var(--muted)]">
-                        Konten About untuk pulau ini belum diinput.
+                <style>
+                    .empty-state-card {
+                        position: relative;
+                        max-width: 580px;
+                        margin: 2rem auto;
+                        padding: 3.5rem 2rem;
+                        border-radius: 24px;
+                        background: linear-gradient(145deg, 
+                            color-mix(in srgb, var(--card) 40%, transparent), 
+                            color-mix(in srgb, var(--card) 20%, transparent));
+                        border: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+                        box-shadow: 
+                            0 20px 40px rgba(0, 0, 0, 0.2), 
+                            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+                        backdrop-filter: blur(8px);
+                        -webkit-backdrop-filter: blur(8px);
+                        overflow: hidden;
+                        text-align: center;
+                    }
+
+                    html[data-theme="dark"] .empty-state-card {
+                        background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.005));
+                        border-color: rgba(255, 255, 255, 0.05);
+                    }
+
+                    .empty-state-card::before {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        border-radius: inherit;
+                        padding: 1.5px;
+                        background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), transparent 70%);
+                        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                        -webkit-mask-composite: xor;
+                        mask-composite: exclude;
+                        pointer-events: none;
+                    }
+
+                    .empty-state-icon svg {
+                        color: var(--brand, #f97316);
+                        filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.4));
+                        animation: pulseGlow 3s infinite ease-in-out;
+                    }
+
+                    @keyframes pulseGlow {
+                        0%, 100% {
+                            transform: scale(1);
+                            filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.3));
+                        }
+                        50% {
+                            transform: scale(1.05);
+                            filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.6));
+                        }
+                    }
+
+                    .empty-state-title {
+                        font-family: 'Cinzel', serif !important;
+                        font-size: 1.35rem;
+                        font-weight: 700;
+                        margin: 1rem 0 0.5rem 0;
+                        color: var(--txt-body);
+                        letter-spacing: 0.02em;
+                    }
+
+                    .empty-state-desc {
+                        font-size: 0.95rem;
+                        line-height: 1.6;
+                        color: var(--muted);
+                        max-width: 420px;
+                        margin: 0 auto;
+                    }
+                </style>
+
+                <div class="empty-state-card scroll-reveal reveal-zoom-in">
+                    <div class="empty-state-icon">
+                        <svg class="w-16 h-16 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                            <polyline points="10 9 9 9 8 9" opacity="0.6" />
+                        </svg>
+                    </div>
+                    <h3 class="empty-state-title">Tentang Pulau Belum Tersedia</h3>
+                    <p class="empty-state-desc">
+                        Informasi detail mengenai wilayah, budaya, dan geografi pulau ini sedang dalam proses penyusunan oleh admin.
                     </p>
                 </div>
             @endforelse
@@ -493,16 +576,16 @@
         <section id="stats" class="py-4">
 
             {{-- TITLE + DECORATION + SUBTITLE (SAMA PERSIS DENGAN HOME SYSTEM) --}}
-            <h2 class="neon-title">Statistik Pulau</h2>
-            <div class="title-decoration"></div>
-            <p class="neon-subtitle">
+            <h2 class="neon-title scroll-reveal reveal-fade-up">Statistik Pulau</h2>
+            <div class="title-decoration scroll-reveal reveal-fade-up delay-100"></div>
+            <p class="neon-subtitle scroll-reveal reveal-fade-up delay-150">
                 Informasi kependudukan dan keberagaman Nusantara pada pulau ini, termasuk suku, bahasa, dan agama, yang membantu mengenal budaya Indonesia secara lebih dekat.
             </p>
 
             {{-- 3 CARD UTAMA --}}
             <div class="grid gap-6 lg:grid-cols-3 mb-8 mt-6">
                 {{-- POPULATION --}}
-                <button type="button" class="stat-card stat-card--green" data-stat="population">
+                <button type="button" class="stat-card stat-card--green scroll-reveal reveal-fade-up delay-100" data-stat="population">
                     <div class="flex items-start justify-between gap-3">
                         <div class="flex-1">
                             <div class="stat-number">
@@ -528,7 +611,7 @@
                 </button>
 
                 {{-- ETHNICITY COUNT --}}
-                <button type="button" class="stat-card stat-card--purple" data-stat="ethnicity">
+                <button type="button" class="stat-card stat-card--purple scroll-reveal reveal-fade-up delay-200" data-stat="ethnicity">
                     <div class="flex items-start justify-between gap-3">
                         <div class="flex-1">
                             <div class="stat-number">{{ $ethnicities->count() }}</div>
@@ -551,7 +634,7 @@
                 </button>
 
                 {{-- LANGUAGE COUNT --}}
-                <button type="button" class="stat-card stat-card--red" data-stat="language">
+                <button type="button" class="stat-card stat-card--red scroll-reveal reveal-fade-up delay-300" data-stat="language">
                     <div class="flex items-start justify-between gap-3">
                         <div class="flex-1">
                             <div class="stat-number">{{ $languages->count() }}</div>
@@ -578,7 +661,7 @@
             {{-- 3 CHART --}}
             <div class="grid gap-6 lg:grid-cols-3 mb-6">
                 {{-- 1. SUKU – BAR --}}
-                <div class="chart-card">
+                <div class="chart-card scroll-reveal reveal-zoom-in delay-100">
                     <div class="flex items-center justify-between mb-3">
                         <p class="chart-title">Keberagaman Suku di Indonesia</p>
                     </div>
@@ -591,7 +674,7 @@
                 </div>
 
                 {{-- 2. BAHASA – DONUT --}}
-                <div class="chart-card">
+                <div class="chart-card scroll-reveal reveal-zoom-in delay-200">
                     <div class="flex items-center justify-between mb-3">
                         <p class="chart-title">Keberagaman Bahasa Nusantara</p>
                     </div>
@@ -604,7 +687,7 @@
                 </div>
 
                 {{-- 3. AGAMA – PIE --}}
-                <div class="chart-card">
+                <div class="chart-card scroll-reveal reveal-zoom-in delay-300">
                     <div class="flex items-center justify-between mb-3">
                         <p class="chart-title">Keberagaman Agama di Indonesia</p>
                     </div>

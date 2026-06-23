@@ -44,6 +44,11 @@
     {{-- CSS Navbar (sekaligus theme) --}}
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
 
+    {{-- Google Fonts - Cinzel --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&display=swap" rel="stylesheet">
+
 <style>
 /* ==========================================
    THEME AWARE LOADER
@@ -830,46 +835,54 @@ document.addEventListener("click", function (e) {
   const holder = document.getElementById("garudaParticles");
   if (!cursor || !holder) return;
 
-  let x = window.innerWidth / 2;
-  let y = window.innerHeight / 2;
+        let x = window.innerWidth / 2;
+        let y = window.innerHeight / 2;
 
-  let lastParticleAt = 0;
+        let lastParticleAt = 0;
+        let firstMove = false;
 
-  function moveCursor(nx, ny){
-    cursor.style.left = nx + "px";
-    cursor.style.top  = ny + "px";
-  }
+        // Sembunyikan kursor kustom pada awal load halaman agar tidak tertinggal di tengah layar
+        cursor.style.opacity = "0";
 
-  function spawnParticle(px, py){
-    const now = performance.now();
-    if (now - lastParticleAt < 18) return;
-    lastParticleAt = now;
+        function moveCursor(nx, ny){
+          cursor.style.left = nx + "px";
+          cursor.style.top  = ny + "px";
+        }
 
-    const p = document.createElement("div");
-    p.className = "garuda-particle";
+        function spawnParticle(px, py){
+          const now = performance.now();
+          if (now - lastParticleAt < 18) return;
+          lastParticleAt = now;
 
-    const size = 3 + Math.random() * 5;
-    p.style.width  = size + "px";
-    p.style.height = size + "px";
+          const p = document.createElement("div");
+          p.className = "garuda-particle";
 
-    const ox = (Math.random() - 0.5) * 10;
-    const oy = (Math.random() - 0.5) * 10;
+          const size = 3 + Math.random() * 5;
+          p.style.width  = size + "px";
+          p.style.height = size + "px";
 
-    p.style.left = (px + ox) + "px";
-    p.style.top  = (py + oy) + "px";
+          const ox = (Math.random() - 0.5) * 10;
+          const oy = (Math.random() - 0.5) * 10;
 
-    holder.appendChild(p);
+          p.style.left = (px + ox) + "px";
+          p.style.top  = (py + oy) + "px";
 
-    p.addEventListener("animationend", () => p.remove());
-  }
+          holder.appendChild(p);
 
-  moveCursor(x, y);
+          p.addEventListener("animationend", () => p.remove());
+        }
 
-  window.addEventListener("mousemove", (e) => {
-    x = e.clientX; y = e.clientY;
-    moveCursor(x, y);
-    spawnParticle(x, y);
-  }, { passive: true });
+        moveCursor(x, y);
+
+        window.addEventListener("mousemove", (e) => {
+          if (!firstMove) {
+            firstMove = true;
+            cursor.style.opacity = "";
+          }
+          x = e.clientX; y = e.clientY;
+          moveCursor(x, y);
+          spawnParticle(x, y);
+        }, { passive: true });
 
   document.addEventListener("mousedown", () => cursor.classList.add("is-down"), true);
   document.addEventListener("mouseup",   () => cursor.classList.remove("is-down"), true);

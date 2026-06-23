@@ -3,6 +3,8 @@
 
 @section('title', 'History Pulau & Suku')
 
+@section('page-title', 'History Pulau & Suku')
+
 @section('content')
 @php
     // keep original variables behavior

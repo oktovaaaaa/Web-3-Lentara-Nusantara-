@@ -89,6 +89,8 @@
 
             /* Title (neon gradient) - basis dari yang kamu pakai di History & Stats */
     .neon-title {
+        font-family: 'Cinzel', serif !important;
+        letter-spacing: 0.04em;
         text-align: center !important;
         display: block !important;
         width: 100% !important;
@@ -183,6 +185,11 @@
                TRIBE TABS STYLE (dari islands/partials/tribe-styles.blade.php)
                (Aku pindahin ke sini tanpa mengubah isi CSS-nya)
             ========================================================= */
+            /* Fix scroll offset for sticky navbar */
+            #about, #destinations, #foods, #warisan, #quiz, #history {
+                scroll-margin-top: 110px;
+            }
+
             .tribe-tab {
                 background: rgba(148, 163, 184, 0.12); /* abu soft, masih kelihatan di dark / light */
                 color: var(--txt-body, #020617);
@@ -924,13 +931,9 @@
                 padding: 1.5rem;
                 overflow: hidden;
                 cursor: pointer;
-                transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, box-shadow 0.3s ease;
                 box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
                 border: 1px solid rgba(255, 255, 255, 0.1);
-
-                opacity: 0;
-                transform: translateY(20px);
-                animation: statsFadeUp 0.7s ease-out forwards;
                 text-align: left;
             }
 
@@ -1078,11 +1081,7 @@
                     0 20px 60px rgba(0, 0, 0, 0.35),
                     0 0 0 1px rgba(255, 255, 255, 0.06);
                 overflow: hidden;
-                transition: all 0.3s ease;
-
-                opacity: 0;
-                transform: translateY(20px);
-                animation: statsFadeUp 0.7s ease-out forwards;
+                transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, box-shadow 0.3s ease;
                 color: var(--txt-body);
             }
 
@@ -1160,19 +1159,7 @@
                 height: 240px;
                 margin: 1rem 0;
             }
-
-            @keyframes statsFadeUp {
-                from { opacity: 0; transform: translateY(20px) scale(0.98); }
-                to { opacity: 1; transform: translateY(0) scale(1); }
-            }
-
-            #stats .stat-card[data-stat="population"] { animation-delay: 0.12s; }
-            #stats .stat-card[data-stat="ethnicity"]  { animation-delay: 0.22s; }
-            #stats .stat-card[data-stat="language"]   { animation-delay: 0.32s; }
-
-            #stats .chart-card:nth-child(1) { animation-delay: 0.42s; }
-            #stats .chart-card:nth-child(2) { animation-delay: 0.52s; }
-            #stats .chart-card:nth-child(3) { animation-delay: 0.62s; }
+            /* Hapus keyframe dan delay animasi bawaan agar menggunakan system scroll-reveal */
 
             /* ================= MODAL ================= */
             #stats-modal-backdrop {
@@ -1308,8 +1295,55 @@
             }
 
 
+            /* =========================================================
+               SCROLL REVEAL ANIMATION SYSTEM
+               - Sama persis seperti di home.blade.php
+               - Berlaku untuk semua section di halaman pulau
+            ========================================================= */
+
+            /* State awal: SEMUA elemen scroll-reveal dimulai TIDAK TERLIHAT */
+            .scroll-reveal {
+                opacity: 0 !important;
+                will-change: opacity, transform;
+                transition-duration: 0.85s;
+                transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+                transition-property: opacity, transform;
+            }
+
+            /* Saat active (sudah masuk viewport): tampil normal */
+            .scroll-reveal.active {
+                opacity: 1 !important;
+            }
+
+            .delay-100 { transition-delay: 100ms !important; }
+            .delay-150 { transition-delay: 150ms !important; }
+            .delay-200 { transition-delay: 200ms !important; }
+            .delay-300 { transition-delay: 300ms !important; }
+            .delay-400 { transition-delay: 400ms !important; }
+            .delay-500 { transition-delay: 500ms !important; }
+
+            /* Arah animasi masing-masing type */
+            .reveal-fade-up   { transform: translateY(50px); }
+            .reveal-fade-up.active   { transform: translateY(0); }
+
+            .reveal-fade-left  { transform: translateX(-50px); }
+            .reveal-fade-left.active  { transform: translateX(0); }
+
+            .reveal-fade-right { transform: translateX(50px); }
+            .reveal-fade-right.active { transform: translateX(0); }
+
+            .reveal-zoom-in  { transform: scale(0.93) translateY(20px); }
+            .reveal-zoom-in.active  { transform: scale(1) translateY(0); }
+
+            .reveal-scale-up {
+                transform: scale(0.88);
+                transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            .reveal-scale-up.active { transform: scale(1); }
 
         </style>
+
+
 
         {{-- Styles untuk tabs + timeline (punyamu yang sudah ada) --}}
         @include('islands.partials.tribe-styles')
@@ -1331,7 +1365,7 @@
             {{-- =========================
                TABS SUKU (SERVER DRIVEN)
                ========================= --}}
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6 scroll-reveal reveal-fade-up">
                 <div>
                     <p class="text-xs uppercase tracking-[0.18em] text-[var(--muted)] mb-1">
                         Pilih Suku di {{ $islandPretty }}
@@ -1414,11 +1448,11 @@
                    QUIZ (DINAMIS PER SUKU, fallback global)
                    =================================================== --}}
 <section id="quiz" class="py-12">
-    <h2 class="neon-title">
+    <h2 class="neon-title scroll-reveal reveal-fade-up">
         Kuis Suku {{ $tribeKey !== '' ? $tribeKey : '—' }}
     </h2>
-    <div class="title-decoration"></div>
-    <p class="neon-subtitle">
+    <div class="title-decoration scroll-reveal reveal-fade-up delay-100"></div>
+    <p class="neon-subtitle scroll-reveal reveal-fade-up delay-150">
         Uji pengetahuanmu tentang budaya dan keunikan Suku {{ $tribeKey !== '' ? $tribeKey : '—' }} lewat kuis singkat.
     </p>
 
@@ -1431,4 +1465,59 @@
             </div>
         </div>
     </section>
+
+    {{-- =====================================================
+       SCROLL REVEAL SCRIPT - SAMA SEPERTI HOME.BLADE.PHP
+    ===================================================== --}}
+    <script>
+        (function() {
+            // Jalankan setelah halaman fully rendered (window load) bukan DOMContentLoaded
+            // agar semua partial sudah ter-render dan CSS opacity:0 sudah diterapkan
+            function initScrollReveal() {
+                const revealElements = document.querySelectorAll('.scroll-reveal');
+                if (!revealElements.length) return;
+
+                if (!('IntersectionObserver' in window)) {
+                    revealElements.forEach(el => el.classList.add('active'));
+                    return;
+                }
+
+                const observerOptions = {
+                    root: null,
+                    // Mulai animasi lebih awal: elemen masuk 80px sebelum benar-benar visible
+                    rootMargin: '0px 0px -60px 0px',
+                    threshold: 0.05
+                };
+
+                const revealObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        } else {
+                            // Hapus active saat elemen benar-benar keluar dari layar
+                            // agar bisa animasi lagi saat scroll kembali
+                            const bounding = entry.target.getBoundingClientRect();
+                            if (bounding.top > window.innerHeight + 50 || bounding.bottom < -50) {
+                                entry.target.classList.remove('active');
+                            }
+                        }
+                    });
+                }, observerOptions);
+
+                revealElements.forEach(function(el) {
+                    revealObserver.observe(el);
+                });
+            }
+
+            // Tunggu sebentar setelah load agar layout sudah settled
+            if (document.readyState === 'complete') {
+                setTimeout(initScrollReveal, 100);
+            } else {
+                window.addEventListener('load', function() {
+                    setTimeout(initScrollReveal, 100);
+                });
+            }
+        })();
+    </script>
 @endsection
+

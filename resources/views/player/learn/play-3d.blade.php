@@ -494,12 +494,14 @@
 
     <!-- Character portrait -->
     <div style="position:absolute;bottom:160px;left:50%;transform:translateX(-50%);width:100%;display:flex;justify-content:center;pointer-events:none;">
-        <div id="storyChar" style="
-            font-size:clamp(80px,18vw,160px);
+        <img id="storyChar" src="" alt="" style="
+            max-height:55vh;
+            max-width:40vw;
+            object-fit:contain;
             transition:opacity .35s ease,transform .35s ease;
-            filter:drop-shadow(0 0 30px rgba(0,0,0,.7));
-            line-height:1;
-        "></div>
+            filter:drop-shadow(0 10px 30px rgba(0,0,0,.7));
+            display:none;
+        ">
     </div>
 
     <!-- Dialog box -->
@@ -4018,32 +4020,38 @@
     const INTRO_SLIDES = [
         {
             speaker: '— Narasi —',
-            char: '🌊',
+            char: null,
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: 'Di tengah lautan Nusantara, sebuah perahu kecil terdampar di tepi pantai pulau yang asing...',
         },
         {
             speaker: 'Penjelajah',
-            char: '🧑‍🌾',
+            char: "{{ asset('images/storylines/aceh/char_explorer.png') }}",
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Hei! Kita terdampar! Aku bisa melihat sebuah desa di sana. Ayo kita cari bantuan dan perbekalan!"',
         },
         {
             speaker: 'Laksamana Malahayati',
-            char: '👸',
+            char: "{{ asset('images/storylines/aceh/char_malahayati.png') }}",
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Selamat datang di tanah Aceh, penjelajah! Aku Laksamana Malahayati, komandan armada Inong Balee. Desa ini penuh dengan warisan budaya kami."',
         },
         {
             speaker: 'Penjelajah',
-            char: '🧑‍🌾',
+            char: "{{ asset('images/storylines/aceh/char_explorer.png') }}",
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Luar biasa! Kami butuh perbekalan untuk melanjutkan perjalanan. Bisakah kami membantu mengumpulkan sesuatu?"',
         },
         {
             speaker: 'Laksamana Malahayati',
-            char: '👸',
+            char: "{{ asset('images/storylines/aceh/char_malahayati.png') }}",
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Tentu! Kami memerlukan 4 pusaka budaya Aceh — Mie Aceh dari kedai, Kopi Gayo dari warung, Pinto Aceh dari meja ukir, dan Rapa\'i dari balai musik. Kumpulkan semuanya dan kapal kami siap berlayar!"',
         },
         {
             speaker: 'Penjelajah',
-            char: '🧑‍🌾',
+            char: "{{ asset('images/storylines/aceh/char_explorer.png') }}",
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Baik! Aku akan menjelajahi desa ini. Tapi hati-hati — ada banyak barang mirip yang bukan budaya Aceh asli. Aku harus jeli!"',
         },
     ];
@@ -4051,27 +4059,32 @@
     const OUTRO_SLIDES = [
         {
             speaker: '— Narasi —',
-            char: '🏆',
+            char: null,
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_port.png') }}",
             text: 'Semua pusaka budaya Aceh telah terkumpul. Penjelajah berlari menuju dermaga membawa bekal berharga itu...',
         },
         {
             speaker: 'Laksamana Malahayati',
-            char: '👸',
+            char: "{{ asset('images/storylines/aceh/char_malahayati.png') }}",
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_port.png') }}",
             text: '"Sempurna! Mie Aceh, Kopi Gayo, Pinto Aceh, dan Rapa\'i — semua ada! Armada Inong Balee siap berlayar!"',
         },
         {
             speaker: 'Penjelajah',
-            char: '🧑‍🌾',
+            char: "{{ asset('images/storylines/aceh/char_explorer.png') }}",
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_port.png') }}",
             text: '"Terima kasih Laksamana! Aku belajar banyak tentang kebudayaan Aceh yang kaya ini. Setiap barang punya makna tersendiri."',
         },
         {
             speaker: 'Laksamana Malahayati',
-            char: '👸',
+            char: "{{ asset('images/storylines/aceh/char_malahayati.png') }}",
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_port.png') }}",
             text: '"Itulah semangat Serambi Mekkah — kaya tradisi, teguh dalam jiwa. Bawalah ilmu ini dalam perjalananmu ke pulau-pulau berikutnya!"',
         },
         {
             speaker: '— Narasi —',
-            char: '⛵',
+            char: null,
+            bg: "{{ asset('images/storylines/aceh/bg_aceh_port.png') }}",
             text: 'Kapal Cakra Donya mengembangkan layarnya. Bersama angin laut Aceh, ekspedisi berlanjut menuju cakrawala baru Nusantara...',
         },
     ];
@@ -4118,13 +4131,27 @@
             storyDots.appendChild(dot);
         });
 
+        // Background
+        if (slide.bg) {
+            storyBg.style.backgroundImage = `url('${slide.bg}')`;
+            storyBg.style.display = 'block';
+        } else {
+            storyBg.style.backgroundImage = '';
+            storyBg.style.display = 'none';
+        }
+
         // Character
         storyChar.style.opacity = '0';
         storyChar.style.transform = 'translateY(20px)';
         setTimeout(() => {
-            storyChar.textContent = slide.char || '';
-            storyChar.style.opacity = '1';
-            storyChar.style.transform = 'translateY(0)';
+            if (slide.char) {
+                storyChar.src = slide.char;
+                storyChar.style.display = 'block';
+                storyChar.style.opacity = '1';
+                storyChar.style.transform = 'translateY(0)';
+            } else {
+                storyChar.style.display = 'none';
+            }
         }, 200);
 
         storySpeaker.textContent = slide.speaker || '';

@@ -20,11 +20,108 @@
 <section id="warisan" class="py-10 w-full overflow-x-hidden">
 
     {{-- ================= SECTION TITLE (DARI DATABASE) ================= --}}
-    <h2 class="neon-title">{{ $heroTitle }}</h2>
-    <div class="title-decoration"></div>
+    <h2 class="neon-title scroll-reveal reveal-fade-up">{{ $heroTitle }}</h2>
+    <div class="title-decoration scroll-reveal reveal-fade-up delay-100"></div>
 
     @if($heroDescription)
         <p class="wf-hero-desc">{{ $heroDescription }}</p>
+    @endif
+
+    @php
+        $totalItemsCount = 0;
+        foreach($labels as $key => $label) {
+            $totalItemsCount += ($itemsByCategory[$key] ?? collect())->count();
+        }
+    @endphp
+
+    @if($totalItemsCount === 0)
+        <style>
+            .empty-state-card {
+                position: relative;
+                max-width: 580px;
+                margin: 2rem auto;
+                padding: 3.5rem 2rem;
+                border-radius: 24px;
+                background: linear-gradient(145deg, 
+                    color-mix(in srgb, var(--card) 40%, transparent), 
+                    color-mix(in srgb, var(--card) 20%, transparent));
+                border: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+                box-shadow: 
+                    0 20px 40px rgba(0, 0, 0, 0.2), 
+                    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                overflow: hidden;
+                text-align: center;
+            }
+
+            html[data-theme="dark"] .empty-state-card {
+                background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.005));
+                border-color: rgba(255, 255, 255, 0.05);
+            }
+
+            .empty-state-card::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                padding: 1.5px;
+                background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), transparent 70%);
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                pointer-events: none;
+            }
+
+            .empty-state-icon svg {
+                color: var(--brand, #f97316);
+                filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.4));
+                animation: pulseGlow 3s infinite ease-in-out;
+            }
+
+            @keyframes pulseGlow {
+                0%, 100% {
+                    transform: scale(1);
+                    filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.3));
+                }
+                50% {
+                    transform: scale(1.05);
+                    filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.6));
+                }
+            }
+
+            .empty-state-title {
+                font-family: 'Cinzel', serif !important;
+                font-size: 1.35rem;
+                font-weight: 700;
+                margin: 1rem 0 0.5rem 0;
+                color: var(--txt-body);
+                letter-spacing: 0.02em;
+            }
+
+            .empty-state-desc {
+                font-size: 0.95rem;
+                line-height: 1.6;
+                color: var(--muted);
+                max-width: 420px;
+                margin: 0 auto;
+            }
+        </style>
+
+        <div class="empty-state-card scroll-reveal reveal-zoom-in">
+            <div class="empty-state-icon">
+                <svg class="w-16 h-16 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22V8M5 12H2M22 12h-3" opacity="0.5" />
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    <path d="M2 17l10 5 10-5" />
+                    <path d="M2 12l10 5 10-5" />
+                </svg>
+            </div>
+            <h3 class="empty-state-title">Warisan Budaya Belum Tersedia</h3>
+            <p class="empty-state-desc">
+                Data warisan budaya takbenda, pakaian adat, rumah tradisi, senjata, maupun alat musik khas suku ini sedang dikumpulkan oleh admin.
+            </p>
+        </div>
     @endif
 
     <style>
@@ -76,9 +173,10 @@
         }
 
         #warisan .wf-category-title {
+            font-family: 'Cinzel', serif !important;
             font-size: clamp(1.35rem, 2.2vw, 2rem);
-            font-weight: 900;
-            letter-spacing: -0.02em;
+            font-weight: 700;
+            letter-spacing: 0.04em;
             color: var(--wf-txt);
             margin: 0;
             line-height: 1.2;
@@ -116,7 +214,7 @@
             width: 100%;
             max-width: 1400px;
             margin: 0 auto 3.2rem;
-            padding: 0 2rem;
+            padding: 0 4.5rem;
             position: relative;
         }
 
@@ -345,8 +443,8 @@
             stroke-width: 2.7;
         }
 
-        #warisan .wf-prev{ left: -18px; }
-        #warisan .wf-next{ right: -18px; }
+        #warisan .wf-prev{ left: -58px; }
+        #warisan .wf-next{ right: -58px; }
 
         /* ================= MOBILE NAV ================= */
         #warisan .wf-mobile-nav{
@@ -760,21 +858,21 @@
             @continue
         @endif
 
-        <div class="wf-row wf-reveal" id="{{ $rowId }}" data-wf-row="{{ $key }}">
+        <div class="wf-row wf-reveal scroll-reveal reveal-fade-up" id="{{ $rowId }}" data-wf-row="{{ $key }}">
             <div class="wf-category-title-wrap">
-                <h3 class="wf-category-title">{{ $label }}</h3>
+                <h3 class="wf-category-title scroll-reveal reveal-fade-up">{{ $label }}</h3>
 
             </div>
 
             <div class="wf-flow">
-                <div class="wf-viewport" data-wf-viewport>
-                    {{-- DESKTOP NAV --}}
-                    <button type="button" class="wf-nav wf-prev" data-wf-prev aria-label="Sebelumnya">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/>
-                        </svg>
-                    </button>
+                {{-- DESKTOP NAV --}}
+                <button type="button" class="wf-nav wf-prev" data-wf-prev aria-label="Sebelumnya">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/>
+                    </svg>
+                </button>
 
+                <div class="wf-viewport" data-wf-viewport>
                     <div class="wf-track" data-wf-track>
                         @foreach($items as $item)
                             @php
@@ -838,13 +936,13 @@
                             </article>
                         @endforeach
                     </div>
-
-                    <button type="button" class="wf-nav wf-next" data-wf-next aria-label="Berikutnya">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
-                        </svg>
-                    </button>
                 </div>
+
+                <button type="button" class="wf-nav wf-next" data-wf-next aria-label="Berikutnya">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                    </svg>
+                </button>
 
                 {{-- MOBILE NAV (below) --}}
                 <div class="wf-mobile-nav" data-wf-mobile-nav>

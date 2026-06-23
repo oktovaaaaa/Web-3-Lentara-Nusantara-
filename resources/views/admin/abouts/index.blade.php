@@ -3,6 +3,8 @@
 
 @section('title', 'About Suku')
 
+@section('page-title', 'About Suku')
+
 @section('content')
 @php
     $ready = !empty($selectedIslandId) && !empty($selectedTribeKey);

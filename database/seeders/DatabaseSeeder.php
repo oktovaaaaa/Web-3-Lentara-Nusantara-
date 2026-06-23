@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             RoroJonggrangSeeder::class,
             PangeranSamudraSeeder::class,
             AcehGame3DSeeder::class,
+            BatakTribeSeeder::class,
+            AcehTribeSeeder::class,
         ]);
     }
 }

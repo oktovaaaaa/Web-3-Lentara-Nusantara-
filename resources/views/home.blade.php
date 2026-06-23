@@ -21,6 +21,8 @@
             {{-- ================= JUDUL KONSISTEN NEON ORANGE ================= --}}
             <style>
                 .neon-title {
+                    font-family: 'Cinzel', serif !important;
+                    letter-spacing: 0.04em;
                     text-align: center !important;
                     display: block !important;
                     width: 100% !important;

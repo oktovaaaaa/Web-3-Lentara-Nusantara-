@@ -39,6 +39,8 @@ FULL CSS (REPLACE SEMUA <style> KAMU DENGAN INI)
     }
 
     .mi-title {
+        font-family: 'Cinzel', serif !important;
+        letter-spacing: 0.04em;
         font-size: clamp(2.2rem, 4vw, 3rem);
         font-weight: 800;
         margin-bottom: 0.5rem;

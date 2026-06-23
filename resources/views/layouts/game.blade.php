@@ -249,6 +249,10 @@
         let y = window.innerHeight / 2;
 
         let lastParticleAt = 0;
+        let firstMove = false;
+
+        // Sembunyikan kursor kustom pada awal load halaman agar tidak tertinggal di tengah layar
+        cursor.style.opacity = "0";
 
         function moveCursor(nx, ny){
           cursor.style.left = nx + "px";
@@ -281,6 +285,10 @@
         moveCursor(x, y);
 
         window.addEventListener("mousemove", (e) => {
+          if (!firstMove) {
+            firstMove = true;
+            cursor.style.opacity = "";
+          }
           x = e.clientX; y = e.clientY;
           moveCursor(x, y);
           spawnParticle(x, y);

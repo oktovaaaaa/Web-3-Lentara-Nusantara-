@@ -3,6 +3,8 @@
 
 @section('title', 'Admin - Tambah Destinasi')
 
+@section('page-title', 'Tambah Destinasi')
+
 @section('content')
 <div class="max-w-4xl mx-auto py-8 px-4 text-slate-100">
     <h1 class="text-2xl font-bold mb-4">Tambah Destinasi</h1>

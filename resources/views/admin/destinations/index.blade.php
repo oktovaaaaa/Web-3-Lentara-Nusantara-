@@ -3,6 +3,8 @@
 
 @section('title', 'Admin - Destinasi')
 
+@section('page-title', 'Destinasi')
+
 @section('content')
 <div class="a-wrap" data-page="admin-destinations-index">
 
