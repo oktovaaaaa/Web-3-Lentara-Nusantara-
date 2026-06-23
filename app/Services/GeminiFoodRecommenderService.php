@@ -23,6 +23,23 @@ class GeminiFoodRecommenderService
             $model = 'gemini-2.5-flash';
         }
 
+        try {
+            return $this->tryGenerateWithModel($apiKey, $model, $tribeKey, $islandNameOrSlug);
+        } catch (\Exception $e) {
+            // Jika model 2.5-flash gagal (503/429/dll), coba fallback ke 1.5-flash!
+            if ($model !== 'gemini-1.5-flash') {
+                try {
+                    return $this->tryGenerateWithModel($apiKey, 'gemini-1.5-flash', $tribeKey, $islandNameOrSlug);
+                } catch (\Exception $ex) {
+                    throw new \RuntimeException("Gemini gagal pada model {$model} dan fallback 1.5-flash. Error: " . $ex->getMessage(), 0, $ex);
+                }
+            }
+            throw $e;
+        }
+    }
+
+    private function tryGenerateWithModel(string $apiKey, string $model, string $tribeKey, string $islandNameOrSlug): array
+    {
         // 1) Try normal (10 items)
         $items = $this->callGeminiAndParse(
             apiKey: $apiKey,
@@ -111,7 +128,10 @@ PROMPT;
 
         $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
 
-        $resp = Http::withOptions(['verify' => false])->timeout(60)->post($url, [
+        $resp = Http::withOptions(['verify' => false])
+            ->retry(3, 1000)
+            ->timeout(60)
+            ->post($url, [
             "contents" => [
                 [
                     "role"  => "user",

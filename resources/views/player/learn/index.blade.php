@@ -742,11 +742,10 @@ $refillUrl = Route::has('game.hearts.refill') ? route('game.hearts.refill') : nu
                         <span id="heartsNowDesktop">{{ (int)($player->hearts ?? 0) }}</span>/<span>{{ (int)($player->hearts_max ?? 5) }}</span>
                     </div>
 
-                    <div class="pill money" title="Uang">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M3 7h18v10H3V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                            <path d="M7 7V5h10v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" stroke="currentColor" stroke-width="2"/>
+                    <div class="pill money" title="Koin">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="8"/>
+                            <path d="M12 8v8M9 12h6"/>
                         </svg>
                         <span>{{ number_format((int)($player->coins ?? 0), 0, ',', '.') }}</span>
                     </div>

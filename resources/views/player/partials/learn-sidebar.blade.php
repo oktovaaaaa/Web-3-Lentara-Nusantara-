@@ -379,7 +379,7 @@
     }
     .m-pill svg{ width: 16px; height: 16px; }
     .m-pill.heart{ color: var(--danger); }
-    .m-pill.money{ color:#22c55e; }
+    .m-pill.money{ color:#eab308; }
     .m-pill.xp{ color:#3b82f6; }
 
     /* Drawer overlay + mobile nav (overlay, NOT pushing layout) */
@@ -455,11 +455,10 @@
             <span id="heartsNowMobile">{{ (int)($player->hearts ?? 0) }}</span>/<span>{{ (int)($player->hearts_max ?? 5) }}</span>
         </div>
 
-        <div class="m-pill money" title="Uang">
-            <svg viewBox="0 0 24 24" fill="none">
-                <path d="M3 7h18v10H3V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M7 7V5h10v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" stroke="currentColor" stroke-width="2"/>
+        <div class="m-pill money" title="Koin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="8"/>
+                <path d="M12 8v8M9 12h6"/>
             </svg>
             <span>{{ number_format((int)($player->coins ?? 0), 0, ',', '.') }}</span>
         </div>
@@ -524,6 +523,16 @@
                 <span class="nav-label">{{ $m['label'] }}</span>
             </a>
         @endforeach
+
+        <a class="nav-item" href="{{ route('home') }}">
+            <span class="nav-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="currentColor" fill-opacity="0.12"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </span>
+            <span class="nav-label">Kembali ke Beranda</span>
+        </a>
     </nav>
 
 <div class="nav-foot">
@@ -612,6 +621,16 @@
                 <span class="nav-label">{{ $m['label'] }}</span>
             </a>
         @endforeach
+
+        <a class="nav-item" href="{{ route('home') }}">
+            <span class="nav-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="currentColor" fill-opacity="0.12"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </span>
+            <span class="nav-label">Kembali ke Beranda</span>
+        </a>
     </nav>
 
     <div class="nav-foot">

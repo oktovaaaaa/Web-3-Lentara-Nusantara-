@@ -33,16 +33,33 @@
     #camera-ar .ar-wrap {
       max-width: 1100px;
       margin: 0 auto;
+    }
+
+    #camera-ar .ar-grid {
       display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 24px;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 32px;
     }
 
     @media (max-width: 1024px) {
-      #camera-ar .ar-wrap {
+      #camera-ar .ar-grid {
         grid-template-columns: 1fr;
+        gap: 24px;
       }
     }
+
+    /* Traditional Gold Corner Accents */
+    #camera-ar .q-corner {
+      position: absolute !important;
+      width: 60px;
+      height: 60px;
+      pointer-events: none;
+      z-index: 10 !important;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    #camera-ar .q-corner-tl { top: -6px; left: -6px; }
+    #camera-ar .q-corner-tr { top: -6px; right: -6px; transform: scaleX(-1); }
 
     /* ================= CARDS WITH ORANGE NEON ================= */
     #camera-ar .ar-card {
@@ -542,138 +559,204 @@
   </style>
 
   <div class="ar-wrap">
-    {{-- LEFT: CAMERA VIEW + (FILTER + FLIP DIPINDAH KE SINI) --}}
-    <div class="ar-card scroll-reveal reveal-fade-up delay-100">
-      <div class="stage" id="arStage">
-        <video id="arVideo" playsinline muted autoplay></video>
+    <div class="ar-card scroll-reveal reveal-fade-up delay-100 w-full relative">
+      
+      <!-- Batik Header Banner -->
+      <div class="relative w-full h-16 rounded-2xl overflow-hidden mb-6 border border-amber-600/30 shadow-inner" style="background-color: #1a0f03;">
+        <img src="{{ asset('images/icon/footer.JPEG') }}" class="w-full h-full object-cover opacity-90 object-center" alt="Corak Batik">
+        <!-- Elegant Overlay to make the text/button legible and add depth -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-stone-950/30"></div>
+        
+        <!-- Ornate Gold Filigree Borders on the batik banner sides (matching Nusantara vibes) -->
+        <div class="absolute inset-y-0 left-0 w-2 bg-gradient-to-r from-amber-500 to-transparent opacity-60"></div>
+        <div class="absolute inset-y-0 right-0 w-2 bg-gradient-to-l from-amber-500 to-transparent opacity-60"></div>
 
-        <div class="stage-overlay">
-          <span class="chip" id="arStatus">Status: Siap</span>
-          <span class="chip" id="arFilterName">Filter: Tidak ada</span>
+        <!-- Title of the stage or a neat label on the left of the batik header -->
+        <div class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+          <span class="text-white font-serif font-bold tracking-widest text-sm uppercase drop-shadow-md">Lentara AR Nusantara</span>
         </div>
 
-        {{-- Watermark Image Top Right --}}
-        <div class="wm-topright" aria-label="Lentara Watermark">
-          <img id="lentaraWatermarkImg" src="{{ asset('images/icon/icon_lentara.png') }}" alt="Lentara" loading="eager">
-          <span>LENTARA AR</span>
-        </div>
-
-        {{-- ✅ DIHAPUS sesuai request:
-        <div class="watermark">LENTARA • AR NUSANTARA</div>
-        --}}
-      </div>
-
-      <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <button class="btn" id="btnStartCam" type="button">
-          <span class="inline-flex items-center justify-center gap-2">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="currentColor"
-                stroke-width="2" />
-              <path d="M16 10l4-2v8l-4-2v-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+        <!-- Button Panduan overlaid on the batik header on the top-right -->
+        <div style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); z-index: 10;">
+          <button id="btnOpenGuide" class="btn-secondary !w-auto !px-4 !py-2 flex items-center gap-2 rounded-xl cursor-pointer hover:bg-orange-500/20 bg-slate-900/60 backdrop-blur-md border border-orange-500/40 text-white hover:border-orange-400 transition-all duration-300" type="button">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>Mulai Kamera</span>
-          </span>
-        </button>
-
-        <button class="btn btn-secondary" id="btnCapture" type="button" disabled>
-          <span class="inline-flex items-center justify-center gap-2">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M7 7l1.2-2h7.6L17 7h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2Z"
-                stroke="currentColor" stroke-width="2" />
-              <path d="M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2" />
-            </svg>
-            <span>Ambil Foto</span>
-          </span>
-        </button>
-
-        <button class="btn btn-secondary" id="btnStopCam" type="button" disabled>
-          <span class="inline-flex items-center justify-center gap-2">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M7 7h10v10H7V7Z" stroke="currentColor" stroke-width="2" />
-            </svg>
-            <span>Hentikan</span>
-          </span>
-        </button>
-      </div>
-
-
-
-      {{-- ✅ FILTER + FLIP DIPINDAH KE BAWAH CATATAN / AREA TIPS --}}
-      <div class="mt-6 pt-4 border-t border-gray-800">
-        <div class="flex items-center justify-between mb-3">
-          <div class="section-title mb-0">Pilih Filter</div>
-          <button class="btn-secondary !w-auto !px-4 !py-2" id="btnClearFilter" type="button">
-            Bersihkan
+            <span class="text-xs font-bold text-white">Panduan</span>
           </button>
         </div>
+      </div>
 
-        <div class="filter-bar mt-2" id="filterBar"></div>
+      <div>
+        {{-- CAMERA VIEW STAGE --}}
+        <div class="stage" id="arStage">
+          <video id="arVideo" playsinline muted autoplay></video>
 
-        <div class="mt-4">
+          <div class="stage-overlay">
+            <span class="chip" id="arStatus">Status: Siap</span>
+            <span class="chip" id="arFilterName">Filter: Tidak ada</span>
+          </div>
 
-          <button class="btn btn-secondary" id="btnFlip" type="button" disabled>
+          {{-- Watermark Image Top Right --}}
+          <div class="wm-topright" aria-label="Lentara Watermark">
+            <img id="lentaraWatermarkImg" src="{{ asset('images/icon/icon_lentara.png') }}" alt="Lentara" loading="eager">
+            <span>LENTARA AR</span>
+          </div>
+        </div>
+
+        {{-- BUTTONS --}}
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <button class="btn" id="btnStartCam" type="button">
             <span class="inline-flex items-center justify-center gap-2">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M20 7h-6m6 0-2-2m2 2-2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
-                <path d="M4 17h6m-6 0 2 2m-2-2 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
-                <path d="M18 9a7 7 0 0 0-12.3-4.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                <path d="M6 15a7 7 0 0 0 12.3 4.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M4 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7Z" stroke="currentColor"
+                  stroke-width="2" />
+                <path d="M16 10l4-2v8l-4-2v-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
               </svg>
-              <span>Ganti Kamera</span>
+              <span>Mulai Kamera</span>
             </span>
           </button>
-        </div>
-      </div>
-    </div>
 
-    {{-- RIGHT: (TIPS & TRIK DIPINDAH KE SINI) + HASIL CAPTURE --}}
-    <div class="ar-card scroll-reveal reveal-fade-up delay-200">
-      {{-- ✅ TIPS & TRIK PINDAH KE POSISI FILTER SEBELUMNYA --}}
-      <div>
-        <div class="section-title mb-2">Panduan & Saran</div>
-        <ul class="muted text-sm space-y-1">
-          <li>• Pilih filter sebelum menyalakan kamera</li>
-          <li>• Pastikan pencahayaan cukup</li>
-          <li>• Gunakan Ganti Kamera untuk beralih depan/belakang</li>
-          <li>• Unduh hasil foto untuk dibagikan</li>
-        </ul>
-
-      </div>
-
-      <div class="mt-6 pt-4 border-t border-gray-800">
-        <div class="section-title mb-3">Hasil Capture</div>
-        <div class="preview">
-          <img id="capturePreview" alt="Preview capture" src="" style="display:none;">
-          <div id="captureEmpty" class="p-6 text-center muted">
-            <div class="mb-2 inline-flex justify-center">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <button class="btn btn-secondary" id="btnCapture" type="button" disabled>
+            <span class="inline-flex items-center justify-center gap-2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M7 7l1.2-2h7.6L17 7h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2Z"
                   stroke="currentColor" stroke-width="2" />
                 <path d="M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2" />
               </svg>
-            </div>
-            <div>Belum ada foto.</div>
-            <div class="text-sm mt-1">Klik tombol <strong>Ambil Foto</strong> untuk mengambil gambar.</div>
-          </div>
+              <span>Ambil Foto</span>
+            </span>
+          </button>
 
+          <button class="btn btn-secondary" id="btnStopCam" type="button" disabled>
+            <span class="inline-flex items-center justify-center gap-2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 7h10v10H7V7Z" stroke="currentColor" stroke-width="2" />
+              </svg>
+              <span>Hentikan</span>
+            </span>
+          </button>
         </div>
 
-        <div class="mt-4">
-          <a class="btn btn-secondary text-center" id="btnDownload" href="#" download="lentara-ar.png"
-            style="display:none; text-decoration: none;">
-            <span class="inline-flex items-center justify-center gap-2 w-full">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                <path d="M8 11l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
-                <path d="M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              </svg>
-              <span>Unduh</span>
-            </span>
-          </a>
+        {{-- FILTER BAR --}}
+        <div class="mt-6 pt-4 border-t border-gray-800/40 dark:border-stone-800/40">
+          <div class="flex items-center justify-between mb-3">
+            <div class="section-title mb-0">Pilih Filter</div>
+            <button class="btn-secondary !w-auto !px-4 !py-2" id="btnClearFilter" type="button">
+              Bersihkan
+            </button>
+          </div>
 
+          <div class="filter-bar mt-2" id="filterBar"></div>
+
+          <div class="mt-4">
+            <button class="btn btn-secondary" id="btnFlip" type="button" disabled>
+              <span class="inline-flex items-center justify-center gap-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M20 7h-6m6 0-2-2m2 2-2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M4 17h6m-6 0 2 2m-2-2 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M18 9a7 7 0 0 0-12.3-4.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <path d="M6 15a7 7 0 0 0 12.3 4.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <span>Ganti Kamera</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {{-- HASIL CAPTURE (RIGHT UNDER THE FILTER) --}}
+        <div class="mt-8 pt-6 border-t border-slate-200 dark:border-stone-850">
+          <div class="flex flex-col items-center justify-center text-center">
+            <div class="section-title mb-3">Hasil Capture</div>
+            <div class="preview w-full max-w-lg min-h-[220px] flex items-center justify-center border border-slate-200 dark:border-stone-800/80 rounded-2xl bg-slate-50/50 dark:bg-stone-900/50 p-2 relative overflow-hidden">
+              <img id="capturePreview" alt="Preview capture" src="" style="display:none; max-width: 100%; border-radius: 12px;" class="shadow-lg">
+              <div id="captureEmpty" class="p-8 text-center muted flex flex-col items-center justify-center">
+                <div class="mb-3 inline-flex justify-center text-slate-400 dark:text-stone-650">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 7l1.2-2h7.6L17 7h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2Z"
+                      stroke="currentColor" stroke-width="2" />
+                    <path d="M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2" />
+                  </svg>
+                </div>
+                <div class="font-bold text-slate-600 dark:text-stone-400">Belum ada foto.</div>
+                <div class="text-xs mt-1 text-slate-500 dark:text-stone-500">Klik tombol <strong>Ambil Foto</strong> untuk mengambil gambar.</div>
+              </div>
+            </div>
+
+            <div class="mt-4 w-full max-w-lg">
+              <a class="btn text-center bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-500 hover:to-red-650" id="btnDownload" href="#" download="lentara-ar.png"
+                style="display:none; text-decoration: none;">
+                <span class="inline-flex items-center justify-center gap-2 w-full">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <path d="M8 11l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                    <path d="M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                  <span>Unduh Hasil Foto</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Guide Popup Modal (Traditional Indonesian Gold Accent modal) -->
+  <div id="guideModal" class="fixed inset-0 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
+    <div id="guideModalBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
+    <div class="bg-white dark:bg-stone-900 border-2 border-amber-600/85 rounded-[28px] max-w-md w-[calc(100vw-2rem)] p-6 relative z-10 shadow-2xl transform scale-95 transition-all duration-300">
+      
+      <!-- Ornate corner at the top left of modal -->
+      <div class="q-corner q-corner-tl" aria-hidden="true" style="width: 50px; height: 50px; top: -6px; left: -6px;">
+        <svg width="100%" height="100%" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <use href="#branch-tl-group" />
+          <use href="#branch-tl-vertical" />
+          <g fill="none" stroke="#4e2b02" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+            <use href="#branch-tl-group" />
+            <use href="#branch-tl-vertical" />
+          </g>
+          <g fill="url(#gold-grad-tl)" stroke="#5d3403" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round">
+            <use href="#branch-tl-group" />
+            <use href="#branch-tl-vertical" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="flex items-center justify-between mb-4 pb-2 border-b border-amber-900/10 dark:border-amber-500/10">
+        <h3 class="text-lg font-bold text-amber-700 dark:text-amber-400 font-serif tracking-wider">Panduan & Saran</h3>
+        <button id="btnCloseGuide" class="w-8 h-8 rounded-full flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-slate-500 dark:text-stone-400 border border-slate-200 dark:border-stone-700 transition-all hover:scale-105" type="button">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-sm text-slate-600 dark:text-stone-300">
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold text-xs">1</div>
+          <p class="leading-relaxed">Pilih salah satu <strong>Filter Tradisional</strong> pada daftar pilihan filter di bawah kamera sebelum Anda menyalakan kamera.</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold text-xs">2</div>
+          <p class="leading-relaxed">Klik tombol <strong>Mulai Kamera</strong>. Izinkan peramban (browser) untuk mengakses kamera perangkat Anda.</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold text-xs">3</div>
+          <p class="leading-relaxed">Pastikan area wajah Anda mendapatkan **pencahayaan yang cukup** dan menghadap tegak lurus ke arah kamera agar sistem pelacakan wajah bekerja optimal.</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold text-xs">4</div>
+          <p class="leading-relaxed">Gunakan tombol <strong>Ganti Kamera</strong> untuk beralih antara kamera depan dan kamera belakang (khusus perangkat seluler/mobile).</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold text-xs">5</div>
+          <p class="leading-relaxed">Tekan <strong>Ambil Foto</strong> untuk mengabadikan momen, lalu klik <strong>Unduh Hasil Foto</strong> di sisi kanan untuk menyimpannya.</p>
         </div>
       </div>
     </div>
@@ -1310,6 +1393,42 @@
         q.style.maxWidth = '100%';
         q.style.alignSelf = 'flex-start';
       });
+
+      // ============================================
+      // Guide Modal Pop-up Handlers
+      // ============================================
+      const btnOpenGuide = document.getElementById('btnOpenGuide');
+      const btnCloseGuide = document.getElementById('btnCloseGuide');
+      const guideModal = document.getElementById('guideModal');
+      const guideModalBackdrop = document.getElementById('guideModalBackdrop');
+
+      if (btnOpenGuide && btnCloseGuide && guideModal) {
+        function openGuide() {
+          guideModal.classList.remove('opacity-0', 'pointer-events-none');
+          guideModal.classList.add('opacity-100', 'pointer-events-auto');
+          const box = guideModal.querySelector('.transform');
+          if (box) {
+            box.classList.remove('scale-95');
+            box.classList.add('scale-100');
+          }
+        }
+
+        function closeGuide() {
+          guideModal.classList.remove('opacity-100', 'pointer-events-auto');
+          guideModal.classList.add('opacity-0', 'pointer-events-none');
+          const box = guideModal.querySelector('.transform');
+          if (box) {
+            box.classList.remove('scale-100');
+            box.classList.add('scale-95');
+          }
+        }
+
+        btnOpenGuide.addEventListener('click', openGuide);
+        btnCloseGuide.addEventListener('click', closeGuide);
+        if (guideModalBackdrop) {
+          guideModalBackdrop.addEventListener('click', closeGuide);
+        }
+      }
     });
 
   </script>

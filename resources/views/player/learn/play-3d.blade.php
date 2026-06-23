@@ -359,10 +359,37 @@
             box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15);
         }
 
+        /* Storyline Character overlay */
+        .story-char-wrap {
+            position: absolute;
+            bottom: 160px;
+            left: 25%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 9999;
+        }
+        #storyChar {
+            max-height: 55vh;
+            max-width: 45vw;
+            object-fit: contain;
+            transition: opacity .35s ease, transform .35s ease;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,.7));
+            display: none;
+        }
+
         @media (max-width: 640px) {
             #controlsPanel { display: none; }
             #joystickContainer { display: grid; }
             .hud-title .lg { font-size: 13px; }
+
+            .story-char-wrap {
+                left: 30%;
+                bottom: 155px;
+            }
+            #storyChar {
+                max-height: 60vh;
+                max-width: 75vw;
+            }
         }
     </style>
 </head>
@@ -493,15 +520,8 @@
     <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 35%,rgba(0,0,0,.3) 100%);"></div>
 
     <!-- Character portrait -->
-    <div style="position:absolute;bottom:160px;left:50%;transform:translateX(-50%);width:100%;display:flex;justify-content:center;pointer-events:none;">
-        <img id="storyChar" src="" alt="" style="
-            max-height:55vh;
-            max-width:40vw;
-            object-fit:contain;
-            transition:opacity .35s ease,transform .35s ease;
-            filter:drop-shadow(0 10px 30px rgba(0,0,0,.7));
-            display:none;
-        ">
+    <div class="story-char-wrap">
+        <img id="storyChar" src="" alt="">
     </div>
 
     <!-- Dialog box -->
@@ -4026,31 +4046,31 @@
         },
         {
             speaker: 'Penjelajah',
-            char: "{{ asset('images/storylines/aceh/char_explorer.png') }}",
+            char: "{{ asset('images/storylines/aceh/jelajah_aceh/penjelajah_melihat_desa_dengan_teropong.png') }}",
             bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Hei! Kita terdampar! Aku bisa melihat sebuah desa di sana. Ayo kita cari bantuan dan perbekalan!"',
         },
         {
             speaker: 'Laksamana Malahayati',
-            char: "{{ asset('images/storylines/aceh/char_malahayati.png') }}",
+            char: "{{ asset('images/storylines/aceh/jelajah_aceh/laksamana_malahayati_menyambut_penjelajah.png') }}",
             bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Selamat datang di tanah Aceh, penjelajah! Aku Laksamana Malahayati, komandan armada Inong Balee. Desa ini penuh dengan warisan budaya kami."',
         },
         {
             speaker: 'Penjelajah',
-            char: "{{ asset('images/storylines/aceh/char_explorer.png') }}",
+            char: "{{ asset('images/storylines/aceh/jelajah_aceh/penjelajah_berbicara_dengan_laksamana.png') }}",
             bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Luar biasa! Kami butuh perbekalan untuk melanjutkan perjalanan. Bisakah kami membantu mengumpulkan sesuatu?"',
         },
         {
             speaker: 'Laksamana Malahayati',
-            char: "{{ asset('images/storylines/aceh/char_malahayati.png') }}",
+            char: "{{ asset('images/storylines/aceh/jelajah_aceh/laksamana_berbicara_dengan_penjelajah.png') }}",
             bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Tentu! Kami memerlukan 4 pusaka budaya Aceh — Mie Aceh dari kedai, Kopi Gayo dari warung, Pinto Aceh dari meja ukir, dan Rapa\'i dari balai musik. Kumpulkan semuanya dan kapal kami siap berlayar!"',
         },
         {
             speaker: 'Penjelajah',
-            char: "{{ asset('images/storylines/aceh/char_explorer.png') }}",
+            char: "{{ asset('images/storylines/aceh/jelajah_aceh/penjelajah_berbicara_dengan_laksamana.png') }}",
             bg: "{{ asset('images/storylines/aceh/bg_aceh_beach.png') }}",
             text: '"Baik! Aku akan menjelajahi desa ini. Tapi hati-hati — ada banyak barang mirip yang bukan budaya Aceh asli. Aku harus jeli!"',
         },
@@ -4065,19 +4085,19 @@
         },
         {
             speaker: 'Laksamana Malahayati',
-            char: "{{ asset('images/storylines/aceh/char_malahayati.png') }}",
+            char: "{{ asset('images/storylines/aceh/jelajah_aceh/laksamana_berbicara_dengan_penjelajah.png') }}",
             bg: "{{ asset('images/storylines/aceh/bg_aceh_port.png') }}",
             text: '"Sempurna! Mie Aceh, Kopi Gayo, Pinto Aceh, dan Rapa\'i — semua ada! Armada Inong Balee siap berlayar!"',
         },
         {
             speaker: 'Penjelajah',
-            char: "{{ asset('images/storylines/aceh/char_explorer.png') }}",
+            char: "{{ asset('images/storylines/aceh/jelajah_aceh/penjelajah_membawa_barang.png') }}",
             bg: "{{ asset('images/storylines/aceh/bg_aceh_port.png') }}",
             text: '"Terima kasih Laksamana! Aku belajar banyak tentang kebudayaan Aceh yang kaya ini. Setiap barang punya makna tersendiri."',
         },
         {
             speaker: 'Laksamana Malahayati',
-            char: "{{ asset('images/storylines/aceh/char_malahayati.png') }}",
+            char: "{{ asset('images/storylines/aceh/jelajah_aceh/laksamana_berbicara_dengan_penjelajah.png') }}",
             bg: "{{ asset('images/storylines/aceh/bg_aceh_port.png') }}",
             text: '"Itulah semangat Serambi Mekkah — kaya tradisi, teguh dalam jiwa. Bawalah ilmu ini dalam perjalananmu ke pulau-pulau berikutnya!"',
         },

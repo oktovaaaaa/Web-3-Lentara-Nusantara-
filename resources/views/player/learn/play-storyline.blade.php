@@ -119,11 +119,11 @@
         /* Character sprite */
         #vnChar {
             position: absolute;
-            bottom: 160px;
-            left: 50%;
+            bottom: 90px;
+            left: 25%;
             transform: translateX(-50%);
-            max-height: 55vh;
-            max-width: 40vw;
+            max-height: 75vh;
+            max-width: 45vw;
             object-fit: contain;
             filter: drop-shadow(0 10px 30px rgba(0,0,0,.6));
             transition: opacity 0.4s ease, transform 0.4s ease;
@@ -175,7 +175,7 @@
         .vn-pill svg { width: 16px; height: 16px; }
         .vn-pill.heart { color: #f87171; }
         .vn-pill.xp    { color: #60a5fa; }
-        .vn-pill.coin  { color: #4ade80; }
+        .vn-pill.coin  { color: #eab308; }
 
         /* PROGRESS BAR */
         #vnProgress {
@@ -336,9 +336,66 @@
         #vnFeedback.show { opacity: 1; }
 
         @media (max-width: 640px) {
-            #vnChar { max-height: 40vh; max-width: 60vw; bottom: 200px; }
+            #vnChar {
+                max-height: 60vh;
+                max-width: 75vw;
+                bottom: 85px;
+                left: 30%;
+            }
             #vnText { font-size: 13px; }
-            .vn-title .lg { font-size: 14px; }
+            
+            /* Stacking grid to prevent overlap on mobile */
+            #vnTopbar {
+                display: grid;
+                grid-template-areas: 
+                    "back pills"
+                    "title title";
+                grid-template-columns: auto 1fr;
+                row-gap: 8px;
+                padding: 10px 14px;
+            }
+            .vn-top-left {
+                display: contents;
+            }
+            .vn-back {
+                grid-area: back;
+                width: 38px;
+                height: 38px;
+            }
+            .vn-back svg {
+                width: 18px;
+                height: 18px;
+            }
+            .vn-top-right {
+                grid-area: pills;
+                justify-self: end;
+                gap: 6px;
+            }
+            .vn-pill {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+            .vn-pill svg {
+                width: 14px;
+                height: 14px;
+            }
+            .vn-title {
+                grid-area: title;
+                margin-top: 2px;
+                padding-left: 2px;
+                gap: 1px;
+            }
+            .vn-title .sm {
+                font-size: 10px;
+            }
+            .vn-title .lg {
+                font-size: 14px;
+            }
+            #vnProgress {
+                top: 105px;
+                left: 14px;
+                right: 14px;
+            }
         }
     </style>
 </head>
@@ -396,7 +453,22 @@
             <div id="vnSpeaker"></div>
             <div id="vnText"></div>
             <div id="vnChoices" class="hidden"></div>
-            <div id="vnContinueHint">▸ Klik untuk lanjut</div>
+            <div style="display:flex;align-items:center;justify-content:flex-end;margin-top:10px;">
+                <div id="vnContinueHint" style="display:none;"></div>
+                <button id="storyNext" style="
+                    padding:10px 24px;
+                    background:linear-gradient(135deg,#f97316,#ea580c);
+                    color:#fff;border:none;border-radius:12px;
+                    font-weight:950;font-size:14px;cursor:pointer;
+                    box-shadow:0 4px 14px rgba(249,115,22,.35);
+                    transition:transform .15s ease,box-shadow .15s ease;
+                    z-index: 30;
+                    display: none;
+                " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(249,115,22,.5)'"
+                   onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(249,115,22,.35)'">
+                    Lanjut ▶
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -433,7 +505,7 @@
             <div class="vn-modal-title">Hati Habis!</div>
             <div class="vn-modal-sub">Hati kamu habis. Isi ulang dengan 10 koin atau tunggu hati terisi kembali secara otomatis.</div>
             <div class="vn-modal-actions">
-                <button class="vn-modal-btn primary" id="btnRefillModal">Isi Ulang Hati (10 💰)</button>
+                <button class="vn-modal-btn primary" id="btnRefillModal">Isi Ulang Hati (10 Koin)</button>
                 <a class="vn-modal-btn ghost" href="{{ route('game.learn') }}">Kembali ke Belajar</a>
             </div>
         </div>
@@ -485,6 +557,7 @@
     const textEl      = document.getElementById('vnText');
     const choicesEl   = document.getElementById('vnChoices');
     const hintEl      = document.getElementById('vnContinueHint');
+    const nextBtn     = document.getElementById('storyNext');
     const progressFill= document.getElementById('vnProgressFill');
     const heartNumEl  = document.getElementById('heartNum');
     const xpNumEl     = document.getElementById('xpNum');
@@ -593,6 +666,7 @@
 
         // Hint
         hintEl.classList.add('hidden');
+        nextBtn.style.display = 'none';
 
         // Typewrite dialog
         typeText(step.dialogue_text, function () {
@@ -601,6 +675,7 @@
                 renderChoices(step.options, idx);
             } else {
                 hintEl.classList.remove('hidden');
+                nextBtn.style.display = 'block';
             }
         });
     }
@@ -630,7 +705,11 @@
             btn.classList.add('correct');
             flashFeedback('✓ Benar!', '#4ade80');
             playSound(sfxOk);
-            setTimeout(() => { choicesEl.classList.add('hidden'); hintEl.classList.remove('hidden'); }, 900);
+            setTimeout(() => { 
+                choicesEl.classList.add('hidden'); 
+                hintEl.classList.remove('hidden'); 
+                nextBtn.style.display = 'block';
+            }, 900);
         } else {
             btn.classList.add('wrong');
             shakeStage();
@@ -732,6 +811,7 @@
                 renderChoices(step.options, currentIndex);
             } else {
                 hintEl.classList.remove('hidden');
+                nextBtn.style.display = 'block';
             }
             return;
         }

@@ -20,6 +20,44 @@
     $gameLabel = $playerLoggedIn ? 'Permainan' : 'Permainan';
 @endphp
 
+<style>
+    .nav-btn--game-active {
+        color: #f97316 !important;
+        background: rgba(249, 115, 22, 0.08) !important;
+        box-shadow: 
+            0 0 10px rgba(249, 115, 22, 0.15),
+            inset 0 0 0 1px rgba(249, 115, 22, 0.25) !important;
+        transition: all 0.25s ease !important;
+    }
+    html[data-theme="dark"] .nav-btn--game-active {
+        color: #ff8c42 !important;
+        background: rgba(255, 140, 66, 0.12) !important;
+        box-shadow: 
+            0 0 12px rgba(255, 140, 66, 0.25),
+            inset 0 0 0 1px rgba(255, 140, 66, 0.3) !important;
+    }
+    .nav-btn--game-active:hover {
+        background: rgba(249, 115, 22, 0.15) !important;
+        box-shadow: 
+            0 0 15px rgba(249, 115, 22, 0.3),
+            inset 0 0 0 1.5px rgba(249, 115, 22, 0.4) !important;
+        transform: translateY(-1px);
+    }
+    
+    .drawer-link--game-active {
+        color: #f97316 !important;
+        font-weight: 800 !important;
+        background: rgba(249, 115, 22, 0.06) !important;
+        border-left: 3px solid #f97316 !important;
+        transition: all 0.25s ease !important;
+    }
+    html[data-theme="dark"] .drawer-link--game-active {
+        color: #ff8c42 !important;
+        background: rgba(255, 140, 66, 0.1) !important;
+        border-left-color: #ff8c42 !important;
+    }
+</style>
+
 <header class="site-header" id="top">
     {{-- ===== ICON LINGKARAN GLASS HANYA UNTUK MOBILE ===== --}}
     <div class="circle-logo-container mobile-only" id="circleLogoContainer">
@@ -106,7 +144,7 @@
                 </button>
 
                 {{-- ===== GAME / BELAJAR (SETELAH KUIS, SEBELUM TESTIMONI) ===== --}}
-                <button type="button" class="nav-btn" data-url="{{ $gameUrl }}">
+                <button type="button" class="nav-btn {{ $playerLoggedIn ? 'nav-btn--game-active' : '' }}" data-url="{{ $gameUrl }}">
                     <span>{{ $gameLabel }}</span>
                 </button>
 
@@ -179,7 +217,7 @@
                 </button>
 
                 {{-- ===== GAME / BELAJAR (SETELAH KUIS) ===== --}}
-                <button type="button" class="nav-btn" data-url="{{ $gameUrl }}">
+                <button type="button" class="nav-btn {{ $playerLoggedIn ? 'nav-btn--game-active' : '' }}" data-url="{{ $gameUrl }}">
                     <span>{{ $gameLabel }}</span>
                 </button>
             @endif
@@ -257,7 +295,7 @@
                                 <a href="#testimoni" data-target="#testimoni" class="drawer-link">Testimoni</a>
 
                 {{-- ===== GAME / BELAJAR ===== --}}
-                <a href="{{ $gameUrl }}" class="drawer-link">{{ $gameLabel }}</a>
+                <a href="{{ $gameUrl }}" class="drawer-link {{ $playerLoggedIn ? 'drawer-link--game-active' : '' }}">{{ $gameLabel }}</a>
 
 
             @else
@@ -289,7 +327,7 @@
                 <a href="#quiz" data-target="#quiz" class="drawer-link">Kuis</a>
 
                 {{-- ===== GAME / BELAJAR ===== --}}
-                <a href="{{ $gameUrl }}" class="drawer-link">{{ $gameLabel }}</a>
+                <a href="{{ $gameUrl }}" class="drawer-link {{ $playerLoggedIn ? 'drawer-link--game-active' : '' }}">{{ $gameLabel }}</a>
             @endif
         </div>
 

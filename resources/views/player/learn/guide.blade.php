@@ -587,18 +587,18 @@
                     <button class="qa-q" type="button">
                         <span class="left">
                             <span class="qa-ico" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none">
-                                    <path d="M3 7h18v10H3V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                    <path d="M12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" stroke="currentColor" stroke-width="2"/>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="8"/>
+                                    <path d="M12 8v8M9 12h6"/>
                                 </svg>
                             </span>
-                            <span>Apakah hearts bisa diisi ulang dengan coin?</span>
+                            <span>Apakah hearts bisa diisi ulang dengan koin?</span>
                         </span>
                         <span class="chev">▾</span>
                     </button>
                     <div class="qa-a">
-                        Bisa. Isi ulang hearts menjadi penuh dengan biaya <b>10 coins</b>.
-                        Jika coins tidak cukup, kamu harus menunggu regen hearts.
+                        Bisa. Isi ulang hearts menjadi penuh dengan biaya <b>10 koin</b>.
+                        Jika koin tidak cukup, kamu harus menunggu regen hearts.
                     </div>
                 </div>
 
@@ -717,11 +717,10 @@
                     <span id="heartsNowDesktop">{{ (int)($player->hearts ?? 0) }}</span>/<span>{{ (int)($player->hearts_max ?? 5) }}</span>
                 </div>
 
-                <div class="pill money" title="Uang">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M3 7h18v10H3V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M7 7V5h10v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M12 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" stroke="currentColor" stroke-width="2"/>
+                <div class="pill money" title="Koin">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="8"/>
+                        <path d="M12 8v8M9 12h6"/>
                     </svg>
                     <span>{{ number_format((int)($player->coins ?? 0), 0, ',', '.') }}</span>
                 </div>

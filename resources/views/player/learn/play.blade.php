@@ -314,7 +314,7 @@ body{
 
     .pill.time{ color: var(--txt-body); }
     .pill.xp{ color: #3b82f6; }
-    .pill.coin{ color: #22c55e; }
+    .pill.coin{ color: #eab308; }
     .pill.heart{ color: #dc2626; }
 
     .profile-pill{
@@ -756,11 +756,10 @@ body{
                 <span class="pname">{{ $nickname }}</span>
             </a>
 
-            <div class="pill coin" title="Uang">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M20 12c0 4-4 7-8 7s-8-3-8-7 4-7 8-7 8 3 8 7Z" stroke="currentColor" stroke-width="2"/>
-                    <path d="M12 9v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M9.5 12H14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <div class="pill coin" title="Koin">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="8"/>
+                    <path d="M12 8v8M9 12h6"/>
                 </svg>
                 <span id="coinsText">{{ (int)($player->coins ?? 0) }}</span>
             </div>
@@ -839,14 +838,14 @@ body{
             <div class="modal-title">Hati kamu habis</div>
             <div class="modal-sub">
                 Kamu tidak bisa lanjut bermain sekarang.<br>
-                Tunggu hati terisi kembali atau isi ulang dengan 10 uang.
+                Tunggu hati terisi kembali atau isi ulang dengan 10 koin.
             </div>
 
             <div id="heartsModalMsg" class="modal-sub" style="display:none;"></div>
 
             <div class="modal-actions" style="justify-content: space-between;">
                 <a class="btn" href="{{ route('game.learn') }}">Kembali</a>
-                <button type="button" class="btn primary" id="btnRefill">Isi Ulang Hati (10 Uang)</button>
+                <button type="button" class="btn primary" id="btnRefill">Isi Ulang Hati (10 Koin)</button>
             </div>
         </div>
     </div>
