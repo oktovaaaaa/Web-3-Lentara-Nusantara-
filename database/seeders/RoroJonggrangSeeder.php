@@ -42,6 +42,7 @@ class RoroJonggrangSeeder extends Seeder
         $level->storylineSteps()->delete();
 
         $bg = fn(string $n) => 'images/storylines/roro-jonggrang/' . $n;
+        $char = fn(string $n) => 'images/storylines/roro-jonggrang/Roro Jonggrang & Candi Prambanan/' . $n;
 
         $steps = [
             // ── PEMBUKAAN ────────────────────────────────────────────
@@ -59,7 +60,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => 'Prabu Baka',
                 'dialogue_text'  => 'Seluruh negeri ini tunduk padaku! Tidak ada satu pun kesatria yang berani menantangku, Prabu Baka yang agung!',
                 'background_path'=> $bg('bg_kerajaan.png'),
-                'character_path' => $bg('char_baka.png'),
+                'character_path' => $char('Prabu Baka_Seluruh negeri ini tunduk padaku.png'),
                 'animation_type' => 'none',
                 'options'        => null,
             ],
@@ -77,7 +78,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => 'Bandung Bondowoso',
                 'dialogue_text'  => 'Prabu Baka! Tirani-mu berakhir hari ini! Aku, Bandung Bondowoso, akan menghentikanmu!',
                 'background_path'=> $bg('bg_pertempuran.png'),
-                'character_path' => $bg('char_bandung.png'),
+                'character_path' => $char('Bandung Bondowoso_Prabu Baka! Tirani-mu berakhir hari ini.png'),
                 'animation_type' => 'none',
                 'options'        => [
                     ['option_text' => 'Bandung Bondowoso menantang Prabu Baka dalam pertempuran', 'is_correct' => true],
@@ -90,7 +91,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => null,
                 'dialogue_text'  => 'Dengan kesaktiannya yang luar biasa, Bandung Bondowoso berhasil mengalahkan dan membunuh Prabu Baka. Kerajaan Prambanan pun jatuh ke tangannya.',
                 'background_path'=> $bg('bg_pertempuran.png'),
-                'character_path' => $bg('char_bandung.png'),
+                'character_path' => $char('Bandung Bondowoso_Prabu Baka! Tirani-mu berakhir hari ini.png'),
                 'animation_type' => 'fade',
                 'options'        => null,
             ],
@@ -101,7 +102,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => null,
                 'dialogue_text'  => 'Saat memasuki istana, Bandung Bondowoso terpesona melihat putri Prabu Baka — Roro Jonggrang — yang kecantikannya tak tertandingi di seluruh Nusantara.',
                 'background_path'=> $bg('bg_kerajaan.png'),
-                'character_path' => $bg('char_roro.png'),
+                'character_path' => $char('Roro Jonggrang_Kau yang membunuh ayahku_yaratku hanya satu.png'),
                 'animation_type' => 'fade',
                 'options'        => null,
             ],
@@ -110,7 +111,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => 'Bandung Bondowoso',
                 'dialogue_text'  => 'Wahai Putri yang cantik jelita... maukah kau menjadi permaisuriku? Aku akan membuatmu menjadi ratu agung!',
                 'background_path'=> $bg('bg_kerajaan.png'),
-                'character_path' => $bg('char_bandung.png'),
+                'character_path' => $char('Bandung Bondowoso_Wahai Putri yang cantik jelita.png'),
                 'animation_type' => 'none',
                 'options'        => null,
             ],
@@ -119,7 +120,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => 'Roro Jonggrang',
                 'dialogue_text'  => 'Kau yang membunuh ayahku! Aku tidak akan pernah mau menjadi istrimu! Tapi... jika kau bisa memenuhi satu syaratku, aku akan menerimamu.',
                 'background_path'=> $bg('bg_kerajaan.png'),
-                'character_path' => $bg('char_roro.png'),
+                'character_path' => $char('Roro Jonggrang_Kau yang membunuh ayahku_yaratku hanya satu.png'),
                 'animation_type' => 'none',
                 'options'        => [
                     ['option_text' => 'Roro Jonggrang memberikan syarat yang sangat berat', 'is_correct' => true],
@@ -132,7 +133,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => 'Roro Jonggrang',
                 'dialogue_text'  => 'Syaratku hanya satu: bangunkan SERIBU CANDI dalam satu malam sebelum fajar tiba! Jika gagal, kau harus pergi selamanya!',
                 'background_path'=> $bg('bg_kerajaan.png'),
-                'character_path' => $bg('char_roro.png'),
+                'character_path' => $char('Roro Jonggrang_Kau yang membunuh ayahku_yaratku hanya satu.png'),
                 'animation_type' => 'zoom',
                 'options'        => null,
             ],
@@ -143,7 +144,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => 'Bandung Bondowoso',
                 'dialogue_text'  => 'Seribu candi dalam satu malam?! Tidak ada manusia biasa yang bisa melakukan itu. Tapi aku bukan manusia biasa. Aku akan memanggil para jin dan roh halus untuk membantuku!',
                 'background_path'=> $bg('bg_malam_candi.png'),
-                'character_path' => $bg('char_bandung.png'),
+                'character_path' => $char('Bandung Bondowoso_Seribu candi dalam satu malam_!.png'),
                 'animation_type' => 'fade',
                 'options'        => null,
             ],
@@ -167,7 +168,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => null,
                 'dialogue_text'  => 'Roro Jonggrang mengintip dari balik tembok. Sudah 999 candi berdiri! Hanya kurang satu lagi. Ia harus melakukan sesuatu sebelum fajar benar-benar tiba!',
                 'background_path'=> $bg('bg_malam_candi.png'),
-                'character_path' => $bg('char_roro.png'),
+                'character_path' => $char('Roro Jonggrang_mengintip.png'),
                 'animation_type' => 'none',
                 'options'        => null,
             ],
@@ -176,7 +177,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => 'Roro Jonggrang',
                 'dialogue_text'  => 'Cepat! Perempuan-perempuan desa, tumbuk lesung padi sekarang! Yang lain nyalakan api unggun besar di timur! Kita harus membuat para jin mengira fajar sudah tiba!',
                 'background_path'=> $bg('bg_malam_candi.png'),
-                'character_path' => $bg('char_roro.png'),
+                'character_path' => $char('Roro Jonggrang_mengintip.png'),
                 'animation_type' => 'shake',
                 'options'        => [
                     ['option_text' => 'Roro Jonggrang menipu para jin dengan meniru tanda-tanda fajar',  'is_correct' => true],
@@ -200,7 +201,7 @@ class RoroJonggrangSeeder extends Seeder
                 'character_name' => 'Bandung Bondowoso',
                 'dialogue_text'  => 'RORO JONGGRANG! Kau telah menipuku! Kau yang membuat para jin kabur! Karena kelicikanmu... kau akan menjadi batu — menjadi arca ke-1000 di candi yang kau gagalkan ini!',
                 'background_path'=> $bg('bg_prambanan.png'),
-                'character_path' => $bg('char_bandung.png'),
+                'character_path' => $char('Bandung Bondowoso_marah dan mengutuk roro jongrang.png'),
                 'animation_type' => 'shake',
                 'options'        => [
                     ['option_text' => 'Bandung Bondowoso mengutuk Roro Jonggrang menjadi arca batu', 'is_correct' => true],
@@ -211,9 +212,9 @@ class RoroJonggrangSeeder extends Seeder
             [
                 'order'          => 16,
                 'character_name' => null,
-                'dialogue_text'  => 'Roro Jonggrang berubah menjadi arca batu yang indah, berdiri tegak di dalam Candi Prambanan. Hingga kini, kompleks candi megah itu masih berdiri kokoh di Jawa Tengah — menjadi warisan budaya dunia. Selamat! Kamu telah menyelesaikan Bab 1 — Roro Jonggrang & Candi Prambanan!',
+                'dialogue_text'  => 'Roro Jonggrang berubah menjadi arca batu yang indah, berdiri tegak di dalam Candi Prambanan. Hingga kini, kompleks candi megah itu masih berdiri kokoh di Jawa Tengah — menjadi warisan budaya dunia.',
                 'background_path'=> $bg('bg_prambanan.png'),
-                'character_path' => null,
+                'character_path' => $char('oro Jonggrang berubah menjadi arca batu yang indah.png'),
                 'animation_type' => 'zoom',
                 'options'        => null,
             ],

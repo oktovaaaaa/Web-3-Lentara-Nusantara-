@@ -198,7 +198,7 @@ class LegendaDanauTobaSeeder extends Seeder
             [
                 'order'          => 16,
                 'character_name' => null,
-                'dialogue_text'  => 'Legenda Danau Toba mengajarkan kita untuk selalu menepati janji dan menjaga kepercayaan orang-orang yang kita cintai. Selamat! Kamu telah menyelesaikan Bab 1 — Legenda Danau Toba!',
+                'dialogue_text'  => 'Legenda Danau Toba mengajarkan kita untuk selalu menepati janji dan menjaga kepercayaan orang-orang yang kita cintai.',
                 'background_path'=> $bg('bg_lake.png'),
                 'character_path' => null,
                 'animation_type' => 'fade',

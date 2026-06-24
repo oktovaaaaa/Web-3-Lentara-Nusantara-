@@ -130,6 +130,23 @@
         }
         #vnChar.hidden { opacity: 0; transform: translateX(-50%) translateY(20px); }
 
+        /* Widescreen overlays: scale by height instead of width to match standard character size */
+        #vnChar.widescreen-mode {
+            bottom: 90px !important;
+            left: 25% !important;
+            right: auto !important;
+            transform: translateX(-50%) !important;
+            height: 75vh !important;
+            width: auto !important;
+            max-height: 75vh !important;
+            max-width: none !important;
+            object-fit: contain !important;
+        }
+        #vnChar.widescreen-mode.hidden {
+            opacity: 0 !important;
+            transform: translateX(-50%) translateY(20px) !important;
+        }
+
         /* TOP BAR */
         #vnTopbar {
             position: absolute;
@@ -342,6 +359,12 @@
                 bottom: 85px;
                 left: 30%;
             }
+            #vnChar.widescreen-mode {
+                bottom: 85px !important;
+                left: 30% !important;
+                height: 60vh !important;
+                max-height: 60vh !important;
+            }
             #vnText { font-size: 13px; }
             
             /* Stacking grid to prevent overlap on mobile */
@@ -553,6 +576,14 @@
     // ─── DOM ──────────────────────────────────────────────────────────
     const bg          = document.getElementById('vnBg');
     const charEl      = document.getElementById('vnChar');
+    charEl.onload = function() {
+        const ratio = this.naturalWidth / this.naturalHeight;
+        if (ratio > 1.2) {
+            this.classList.add('widescreen-mode');
+        } else {
+            this.classList.remove('widescreen-mode');
+        }
+    };
     const speakerEl   = document.getElementById('vnSpeaker');
     const textEl      = document.getElementById('vnText');
     const choicesEl   = document.getElementById('vnChoices');
@@ -648,6 +679,7 @@
         // Character
         if (step.character_path) {
             charEl.classList.add('hidden');
+            charEl.classList.remove('widescreen-mode');
             setTimeout(() => {
                 charEl.src = step.character_path;
                 charEl.alt = step.character_name || '';
@@ -655,6 +687,7 @@
             }, 350);
         } else {
             charEl.classList.add('hidden');
+            charEl.classList.remove('widescreen-mode');
         }
 
         // Speaker
