@@ -54,16 +54,25 @@
                 <p class="auth-subtitle">Buat akun dengan username dan PIN 4 digit</p>
             </div>
 
-            {{-- Error (session error + validation error) --}}
-            @if(session('error'))
-                <div class="auth-error" role="alert">
-                    <span class="auth-error__dot" aria-hidden="true"></span>
-                    <span>{{ session('error') }}</span>
-                </div>
-            @elseif($errors->any())
-                <div class="auth-error" role="alert">
-                    <span class="auth-error__dot" aria-hidden="true"></span>
-                    <span>{{ $errors->first() }}</span>
+            {{-- Error Pop-up Modal --}}
+            @if(session('error') || $errors->any())
+                <div id="error-popup-modal" class="error-popup-overlay" role="dialog" aria-modal="true">
+                    <div class="error-popup-card">
+                        <div class="error-popup-icon">
+                            <svg viewBox="0 0 24 24" fill="none" style="width: 32px; height: 32px; color: #ef4444;">
+                                <path d="M12 9v4M12 17h.01M12 3a9 9 0 1 1-9 9 9 9 0 0 1 9-9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h2 class="error-popup-title">Autentikasi Gagal</h2>
+                        <p class="error-popup-message">
+                            @if(session('error'))
+                                {{ session('error') }}
+                            @else
+                                {{ $errors->first() }}
+                            @endif
+                        </p>
+                        <button type="button" class="error-popup-btn" onclick="closeErrorPopup()">Tutup</button>
+                    </div>
                 </div>
             @endif
 
@@ -95,28 +104,16 @@
                     </div>
                 </div>
 
-                {{-- PIN --}}
+                {{-- PIN (4 digit) --}}
                 <div class="auth-field">
-                    <label class="auth-label" for="pin">PIN (4 digit)</label>
-                    <div class="auth-inputWrap">
-                        <span class="auth-ico" aria-hidden="true">
-                            {{-- icon lock --}}
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M6 11h12v9H6v-9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                        <input
-                            id="pin"
-                            name="pin"
-                            inputmode="numeric"
-                            maxlength="4"
-                            required
-                            placeholder=""
-                            class="auth-input"
-                            autocomplete="one-time-code"
-                        >
+                    <label class="auth-label" style="text-align: center; display: block; margin-bottom: 4px;">PIN (4 digit)</label>
+                    <div class="pin-inputs-wrapper" style="display: flex; gap: 12px; justify-content: center; margin: 6px 0 10px;">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="pin-box" required autocomplete="off">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="pin-box" required autocomplete="off">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="pin-box" required autocomplete="off">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="pin-box" required autocomplete="off">
                     </div>
+                    <input type="hidden" name="pin" id="compiled_pin">
                 </div>
 
                 {{-- Row --}}
@@ -136,6 +133,17 @@
                         </svg>
                     </span>
                 </button>
+
+                {{-- Divider --}}
+                <div class="auth-divider">
+                    <span>atau</span>
+                </div>
+
+                {{-- Google Signup Button --}}
+                <a href="{{ route('player.login.google') }}" class="auth-btn-google">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo" class="auth-btn-google__icon">
+                    <span class="auth-btn-google__text">Daftar dengan Google</span>
+                </a>
 
             </form>
 
@@ -193,7 +201,7 @@ html[data-theme="light"]{
 .auth-banner{
   position: absolute;
   left: 0; right: 0;
-  height: 96px;
+  height: 64px;
   z-index: 0;
 }
 .auth-banner--top{ top: 0; }
@@ -281,8 +289,8 @@ html[data-theme="light"]{
 
 /* Card */
 .auth-card{
-  width: min(440px, 100%);
-  border-radius: 24px;
+  width: min(390px, 100%);
+  border-radius: 20px;
   position: relative;
   overflow: hidden;
   background:
@@ -337,7 +345,7 @@ html[data-theme="light"]{
 
 /* Inner padding */
 .auth-head{
-  padding: 22px 22px 10px;
+  padding: 16px 20px 8px;
   text-align: center;
 }
 
@@ -404,9 +412,9 @@ html[data-theme="light"]{
 
 /* Form */
 .auth-form{
-  padding: 10px 22px 22px;
+  padding: 8px 20px 18px;
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .auth-field{ display: grid; gap: 8px; }
@@ -534,11 +542,244 @@ html[data-theme="light"]{
 }
 .auth-btn__icon svg{ width: 18px; height: 18px; color: rgba(2,6,23,.90); }
 
-/* Responsive */
-@media (max-width: 420px){
-  .auth-head{ padding: 20px 18px 10px; }
-  .auth-form{ padding: 10px 18px 20px; }
-  .auth-title{ font-size: 1.42rem; }
+/* Divider */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 6px 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--line);
+}
+.auth-divider:not(:empty)::before {
+  margin-right: .5em;
+}
+.auth-divider:not(:empty)::after {
+  margin-left: .5em;
+}
+
+/* Google Button */
+.auth-btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in oklab, var(--card) 95%, transparent);
+  color: var(--txt-body) !important;
+  font-size: 0.92rem;
+  font-weight: 850;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.auth-btn-google:hover {
+  background: color-mix(in oklab, var(--card) 60%, var(--brand2) 10%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  border-color: rgba(255,107,0,0.4);
+}
+.auth-btn-google:active {
+  transform: translateY(0);
+}
+.auth-btn-google__icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+html[data-theme="light"] .auth-btn-google {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(15,23,42,.14);
+}
+html[data-theme="light"] .auth-btn-google:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(255,107,0,0.4);
+}
+
+/* ==========================================
+   PIN INPUTS (4 BOXES) & ERROR POPUP STYLES
+   ========================================== */
+.pin-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,107,0,.22);
+  background: color-mix(in oklab, var(--bg-body) 86%, transparent);
+  color: var(--txt-body);
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.pin-box:focus {
+  border-color: rgba(255,107,0,.58);
+  box-shadow: 0 0 0 4px rgba(255,107,0,.16);
+  transform: translateY(-2px);
+}
+
+html[data-theme="light"] .pin-box {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(255,107,0,.25);
+  box-shadow: 0 4px 12px rgba(2,6,23,.04);
+}
+
+.error-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 18, 32, 0.76);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeInModal 0.25s ease-out;
+}
+
+.error-popup-card {
+  width: min(380px, 90%);
+  background: linear-gradient(180deg, rgba(15,23,42,.88), rgba(15,23,42,.96));
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 24px;
+  padding: 26px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(239, 68, 68, 0.1);
+  transform: scale(0.9);
+  animation: scaleInModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.error-popup-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+}
+
+.error-popup-title {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--txt-body);
+}
+
+.error-popup-message {
+  margin: 0 0 22px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.error-popup-btn {
+  width: 100%;
+  border: 0;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: white;
+  font-weight: 950;
+  padding: 11px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.error-popup-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.35);
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleInModal {
+  to { transform: scale(1); }
+}
+
+html[data-theme="light"] .error-popup-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 20px 60px rgba(15,23,42,0.12), 0 0 30px rgba(239, 68, 68, 0.05);
 }
 </style>
+
+<script>
+function closeErrorPopup() {
+  const modal = document.getElementById('error-popup-modal');
+  if (modal) {
+    modal.style.opacity = '0';
+    modal.style.transition = 'opacity 0.2s ease';
+    setTimeout(() => {
+      modal.remove();
+    }, 200);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const boxes = document.querySelectorAll('.pin-box');
+  const compiledPinInput = document.getElementById('compiled_pin');
+
+  if (boxes.length > 0 && compiledPinInput) {
+    boxes.forEach((box, index) => {
+      // Only allow numbers
+      box.addEventListener('input', (e) => {
+        box.value = box.value.replace(/[^0-9]/g, '');
+        if (box.value.length === 1 && index < boxes.length - 1) {
+          boxes[index + 1].focus();
+        }
+        updateCompiledPin();
+      });
+
+      // Handle backspace
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && box.value.length === 0 && index > 0) {
+          boxes[index - 1].value = ''; // clear previous box too
+          boxes[index - 1].focus();
+          updateCompiledPin();
+        }
+      });
+      
+      // Handle paste
+      box.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 4);
+        for (let i = 0; i < pastedData.length; i++) {
+          if (boxes[i]) {
+            boxes[i].value = pastedData[i];
+          }
+        }
+        updateCompiledPin();
+        if (pastedData.length > 0) {
+          const nextIndex = Math.min(pastedData.length, boxes.length - 1);
+          boxes[nextIndex].focus();
+        }
+      });
+    });
+
+    function updateCompiledPin() {
+      let compiled = '';
+      boxes.forEach(box => {
+        compiled += box.value;
+      });
+      compiledPinInput.value = compiled;
+    }
+  }
+});
+</script>
 @endsection

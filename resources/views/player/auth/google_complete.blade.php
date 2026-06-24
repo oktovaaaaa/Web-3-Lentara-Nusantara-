@@ -1,58 +1,39 @@
-{{-- resources/views/player/login.blade.php (contoh) --}}
+{{-- resources/views/player/auth/google_complete.blade.php --}}
 @extends('layouts.auth')
 
-@section('title', 'Masuk - Lentara Nusantara')
-<link rel="icon" type="image/png" href="{{ asset('images/icon/icon_lentara.png') }}">
-<link rel="shortcut icon" type="image/png" href="{{ asset('images/icon/icon_lentara.png') }}">
+@section('title', 'Lengkapi Akun Google - Lentara Nusantara')
+
 @section('content')
 <div class="auth-page">
-
-    {{-- TOP BANNER IMAGE --}}
-    <div class="auth-banner auth-banner--top" aria-hidden="true">
-        <img
-            src="{{ asset('images/icon/footer.JPEG') }}"
-            alt="Lentara Top Banner"
-            class="auth-banner__img"
-            loading="lazy"
-        />
-        <div class="auth-banner__overlay auth-banner__overlay--top"></div>
-    </div>
-
-    {{-- BOTTOM BANNER IMAGE --}}
-    <div class="auth-banner auth-banner--bottom" aria-hidden="true">
-        <div class="auth-banner__overlay auth-banner__overlay--bottom"></div>
-        <img
-            src="{{ asset('images/icon/footer.JPEG') }}"
-            alt="Lentara Bottom Banner"
-            class="auth-banner__img"
-            loading="lazy"
-        />
-    </div>
-
-    {{-- BACKGROUND GLOW / ORNAMENT --}}
+    {{-- BACKGROUND GLOW --}}
     <div class="auth-bg" aria-hidden="true">
         <div class="auth-glow auth-glow--a"></div>
         <div class="auth-glow auth-glow--b"></div>
         <div class="auth-grid"></div>
     </div>
 
-    {{-- CENTER WRAP --}}
     <div class="auth-center">
-        <div class="auth-card" role="region" aria-label="Login Player">
-
-            {{-- Header --}}
-            <div class="auth-head">
-                <div class="auth-badge" aria-hidden="true">
-                    {{-- ICON sama feel-nya (boleh tetap shield/check biar persis) --}}
-                    <svg viewBox="0 0 24 24" fill="none">
+        <div class="auth-card" style="max-width: 440px;">
+            <div class="auth-head" style="padding-bottom: 10px;">
+                <div class="auth-badge" aria-hidden="true" style="background: linear-gradient(135deg, var(--brand), var(--brand2));">
+                    <svg viewBox="0 0 24 24" fill="none" style="width: 26px; height: 26px; color: white;">
                         <path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                         <path d="M9.5 12l1.7 1.8L14.7 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
+                <h1 class="auth-title">Amankan Akun</h1>
+                <p class="auth-subtitle">Buat PIN 4 digit untuk mengamankan akun Google Anda</p>
+            </div>
 
-                <h1 class="auth-title">Masuk</h1>
-                {{-- optional subtitle, kalau kamu mau sama persis feel admin --}}
-                <p class="auth-subtitle">Masuk menggunakan username dan PIN 4 digit</p>
+            {{-- Google User Info Card --}}
+            <div style="margin: 10px 22px; padding: 12px; border-radius: 14px; background: rgba(255,107,0,0.06); border: 1px solid rgba(255,107,0,0.2); display: flex; align-items: center; gap: 12px;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem;">
+                    {{ substr($nickname, 0, 1) }}
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 0.85rem; font-weight: 800; color: var(--txt-body);">{{ $nickname }}</div>
+                    <div style="font-size: 0.75rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $email }}</div>
+                </div>
             </div>
 
             {{-- Error Pop-up Modal --}}
@@ -64,7 +45,7 @@
                                 <path d="M12 9v4M12 17h.01M12 3a9 9 0 1 1-9 9 9 9 0 0 1 9-9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
-                        <h2 class="error-popup-title">Autentikasi Gagal</h2>
+                        <h2 class="error-popup-title">Pendaftaran Gagal</h2>
                         <p class="error-popup-message">
                             @if(session('error'))
                                 {{ session('error') }}
@@ -77,37 +58,16 @@
                 </div>
             @endif
 
-            {{-- Form (FUNGSI TETAP PUNYA KAMU) --}}
-            <form method="POST" action="{{ route('player.login.post') }}" class="auth-form">
+            <form method="POST" action="{{ route('player.google.complete.post') }}" class="auth-form">
                 @csrf
-
-                {{-- Username --}}
-                <div class="auth-field">
-                    <label class="auth-label" for="username">Username</label>
-                    <div class="auth-inputWrap">
-                        <span class="auth-ico" aria-hidden="true">
-                            {{-- icon user --}}
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <path d="M20 21a8 8 0 0 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                        <input
-                            id="username"
-                            name="username"
-                            value="{{ old('username') }}"
-                            required
-                            autofocus
-                            placeholder=""
-                            class="auth-input"
-                            autocomplete="username"
-                        >
-                    </div>
-                </div>
+                <input type="hidden" name="email" value="{{ $email }}">
+                <input type="hidden" name="nickname" value="{{ $nickname }}">
+                <input type="hidden" name="google_id" value="{{ $google_id }}">
+                <input type="hidden" name="username" value="{{ old('username', $suggested_username) }}">
 
                 {{-- PIN (4 digit) --}}
                 <div class="auth-field">
-                    <label class="auth-label" style="text-align: center; display: block; margin-bottom: 4px;">PIN (4 digit)</label>
+                    <label class="auth-label" style="text-align: center; display: block; margin-bottom: 4px;">PIN Keamanan (4 digit)</label>
                     <div class="pin-inputs-wrapper" style="display: flex; gap: 12px; justify-content: center; margin: 6px 0 10px;">
                         <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="pin-box" required autocomplete="off">
                         <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="pin-box" required autocomplete="off">
@@ -118,15 +78,14 @@
                 </div>
 
                 {{-- Row --}}
-                <div class="auth-row">
-                    <a href="{{ route('player.register') }}" class="auth-back">Belum punya akun? Daftar</a>
-                    <a href="{{ route('home') }}" class="auth-back">← Kembali</a>
+                <div class="auth-row" style="margin-top: 5px;">
+                    <a href="{{ route('player.login') }}" class="auth-back">← Batal</a>
                 </div>
 
                 {{-- Button --}}
                 <button type="submit" class="auth-btn">
                     <span class="auth-btn__shine" aria-hidden="true"></span>
-                    <span class="auth-btn__text">Masuk</span>
+                    <span class="auth-btn__text">Lengkapi Pendaftaran</span>
                     <span class="auth-btn__icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" fill="none">
                             <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -134,57 +93,41 @@
                         </svg>
                     </span>
                 </button>
-
-                {{-- Divider --}}
-                <div class="auth-divider">
-                    <span>atau</span>
-                </div>
-
-                {{-- Google Login Button --}}
-                <a href="{{ route('player.login.google') }}" class="auth-btn-google">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo" class="auth-btn-google__icon">
-                    <span class="auth-btn-google__text">Masuk dengan Google</span>
-                </a>
-
             </form>
-
         </div>
     </div>
 </div>
 
 <style>
-/* =========================================================
-   AUTH LOGIN — LENTARA THEME (INTERNAL CSS)
-   - Support dark/light via html[data-theme]
-   - Neon ring + glass
-========================================================= */
-
-/* fallback variable kalau navbar.css tidak ada */
-html{
+/* Same variables and core auth classes for styling */
+html {
   --bg-body: #0b1220;
   --txt-body: rgba(226,232,240,.96);
   --muted: rgba(148,163,184,.92);
   --line: rgba(148,163,184,.20);
   --card: rgba(15,23,42,.74);
-
   --brand: #ff6b00;
-  --brand2:#ff8c42;
-  --brand3:#ffaa6b;
+  --brand2: #ff8c42;
+  --brand3: #ffaa6b;
 }
 
-html[data-theme="light"]{
+html[data-theme="light"] {
   --bg-body: #f8fafc;
   --txt-body: rgba(15,23,42,.95);
   --muted: rgba(71,85,105,.90);
   --line: rgba(15,23,42,.14);
   --card: rgba(255,255,255,.78);
-
   --brand: #ff6b00;
-  --brand2:#ff8c42;
-  --brand3:#ffaa6b;
+  --brand2: #ff8c42;
+  --brand3: #ffaa6b;
+  
+  --danger-bg: rgba(239,68,68,.10);
+  --danger-border: rgba(185,28,28,.28);
+  --danger-text: rgba(127,29,29,.96);
+  --danger-dot: #dc2626;
 }
 
-.auth-page{
+.auth-page {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
@@ -192,46 +135,14 @@ html[data-theme="light"]{
   color: var(--txt-body);
 }
 
-/* Banners */
-.auth-banner{
-  position: absolute;
-  left: 0; right: 0;
-  height: 64px;
-  z-index: 0;
-}
-.auth-banner--top{ top: 0; }
-.auth-banner--bottom{ bottom: 0; }
-
-.auth-banner__img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  opacity: .92;
-  filter: saturate(1.04);
-}
-
-.auth-banner__overlay{
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.auth-banner__overlay--top{
-  background: linear-gradient(to bottom, rgba(0,0,0,.22), rgba(0,0,0,.06), transparent);
-}
-.auth-banner__overlay--bottom{
-  background: linear-gradient(to top, rgba(0,0,0,.26), rgba(0,0,0,.08), transparent);
-}
-
-/* Background ornaments */
-.auth-bg{
+.auth-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
 }
 
-.auth-glow{
+.auth-glow {
   position: absolute;
   width: 520px;
   height: 520px;
@@ -239,18 +150,20 @@ html[data-theme="light"]{
   filter: blur(60px);
   opacity: .28;
 }
-.auth-glow--a{
+
+.auth-glow--a {
   top: -160px;
   left: -160px;
   background: radial-gradient(circle, rgba(255,107,0,.75), transparent 60%);
 }
-.auth-glow--b{
+
+.auth-glow--b {
   bottom: -180px;
   right: -160px;
   background: radial-gradient(circle, rgba(255,140,66,.70), transparent 60%);
 }
 
-.auth-grid{
+.auth-grid {
   position: absolute;
   inset: 0;
   opacity: .10;
@@ -258,11 +171,9 @@ html[data-theme="light"]{
     linear-gradient(to right, rgba(255,107,0,.18) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255,107,0,.14) 1px, transparent 1px);
   background-size: 44px 44px;
-  mask-image: radial-gradient(circle at 50% 45%, #000 0%, rgba(0,0,0,.45) 45%, transparent 70%);
 }
 
-/* Center */
-.auth-center{
+.auth-center {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -272,92 +183,32 @@ html[data-theme="light"]{
   z-index: 1;
 }
 
-/* Neon ring animation */
-@property --auth-angle{
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@keyframes authSpin { to { --auth-angle: 360deg; } }
-@keyframes authTitleGlow { to { background-position: 200% center; } }
-
-/* Card */
-.auth-card{
+.auth-card {
   width: min(390px, 100%);
   border-radius: 20px;
   position: relative;
   overflow: hidden;
-  background:
-    linear-gradient(180deg,
-      color-mix(in oklab, var(--card) 88%, transparent),
-      color-mix(in oklab, var(--card) 95%, transparent)
-    );
-  border: 1px solid color-mix(in oklab, var(--line) 90%, transparent);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--card) 88%, transparent), color-mix(in oklab, var(--card) 95%, transparent));
+  border: 1px solid var(--line);
   box-shadow: 0 26px 90px rgba(0,0,0,.26);
   backdrop-filter: blur(14px);
-  isolation: isolate;
 }
 
-/* Neon ring */
-.auth-card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius: inherit;
-  padding: 7px; /* KETEBALAN RING (ubah ini kalau mau lebih tebal/tipis) */
-  pointer-events:none;
-  z-index:0;
-
-  background: conic-gradient(
-    from var(--auth-angle),
-    rgba(255,107,0,0) 0deg,
-    rgba(255,107,0,.20) 28deg,
-    #ff6b00 60deg,
-    #22d3ee 120deg,
-    #34d399 180deg,
-    rgba(34,211,238,.18) 245deg,
-    #ff8c42 315deg,
-    rgba(255,107,0,0) 360deg
-  );
-
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-
-  filter: blur(6px);
-  opacity: .95;
-  animation: authSpin 7.5s linear infinite;
-}
-
-/* ensure content above ring */
-.auth-card > *{
-  position: relative;
-  z-index: 1;
-}
-
-/* Inner padding */
-.auth-head{
+.auth-head {
   padding: 16px 20px 8px;
   text-align: center;
 }
 
-.auth-badge{
+.auth-badge {
   width: 52px;
   height: 52px;
   margin: 0 auto 10px;
   border-radius: 16px;
   display: grid;
   place-items: center;
-  color: #fff;
-  background: linear-gradient(135deg, var(--brand), var(--brand2));
-  box-shadow: 0 18px 40px rgba(0,0,0,.22), 0 0 22px rgba(255,107,0,.18);
 }
-.auth-badge svg{ width: 26px; height: 26px; opacity: .95; }
 
-.auth-title{
+.auth-title {
   margin: 0;
   font-size: 1.55rem;
   font-weight: 950;
@@ -371,15 +222,15 @@ html[data-theme="light"]{
   animation: authTitleGlow 5.2s linear infinite;
 }
 
-.auth-subtitle{
+@keyframes authTitleGlow { to { background-position: 200% center; } }
+
+.auth-subtitle {
   margin: 8px 0 0;
   font-size: .82rem;
   color: color-mix(in oklab, var(--muted) 92%, transparent);
 }
 
-/* Error */
-.auth-error{
-  margin: 0 22px 10px;
+.auth-error {
   padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(239,68,68,.45);
@@ -390,45 +241,43 @@ html[data-theme="light"]{
   color: color-mix(in oklab, #fecaca 88%, white);
   font-size: .86rem;
 }
-.auth-error__dot{
+
+.auth-error__dot {
   width: 10px;
   height: 10px;
   border-radius: 999px;
   margin-top: 4px;
   background: #ef4444;
-  box-shadow: 0 0 14px rgba(239,68,68,.35);
 }
 
-/* Form */
-.auth-form{
+.auth-form {
   padding: 8px 20px 18px;
   display: grid;
   gap: 10px;
 }
 
-.auth-field{ display: grid; gap: 8px; }
-.auth-label{
+.auth-field { display: grid; gap: 8px; }
+.auth-label {
   font-size: .86rem;
   font-weight: 850;
   color: color-mix(in oklab, var(--txt-body) 88%, transparent);
 }
 
-.auth-inputWrap{
+.auth-inputWrap {
   position: relative;
   border-radius: 16px;
   border: 1px solid rgba(255,107,0,.22);
   background: color-mix(in oklab, var(--bg-body) 86%, transparent);
   overflow: hidden;
-  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
 
-.auth-inputWrap:focus-within{
+.auth-inputWrap:focus-within {
   border-color: rgba(255,107,0,.58);
   box-shadow: 0 0 0 4px rgba(255,107,0,.16);
-  transform: translateY(-1px);
 }
 
-.auth-ico{
+.auth-ico {
   position: absolute;
   left: 12px;
   top: 50%;
@@ -442,9 +291,9 @@ html[data-theme="light"]{
   background: rgba(255,107,0,.10);
   border: 1px solid rgba(255,107,0,.18);
 }
-.auth-ico svg{ width: 18px; height: 18px; opacity: .95; }
+.auth-ico svg { width: 18px; height: 18px; }
 
-.auth-input{
+.auth-input {
   width: 100%;
   border: 0;
   outline: none;
@@ -453,211 +302,76 @@ html[data-theme="light"]{
   padding: 12px 12px 12px 54px;
   font-size: .92rem;
 }
-.auth-input::placeholder{
-  color: color-mix(in oklab, var(--muted) 92%, transparent);
-}
 
-/* Row */
-.auth-row{
-  display:flex;
-  align-items:center;
+.auth-row {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 14px;
-  margin-top: 2px;
-  flex-wrap: wrap;
 }
 
-.auth-back{
+.auth-back {
   font-size: .82rem;
   font-weight: 950;
   color: var(--brand2);
   text-decoration: none;
-  transition: filter .2s ease, transform .2s ease;
-}
-.auth-back:hover{
-  filter: saturate(1.12);
-  transform: translateY(-1px);
 }
 
-/* Button */
-.auth-btn{
+.auth-btn {
   margin-top: 6px;
   width: 100%;
   border: 0;
   cursor: pointer;
   border-radius: 999px;
   padding: 11px 14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
-
   background: linear-gradient(135deg, var(--brand), var(--brand2));
   color: #0b1220;
   font-weight: 950;
-  letter-spacing: .01em;
-
   box-shadow: 0 18px 50px rgba(0,0,0,.22), 0 0 26px rgba(255,107,0,.16);
   position: relative;
   overflow: hidden;
-  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  transition: transform .18s ease, box-shadow .18s ease;
 }
-.auth-btn:hover{
+
+.auth-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 24px 70px rgba(0,0,0,.26), 0 0 32px rgba(255,107,0,.20);
-  filter: saturate(1.06);
 }
-.auth-btn:active{ transform: translateY(0px) scale(.99); }
 
-.auth-btn__shine{
-  position:absolute;
-  inset:-2px;
+.auth-btn__shine {
+  position: absolute;
+  inset: -2px;
   background: radial-gradient(220px 80px at 18% 0%, rgba(255,255,255,.40), transparent 60%);
-  opacity: .0;
+  opacity: 0;
   transition: opacity .2s ease;
-  pointer-events:none;
 }
-.auth-btn:hover .auth-btn__shine{ opacity: 1; }
+.auth-btn:hover .auth-btn__shine { opacity: 1; }
 
-.auth-btn__text{ font-size: .94rem; }
-.auth-btn__icon{
+.auth-btn__text { font-size: .94rem; }
+.auth-btn__icon {
   width: 22px;
   height: 22px;
-  display:grid;
-  place-items:center;
+  display: grid;
+  place-items: center;
   border-radius: 999px;
   background: rgba(255,255,255,.30);
   border: 1px solid rgba(0,0,0,.08);
 }
-.auth-btn__icon svg{ width: 18px; height: 18px; color: rgba(2,6,23,.90); }
+.auth-btn__icon svg { width: 18px; height: 18px; color: rgba(2,6,23,.90); }
 
-/* Responsive */
-@media (max-width: 420px){
-  .auth-head{ padding: 20px 18px 10px; }
-  .auth-form{ padding: 10px 18px 20px; }
-  .auth-title{ font-size: 1.42rem; }
-}
-
-/* ================================
-   LIGHT MODE READABILITY FIX
-   ================================ */
-html[data-theme="light"] .auth-title{
-  /* biar judul tetap pop di light */
-  filter: saturate(1.15) contrast(1.05);
-}
-
-html[data-theme="light"] .auth-subtitle{
-  /* subtitle kamu terlalu "muted" -> bikin lebih gelap */
-  color: rgba(30, 41, 59, .82);
-}
-
-html[data-theme="light"] .auth-label{
-  /* label biar tegas */
-  color: rgba(15, 23, 42, .92);
-}
-
-html[data-theme="light"] .auth-inputWrap{
-  /* input wrapper di light jangan ikut bg-body (terlalu pucat) */
-  background: rgba(255,255,255,.92);
-  border-color: rgba(255,107,0,.25);
-  box-shadow: 0 8px 24px rgba(2,6,23,.06);
-}
-
-html[data-theme="light"] .auth-input{
-  color: rgba(15,23,42,.96);
-}
-
-html[data-theme="light"] .auth-input::placeholder{
-  color: rgba(71,85,105,.65);
-}
-
-html[data-theme="light"] .auth-ico{
-  color: rgba(180,65,14,.95);
-  background: rgba(255,107,0,.10);
-  border-color: rgba(255,107,0,.22);
-}
-
-html[data-theme="light"] .auth-back{
-  /* link biar tajam */
-  color: rgba(180,65,14,.95);
-}
-
-html[data-theme="light"] .auth-error{
-  /* ini bagian yang paling bikin sulit kebaca di light */
-  background: rgba(239,68,68,.10);
-  border-color: rgba(239,68,68,.38);
-  color: rgba(127,29,29,.92);  /* teks merah tua biar jelas */
-}
-
-html[data-theme="light"] .auth-error__dot{
-  background: #ef4444;
-  box-shadow: 0 0 14px rgba(239,68,68,.25);
-}
-
-/* Divider */
-.auth-divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 6px 0;
-  color: var(--muted);
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-.auth-divider::before,
-.auth-divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid var(--line);
-}
-.auth-divider:not(:empty)::before {
-  margin-right: .5em;
-}
-.auth-divider:not(:empty)::after {
-  margin-left: .5em;
-}
-
-/* Google Button */
-.auth-btn-google {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  padding: 11px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: color-mix(in oklab, var(--card) 95%, transparent);
-  color: var(--txt-body) !important;
-  font-size: 0.92rem;
-  font-weight: 850;
-  text-decoration: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-.auth-btn-google:hover {
-  background: color-mix(in oklab, var(--card) 60%, var(--brand2) 10%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  border-color: rgba(255,107,0,0.4);
-}
-.auth-btn-google:active {
-  transform: translateY(0);
-}
-.auth-btn-google__icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-}
-
-html[data-theme="light"] .auth-btn-google {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(15,23,42,.14);
-}
-html[data-theme="light"] .auth-btn-google:hover {
-  background: rgba(255, 255, 255, 1);
-  border-color: rgba(255,107,0,0.4);
-}
+/* Light Mode specific details */
+html[data-theme="light"] .auth-subtitle { color: rgba(30, 41, 59, .82); }
+html[data-theme="light"] .auth-label { color: rgba(15, 23, 42, .92); }
+html[data-theme="light"] .auth-inputWrap { background: rgba(255,255,255,.92); border-color: rgba(255,107,0,.25); }
+html[data-theme="light"] .auth-input { color: rgba(15,23,42,.96); }
+html[data-theme="light"] .auth-ico { color: rgba(180,65,14,.95); background: rgba(255,107,0,.10); border-color: rgba(255,107,0,.22); }
+html[data-theme="light"] .auth-back { color: rgba(180,65,14,.95); }
+html[data-theme="light"] .auth-error { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-text); }
+html[data-theme="light"] .auth-error__dot { background: var(--danger-dot); }
 
 /* ==========================================
    PIN INPUTS (4 BOXES) & ERROR POPUP STYLES
@@ -788,6 +502,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const compiledPinInput = document.getElementById('compiled_pin');
 
   if (boxes.length > 0 && compiledPinInput) {
+    // Focus first box
+    boxes[0].focus();
+
     boxes.forEach((box, index) => {
       // Only allow numbers
       box.addEventListener('input', (e) => {

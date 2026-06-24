@@ -32,7 +32,19 @@ return [
         'Atoni',
     ],
 
+    'bali-nusa-tenggara' => [
+        'Bali',
+        'Sasak',
+        'Atoni',
+    ],
+
     'papua&maluku' => [
+        'Asmat',
+        'Amungme',
+        'Ambon',
+    ],
+
+    'papua-maluku' => [
         'Asmat',
         'Amungme',
         'Ambon',

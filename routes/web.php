@@ -48,6 +48,7 @@ Route::post('/nusantara-ai/chat', [NusantaraChatController::class, 'chat'])
 |--------------------------------------------------------------------------
 */
 Route::get('/', [IslandController::class, 'landing'])->name('home');
+Route::get('/jelajah', [IslandController::class, 'explore'])->name('jelajah');
 Route::get('/api/destinations', [IslandController::class, 'apiDestinations'])->name('api.destinations');
 
 Route::get('/islands/{island:slug}', [IslandController::class, 'show'])
@@ -258,6 +259,10 @@ Route::post('/daftar', [PlayerAuthController::class, 'register'])->name('player.
 
 Route::get('/masuk', [PlayerAuthController::class, 'showLogin'])->name('player.login');
 Route::post('/masuk', [PlayerAuthController::class, 'login'])->name('player.login.post');
+Route::get('/auth/google', [PlayerAuthController::class, 'loginWithGoogle'])->name('player.login.google');
+Route::get('/auth/google/callback', [PlayerAuthController::class, 'handleGoogleCallback'])->name('player.login.google.callback');
+Route::get('/auth/google/complete', [PlayerAuthController::class, 'showGoogleComplete'])->name('player.google.complete');
+Route::post('/auth/google/complete', [PlayerAuthController::class, 'completeGoogle'])->name('player.google.complete.post');
 
 Route::post('/keluar', [PlayerAuthController::class, 'logout'])->name('player.logout')->middleware('player');
 

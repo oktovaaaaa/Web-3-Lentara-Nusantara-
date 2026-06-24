@@ -14,7 +14,7 @@ class Player extends Authenticatable
     protected $fillable = [
         'username','pin_hash','nickname','avatar_key',
         'xp_total','coins','hearts','hearts_max',
-        'hearts_updated_at',
+        'hearts_updated_at', 'email', 'google_id',
     ];
 
     protected $hidden = [

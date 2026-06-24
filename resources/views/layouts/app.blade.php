@@ -305,6 +305,20 @@ html{
   font-size: 14px;
   color: rgba(255,255,255,.85);
 }
+.batik-footer-scroller {
+  background-image: url("{{ asset('images/icon/footer.JPEG') }}");
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  animation: batik-scroll 60s linear infinite;
+}
+@keyframes batik-scroll {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -2000px;
+  }
+}
 </style>
 
 </head>
@@ -484,13 +498,8 @@ html{
 
     </div>
 
-    {{-- FOOTER IMAGE --}}
-    <img
-        src="{{ asset('images/icon/footer.JPEG') }}"
-        alt="Lentara Footer"
-        class="w-full h-24 object-cover block opacity-90"
-        loading="lazy"
-    />
+    {{-- FOOTER IMAGE (INFINITE SCROLLING BATIK) --}}
+    <div class="w-full h-24 opacity-90 batik-footer-scroller" aria-label="Lentara Footer Batik"></div>
 
 </footer>
 

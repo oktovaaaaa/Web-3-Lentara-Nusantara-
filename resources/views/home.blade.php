@@ -2853,9 +2853,6 @@
 
             @include('partials.testimonial')
 
-            {{-- ===== JELAJAH DESTINASI NUSANTARA (GPS REALTIME) ===== --}}
-            @include('partials.nusantara-explorer')
-
         </div>
     </section>
 

@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             AcehGame3DSeeder::class,
             BatakTribeSeeder::class,
             AcehTribeSeeder::class,
+            TraditionalTribesSeeder::class,
+            TribeFoodRecommendationSeeder::class,
         ]);
     }
 }

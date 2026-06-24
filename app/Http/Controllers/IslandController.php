@@ -24,7 +24,6 @@ use Illuminate\Support\Carbon;
 
 use App\Models\Destination;
 
-
 use Illuminate\Http\Request;
 
 class IslandController extends Controller
@@ -81,6 +80,14 @@ class IslandController extends Controller
             'testimonialStats'  => $testimonialStats,
             'quiz'              => $quiz,
         ]);
+    }
+
+    /**
+     * Halaman Jelajah Destinasi Nusantara
+     */
+    public function explore()
+    {
+        return view('explore');
     }
 
     /**
@@ -410,6 +417,15 @@ if ($tribeKey !== '') {
             ->whereNotNull('longitude')
             ->get()
             ->map(function ($dest) {
+                $nameLow = strtolower((string)$dest->name);
+                
+                $category = 'wisata';
+                if (str_contains($nameLow, 'museum') || str_contains($nameLow, 'benteng') || str_contains($nameLow, 'candi') || str_contains($nameLow, 'istana') || str_contains($nameLow, 'istano') || str_contains($nameLow, 'makam')) {
+                    $category = 'museum';
+                } elseif (str_contains($nameLow, 'rm') || str_contains($nameLow, 'rumah makan') || str_contains($nameLow, 'resto') || str_contains($nameLow, 'lapo') || str_contains($nameLow, 'bpk') || str_contains($nameLow, 'warung') || str_contains($nameLow, 'kuliner') || str_contains($nameLow, 'kedai')) {
+                    $category = 'kuliner';
+                }
+
                 return [
                     'id' => 'db-' . $dest->id,
                     'name' => $dest->name,
@@ -420,7 +436,7 @@ if ($tribeKey !== '') {
                     'pano_maps_url' => $dest->pano_maps_url,
                     'latitude' => (float) $dest->latitude,
                     'longitude' => (float) $dest->longitude,
-                    'category' => 'wisata',
+                    'category' => $category,
                     'is_db' => true,
                 ];
             });

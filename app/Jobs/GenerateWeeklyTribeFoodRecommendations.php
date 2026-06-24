@@ -46,78 +46,85 @@ class GenerateWeeklyTribeFoodRecommendations implements ShouldQueue
                 $tribeKey = trim((string) $tribeKey);
                 if ($tribeKey === '') continue;
 
-                // 3) Generate dari Gemini
-                $items = $gemini->generateFoodsForTribe($tribeKey, $regionSlug);
+                try {
+                    // 3) Generate dari Gemini
+                    $items = $gemini->generateFoodsForTribe($tribeKey, $regionSlug);
 
-                // 4) Resolve image + wiki_url + summary
-                $finalItems = [];
-                foreach ($items as $it) {
-                    $name = trim((string)($it['name'] ?? ''));
-                    if ($name === '') continue;
+                    // 4) Resolve image + wiki_url + summary
+                    $finalItems = [];
+                    foreach ($items as $it) {
+                        $name = trim((string)($it['name'] ?? ''));
+                        if ($name === '') continue;
 
-                    $resolved = $wiki->resolve($name, $tribeKey);
+                        $resolved = $wiki->resolve($name, $tribeKey);
 
-                    $imageUrl = $resolved['image_url'] ?? null;
-                    $sources  = $resolved['sources'] ?? [];
-                    $wikiUrl  = $resolved['wiki_url'] ?? null;
+                        $imageUrl = $resolved['image_url'] ?? null;
+                        $sources  = $resolved['sources'] ?? [];
+                        $wikiUrl  = $resolved['wiki_url'] ?? null;
 
-                    // ✅ FIX UTAMA: summary key bisa beda-beda tergantung service
-                    // - kamu simpan ke payload sebagai 'wiki_summary'
-                    // - jadi ambil dari beberapa kemungkinan key supaya tidak null
-                    $summary = $resolved['wiki_summary']
-                        ?? $resolved['summary']
-                        ?? $resolved['extract']
-                        ?? null;
+                        // ✅ FIX UTAMA: summary key bisa beda-beda tergantung service
+                        // - kamu simpan ke payload sebagai 'wiki_summary'
+                        // - jadi ambil dari beberapa kemungkinan key supaya tidak null
+                        $summary = $resolved['wiki_summary']
+                            ?? $resolved['summary']
+                            ?? $resolved['extract']
+                            ?? null;
 
-                    // fallback image saja boleh (biar UI tetap cakep)
-                    if (!$imageUrl) {
-                        $imageUrl = 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&q=80&w=1200';
+                        // fallback image saja boleh (biar UI tetap cakep)
+                        if (!$imageUrl) {
+                            $imageUrl = 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&q=80&w=1200';
+                        }
+
+                        // IMPORTANT: kalau sources kosong, BIARKAN kosong (jangan samain semua)
+                        $sources = is_array($sources) ? array_values(array_filter($sources)) : [];
+
+                        // ✅ pastikan wikiUrl jadi sumber pertama (spesifik per makanan)
+                        if ($wikiUrl && is_string($wikiUrl)) {
+                            array_unshift($sources, $wikiUrl);
+                            $sources = array_values(array_unique(array_filter($sources)));
+                        }
+
+                        $finalItems[] = [
+                            'name' => $name,
+                            'description' => (string)($it['description'] ?? ''),
+                            'price_range' => $it['price_range'] ?? null,
+                            'rating_estimate' => $it['rating_estimate'] ?? null,
+                            'region_hint' => $it['region_hint'] ?? null,
+                            'where_to_find' => array_values(array_filter((array)($it['where_to_find'] ?? []))),
+                            'tags' => array_values(array_filter((array)($it['tags'] ?? []))),
+                            'category' => $it['category'] ?? null,
+
+                            'image_url' => $imageUrl,
+                            'sources' => $sources,
+
+                            // ✅ NEW: info sejarah/asal usul dari Wikipedia intro
+                            'wiki_url' => $wikiUrl,
+                            'wiki_summary' => $summary,
+                        ];
                     }
 
-                    // IMPORTANT: kalau sources kosong, BIARKAN kosong (jangan samain semua)
-                    $sources = is_array($sources) ? array_values(array_filter($sources)) : [];
-
-                    // ✅ pastikan wikiUrl jadi sumber pertama (spesifik per makanan)
-                    if ($wikiUrl && is_string($wikiUrl)) {
-                        array_unshift($sources, $wikiUrl);
-                        $sources = array_values(array_unique(array_filter($sources)));
-                    }
-
-                    $finalItems[] = [
-                        'name' => $name,
-                        'description' => (string)($it['description'] ?? ''),
-                        'price_range' => $it['price_range'] ?? null,
-                        'rating_estimate' => $it['rating_estimate'] ?? null,
-                        'region_hint' => $it['region_hint'] ?? null,
-                        'where_to_find' => array_values(array_filter((array)($it['where_to_find'] ?? []))),
-                        'tags' => array_values(array_filter((array)($it['tags'] ?? []))),
-                        'category' => $it['category'] ?? null,
-
-                        'image_url' => $imageUrl,
-                        'sources' => $sources,
-
-                        // ✅ NEW: info sejarah/asal usul dari Wikipedia intro
-                        'wiki_url' => $wikiUrl,
-                        'wiki_summary' => $summary,
+                    $payload = [
+                        'island_slug' => $regionSlug,
+                        'tribe_key' => $tribeKey,
+                        'week_key' => $weekKey,
+                        'generated_at' => $now->toISOString(),
+                        'items' => array_slice($finalItems, 0, 10),
                     ];
+
+                    TribeFoodRecommendation::updateOrCreate(
+                        ['tribe_key' => $tribeKey, 'week_key' => $weekKey],
+                        [
+                            'region_slug' => $regionSlug,
+                            'payload' => $payload,
+                            'generated_at' => $now,
+                        ]
+                    );
+
+                    // Beri jeda kecil untuk menghindari rate limiting API gratis
+                    sleep(2);
+                } catch (\Exception $e) {
+                    logger()->warning("Gagal membuat rekomendasi makanan untuk suku {$tribeKey}: " . $e->getMessage());
                 }
-
-                $payload = [
-                    'island_slug' => $regionSlug,
-                    'tribe_key' => $tribeKey,
-                    'week_key' => $weekKey,
-                    'generated_at' => $now->toISOString(),
-                    'items' => array_slice($finalItems, 0, 10),
-                ];
-
-                TribeFoodRecommendation::updateOrCreate(
-                    ['tribe_key' => $tribeKey, 'week_key' => $weekKey],
-                    [
-                        'region_slug' => $regionSlug,
-                        'payload' => $payload,
-                        'generated_at' => $now,
-                    ]
-                );
             }
         }
     }

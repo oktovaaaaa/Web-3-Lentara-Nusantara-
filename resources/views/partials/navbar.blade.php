@@ -56,6 +56,40 @@
         background: rgba(255, 140, 66, 0.1) !important;
         border-left-color: #ff8c42 !important;
     }
+
+    /* Shiny Text for featured features */
+    @keyframes shiny-sweep {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+    }
+    .shiny-text {
+        background: linear-gradient(
+            120deg,
+            #ea580c 40%,
+            #000000 50%,
+            #ea580c 60%
+        );
+        background-size: 200% auto;
+        color: transparent !important;
+        background-clip: text;
+        -webkit-background-clip: text;
+        animation: shiny-sweep 6s linear infinite;
+        display: inline-block;
+        font-weight: 900 !important;
+        font-family: inherit;
+    }
+    html[data-theme="dark"] .shiny-text {
+        background: linear-gradient(
+            120deg,
+            #ff7a00 40%,
+            #ffffff 50%,
+            #ff7a00 60%
+        );
+        background-size: 200% auto;
+        color: transparent !important;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 </style>
 
 <header class="site-header" id="top">
@@ -88,12 +122,15 @@
 
             @if (!$isIslandMode)
                 {{-- ================= MODE HOME ================= --}}
+                @php
+                    $isHome = request()->routeIs('home');
+                @endphp
 
-                <button type="button" class="nav-btn is-active" data-target="#home" data-default="1">
+                <button type="button" class="nav-btn {{ $isHome ? 'is-active' : '' }}" {!! $isHome ? 'data-target="#home" data-default="1"' : 'data-url="' . route('home') . '"' !!}>
                     <span>Beranda</span>
                 </button>
 
-                <button type="button" class="nav-btn" data-target="#about">
+                <button type="button" class="nav-btn" {!! $isHome ? 'data-target="#about"' : 'data-url="' . route('home') . '#about"' !!}>
                     <span>Tentang</span>
                 </button>
 
@@ -125,22 +162,27 @@
                     </div>
                 </div>
 
-                <button type="button" class="nav-btn" data-target="#stats">
+                <button type="button" class="nav-btn" {!! $isHome ? 'data-target="#stats"' : 'data-url="' . route('home') . '#stats"' !!}>
                     <span>Statistik</span>
                 </button>
 
                 {{-- ✅ FITUR BARU: Kamera AR (HOME / GENERAL SAJA) --}}
-                <button type="button" class="nav-btn" data-target="#camera-ar">
+                <button type="button" class="nav-btn" {!! $isHome ? 'data-target="#camera-ar"' : 'data-url="' . route('home') . '#camera-ar"' !!}>
                     <span>Kamera AR</span>
                 </button>
 
-                <button type="button" class="nav-btn" data-target="#quiz">
+                <button type="button" class="nav-btn" {!! $isHome ? 'data-target="#quiz"' : 'data-url="' . route('home') . '#quiz"' !!}>
                     <span>Kuis</span>
                 </button>
 
-                                {{-- ================= TESTIMONI (HOME ONLY) ================= --}}
-                <button type="button" class="nav-btn" data-target="#testimoni">
+                {{-- ================= TESTIMONI (HOME ONLY) ================= --}}
+                <button type="button" class="nav-btn" {!! $isHome ? 'data-target="#testimoni"' : 'data-url="' . route('home') . '#testimoni"' !!}>
                     <span>Testimoni</span>
+                </button>
+
+                {{-- Jelajah --}}
+                <button type="button" class="nav-btn {{ request()->routeIs('jelajah') ? 'is-active' : '' }}" {!! request()->routeIs('jelajah') ? 'data-default="1"' : '' !!} data-url="{{ route('jelajah') }}">
+                    <span class="shiny-text">Jelajah</span>
                 </button>
 
                 {{-- ===== GAME / BELAJAR (SETELAH KUIS, SEBELUM TESTIMONI) ===== --}}
@@ -216,6 +258,11 @@
                     <span>Kuis</span>
                 </button>
 
+                {{-- Jelajah --}}
+                <button type="button" class="nav-btn" data-url="{{ route('jelajah') }}">
+                    <span class="shiny-text">Jelajah</span>
+                </button>
+
                 {{-- ===== GAME / BELAJAR (SETELAH KUIS) ===== --}}
                 <button type="button" class="nav-btn {{ $playerLoggedIn ? 'nav-btn--game-active' : '' }}" data-url="{{ $gameUrl }}">
                     <span>{{ $gameLabel }}</span>
@@ -259,13 +306,15 @@
                     class="close-drawer"
                     aria-label="Tutup menu">✕</button>
         </div>
-
         <div class="drawer-links">
             @if (!$isIslandMode)
                 {{-- MODE HOME --}}
-                <a href="#home" data-target="#home" class="drawer-link">Beranda</a>
-                <a href="#about" data-target="#about" class="drawer-link">Tentang</a>
-                <a href="#history" data-target="#history" class="drawer-link">Sejarah</a>
+                @php
+                    $isHome = request()->routeIs('home');
+                @endphp
+                <a href="{{ $isHome ? '#home' : route('home') }}" {!! $isHome ? 'data-target="#home"' : '' !!} class="drawer-link">Beranda</a>
+                <a href="{{ $isHome ? '#about' : route('home') . '#about' }}" {!! $isHome ? 'data-target="#about"' : '' !!} class="drawer-link">Tentang</a>
+                <a href="{{ $isHome ? '#history' : route('home') . '#history' }}" {!! $isHome ? 'data-target="#history"' : '' !!} class="drawer-link">Sejarah</a>
 
                 {{-- Pulau + sub menu --}}
                 <a href="#islands" data-target="#islands" class="drawer-link">Pulau</a>
@@ -284,20 +333,21 @@
                     @endforeach
                 </div>
 
-                <a href="#stats" data-target="#stats" class="drawer-link">Statistik</a>
+                <a href="{{ $isHome ? '#stats' : route('home') . '#stats' }}" {!! $isHome ? 'data-target="#stats"' : '' !!} class="drawer-link">Statistik</a>
 
                 {{-- Kamera AR --}}
-                <a href="#camera-ar" data-target="#camera-ar" class="drawer-link">Kamera AR</a>
+                <a href="{{ $isHome ? '#camera-ar' : route('home') . '#camera-ar' }}" {!! $isHome ? 'data-target="#camera-ar"' : '' !!} class="drawer-link">Kamera AR</a>
 
-                <a href="#quiz" data-target="#quiz" class="drawer-link">Kuis</a>
+                <a href="{{ $isHome ? '#quiz' : route('home') . '#quiz' }}" {!! $isHome ? 'data-target="#quiz"' : '' !!} class="drawer-link">Kuis</a>
 
-                                {{-- TESTIMONI --}}
-                                <a href="#testimoni" data-target="#testimoni" class="drawer-link">Testimoni</a>
+                {{-- TESTIMONI --}}
+                <a href="{{ $isHome ? '#testimoni' : route('home') . '#testimoni' }}" {!! $isHome ? 'data-target="#testimoni"' : '' !!} class="drawer-link">Testimoni</a>
+
+                {{-- Jelajah --}}
+                <a href="{{ route('jelajah') }}" class="drawer-link {{ request()->routeIs('jelajah') ? 'drawer-link--game-active' : '' }}"><span class="shiny-text">Jelajah</span></a>
 
                 {{-- ===== GAME / BELAJAR ===== --}}
                 <a href="{{ $gameUrl }}" class="drawer-link {{ $playerLoggedIn ? 'drawer-link--game-active' : '' }}">{{ $gameLabel }}</a>
-
-
             @else
                 {{-- MODE ISLAND --}}
                 <a href="{{ route('home') }}" class="drawer-link">Beranda</a>
@@ -325,6 +375,9 @@
                 </div>
 
                 <a href="#quiz" data-target="#quiz" class="drawer-link">Kuis</a>
+
+                {{-- Jelajah --}}
+                <a href="{{ route('jelajah') }}" class="drawer-link"><span class="shiny-text">Jelajah</span></a>
 
                 {{-- ===== GAME / BELAJAR ===== --}}
                 <a href="{{ $gameUrl }}" class="drawer-link {{ $playerLoggedIn ? 'drawer-link--game-active' : '' }}">{{ $gameLabel }}</a>

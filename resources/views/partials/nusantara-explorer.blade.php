@@ -8,7 +8,7 @@
 <section id="explore-nusantara" class="py-12">
 
   {{-- Leaflet CSS --}}
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
     /* =============================================================
@@ -326,9 +326,6 @@
     }
     html[data-theme="dark"] #explore-nusantara .xp-list-card {
       background: linear-gradient(145deg, #111827, #0f172a);
-    }
-    html[data-theme="light"] #explore-nusantara .xp-list-card {
-      background: linear-gradient(145deg, #ffffff, #f8fafc);
     }
 
     /* LIST HEADER */
@@ -725,9 +722,9 @@
           <div class="flex items-center gap-2">
             <label for="xpRadiusSelect" class="text-xs font-bold text-amber-500" style="color: #f97316;">Radius:</label>
             <select id="xpRadiusSelect" class="xp-radius-select">
-              <option value="10000" selected>10 km</option>
+              <option value="10000">10 km</option>
               <option value="20000">20 km</option>
-              <option value="30000">30 km</option>
+              <option value="30000" selected>30 km</option>
               <option value="40000">40 km</option>
               <option value="50000">50 km</option>
             </select>
@@ -768,8 +765,7 @@
           {{-- Filter tabs --}}
           <div class="xp-tabs">
             <button class="xp-tab is-active" data-filter="all" type="button">Semua</button>
-            <button class="xp-tab" data-filter="museum" type="button">🏛️ Museum</button>
-            <button class="xp-tab" data-filter="wisata" type="button">🎭 Wisata</button>
+            <button class="xp-tab" data-filter="wisata" type="button">🎭 Wisata & Museum</button>
             <button class="xp-tab" data-filter="kuliner" type="button">🍽️ Kuliner</button>
           </div>
         </div>
@@ -790,7 +786,7 @@
   </div>
 
   {{-- Leaflet JS --}}
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPeM=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
   (() => {
@@ -829,8 +825,10 @@
     let userLat = null, userLng = null;
     let watchId = null;
     let lastQueryLat = null, lastQueryLng = null;
+    let isGpsActive = false;
+    let currentRegion = 'indonesia';
 
-    let SEARCH_RADIUS_M = 10000; // default 10km (adjustable 10-50km)
+    let SEARCH_RADIUS_M = 30000; // default 30km (adjustable 10-50km)
 
     function isBatakRegion(lat, lng) {
       // Koordinat wilayah Sumatera Utara / Toba / Samosir / Tapanuli
@@ -868,8 +866,8 @@
 
       // Tile layer — CartoDB Positron (terang) atau Dark Matter (gelap)
       const tileUrl = isDark
-        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
 
       L.tileLayer(tileUrl, {
         attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -878,6 +876,50 @@
       }).addTo(map);
 
       placeUserMarker(lat, lng);
+
+      // Map click listener: click anywhere to pin target search location
+      map.on('click', async (e) => {
+        const newLat = e.latlng.lat;
+        const newLng = e.latlng.lng;
+        userLat = newLat;
+        userLng = newLng;
+        
+        // Move user marker & circle radius
+        placeUserMarker(newLat, newLng);
+        coordsEl.textContent = `${newLat.toFixed(5)}, ${newLng.toFixed(5)}`;
+
+        try {
+          const geoUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${newLat}&lon=${newLng}`;
+          const geoRes = await fetch(geoUrl);
+          if (geoRes.ok) {
+            const geoData = await geoRes.json();
+            const placeName = geoData.display_name || geoData.name || '';
+            if (placeName) {
+              coordsEl.innerHTML = `📍 ${placeName}`;
+            }
+            currentRegion = detectRegion(geoData.address, newLat, newLng);
+          } else {
+            currentRegion = detectRegion(null, newLat, newLng);
+          }
+        } catch (err) {
+          console.warn('Click reverse geocoding failed:', err);
+          currentRegion = detectRegion(null, newLat, newLng);
+        }
+
+        // Fetch new destinations around clicked coordinate
+        skeleton.style.display = 'flex';
+        const newDests = await fetchDestinations(newLat, newLng);
+        allDestinations = newDests;
+        skeleton.style.display = 'none';
+
+        if (allDestinations.length === 0) {
+          destList.innerHTML = `<div class="xp-empty"><div class="xp-empty-icon">🔍</div><div>Tidak ditemukan destinasi dalam radius</div></div>`;
+          countBadge.textContent = '0';
+        } else {
+          renderList(allDestinations);
+          renderMarkers(allDestinations);
+        }
+      });
     }
 
     function placeUserMarker(lat, lng) {
@@ -915,11 +957,16 @@
               const geoData = await geoRes.json();
               const placeName = geoData.display_name || geoData.name || '';
               if (placeName) {
-                coordsEl.innerHTML = `📍 ${placeName} (${newLat.toFixed(5)}, ${newLng.toFixed(5)})`;
+                coordsEl.innerHTML = `📍 ${placeName}`;
               }
+              currentRegion = detectRegion(geoData.address, newLat, newLng);
+              console.log('[Explorer] Drag detected region:', currentRegion);
+            } else {
+              currentRegion = detectRegion(null, newLat, newLng);
             }
           } catch (err) {
             console.warn('Drag reverse geocoding failed:', err);
+            currentRegion = detectRegion(null, newLat, newLng);
           }
 
           // Fetch new destinations
@@ -1038,12 +1085,9 @@
       lastQueryLat = lat;
       lastQueryLng = lng;
 
-      const dbDests = await fetchDbDestinations(lat, lng);
-
-      // Query luas: SEMUA restoran tanpa filter cuisine + museum + wisata
-      // Overpass union: node + way tiap kategori
+      // Optimized query: search nodes for restaurants/shops/attractions, keep ways/relations for museums
       const query = `
-[out:json][timeout:30];
+[out:json][timeout:15];
 (
   node["tourism"="museum"](around:${SEARCH_RADIUS_M},${lat},${lng});
   way["tourism"="museum"](around:${SEARCH_RADIUS_M},${lat},${lng});
@@ -1053,10 +1097,8 @@
   way["historic"](around:${SEARCH_RADIUS_M},${lat},${lng});
 
   node["tourism"~"^(attraction|artwork|gallery|viewpoint|theme_park|zoo|aquarium)$"](around:${SEARCH_RADIUS_M},${lat},${lng});
-  way["tourism"~"^(attraction|gallery|theme_park|zoo)$"](around:${SEARCH_RADIUS_M},${lat},${lng});
-
   node["amenity"~"^(restaurant|cafe|fast_food|food_court|bar)$"](around:${SEARCH_RADIUS_M},${lat},${lng});
-  way["amenity"~"^(restaurant|cafe|fast_food|food_court)$"](around:${SEARCH_RADIUS_M},${lat},${lng});
+  node["shop"~"^(convenience|kiosk|food|marketplace)$"](around:${SEARCH_RADIUS_M},${lat},${lng});
 );
 out center 100;
 `;
@@ -1066,7 +1108,7 @@ out center 100;
           method: 'POST',
           body: 'data=' + encodeURIComponent(query),
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          signal: AbortSignal.timeout(32000),
+          signal: AbortSignal.timeout(16000),
         });
 
         if (!res.ok) throw new Error(`Overpass HTTP ${res.status}`);
@@ -1074,20 +1116,18 @@ out center 100;
         const data = await res.json();
         console.log('[Explorer] Overpass elements:', data.elements.length);
         const osmDests = parseOverpassResults(data.elements, lat, lng);
-        const merged = [...dbDests, ...osmDests];
-        return merged.sort((a, b) => a.dist - b.dist).slice(0, 50);
+        return osmDests.sort((a, b) => a.dist - b.dist).slice(0, 50);
       } catch (err) {
         console.warn('[Explorer] Overpass error:', err.message);
         // Fallback: coba Overpass mirror
         const osmDests = await fetchViaMirror(lat, lng);
-        const merged = [...dbDests, ...osmDests];
-        return merged.sort((a, b) => a.dist - b.dist).slice(0, 50);
+        return osmDests.sort((a, b) => a.dist - b.dist).slice(0, 50);
       }
     }
 
     // Fallback: Overpass mirror lain
     async function fetchViaMirror(lat, lng) {
-      const query = `[out:json][timeout:25];(node["amenity"~"^(restaurant|cafe|fast_food)$"](around:${SEARCH_RADIUS_M},${lat},${lng});way["amenity"~"^(restaurant|cafe)$"](around:${SEARCH_RADIUS_M},${lat},${lng});node["tourism"="museum"](around:${SEARCH_RADIUS_M},${lat},${lng});node["historic"](around:${SEARCH_RADIUS_M},${lat},${lng}););out center 80;`;
+      const query = `[out:json][timeout:15];(node["amenity"~"^(restaurant|cafe|fast_food)$"](around:${SEARCH_RADIUS_M},${lat},${lng});node["shop"~"^(convenience|kiosk|food)$"](around:${SEARCH_RADIUS_M},${lat},${lng});node["tourism"="museum"](around:${SEARCH_RADIUS_M},${lat},${lng});node["historic"](around:${SEARCH_RADIUS_M},${lat},${lng}););out center 80;`;
       try {
         const res = await fetch('https://maps.mail.ru/osm/tools/overpass/api/interpreter', {
           method: 'POST',
@@ -1102,6 +1142,264 @@ out center 100;
         console.warn('[Explorer] Mirror error:', e.message);
         return [];
       }
+    }
+
+    // =========================================================
+    // DETEKSI REGION & KULINER KHAS (STRICT FILTER 6 REGION)
+    // =========================================================
+    function detectRegion(address, lat, lng) {
+      const state = (address?.state || '').toLowerCase();
+      const county = (address?.county || address?.city || '').toLowerCase();
+
+      // Deteksi berdasarkan string Provinsi/State
+      if (state.includes('north sumatra') || state.includes('sumatera utara') || 
+          state.includes('west sumatra') || state.includes('sumatera barat') || 
+          state.includes('aceh') || state.includes('riau') || state.includes('jambi') || 
+          state.includes('bengkulu') || state.includes('lampung') || 
+          state.includes('bangka') || state.includes('south sumatra') || state.includes('sumatera selatan')) {
+        return 'sumatera';
+      }
+      if (state.includes('jakarta') || state.includes('banten') || state.includes('west java') || state.includes('jawa barat') || 
+          state.includes('central java') || state.includes('jawa tengah') || state.includes('yogyakarta') || 
+          state.includes('east java') || state.includes('jawa timur')) {
+        return 'jawa';
+      }
+      if (state.includes('kalimantan')) {
+        return 'kalimantan';
+      }
+      if (state.includes('sulawesi') || state.includes('gorontalo')) {
+        return 'sulawesi';
+      }
+      if (state.includes('bali') || state.includes('nusa tenggara') || state.includes('ntt') || state.includes('ntb')) {
+        return 'bali-nusa-tenggara';
+      }
+      if (state.includes('papua') || state.includes('maluku')) {
+        return 'papua-maluku';
+      }
+
+      // Fallback berdasarkan koordinat peta
+      if (lat >= -6.0 && lat <= 6.0 && lng >= 95.0 && lng <= 106.0) return 'sumatera';
+      if (lat >= -8.8 && lat <= -5.5 && lng >= 105.0 && lng <= 114.6) return 'jawa';
+      if (lat >= -4.5 && lat <= 4.5 && lng >= 108.0 && lng <= 119.5) return 'kalimantan';
+      if (lat >= -6.0 && lat <= 2.5 && lng >= 118.5 && lng <= 125.5) return 'sulawesi';
+      if (lat >= -11.0 && lat <= -8.0 && lng >= 114.4 && lng <= 127.5) return 'bali-nusa-tenggara';
+      if (lat >= -9.0 && lat <= 2.0 && lng >= 124.0 && lng <= 141.0) return 'papua-maluku';
+
+      return 'indonesia';
+    }
+
+    function matchesRegionCulture(name, el, category, region) {
+      const nameLow = (name || '').toLowerCase();
+      const tags = el.tags || {};
+      const cuisineLow = (tags.cuisine || '').toLowerCase();
+      const descLow = (tags.description || '').toLowerCase();
+      const historicLow = (tags.historic || '').toLowerCase();
+      const tourismLow = (tags.tourism || '').toLowerCase();
+
+      // Blacklist makanan modern, asing, atau kuliner umum komersial
+      const foodBlacklist = [
+        'pizza', 'burger', 'spaghetti', 'pasta', 'sushi', 'korean', 'ramen', 'bakery', 'cake', 'donut', 
+        'kfc', 'mcdonald', 'starbucks', 'j.co', 'bread', 'cafe', 'coffee', 'kopi', 'bakmi', 'bakso', 
+        'martabak', 'terang bulan', 'dimsum', 'gelato', 'ice cream', 'boba', 'thai tea', 'toast', 'waffle'
+      ];
+
+      // Blacklist tempat hiburan non-budaya
+      const wisataBlacklist = [
+        'cinema', 'bioskop', 'mall', 'supermarket', 'hotel', 'resort', 'playground', 'waterboom', 'waterpark', 
+        'karaoke', 'club', 'bar', 'spa', 'massage', 'gym', 'stadium', 'lapangan'
+      ];
+
+      if (category === 'kuliner') {
+        const hasBlacklist = foodBlacklist.some(kw => nameLow.includes(kw) || cuisineLow.includes(kw));
+        if (hasBlacklist) return false;
+
+        // Permissive check: if it is a general Indonesian traditional eatery keyword
+        const generalIndoKws = [
+          'rm', 'r.m.', 'rumah makan', 'warung', 'resto', 'restoran', 'kedai', 'masakan', 'kuliner', 'dapur', 'selera', 'makan', 'khas',
+          'tradisional', 'tumpeng', 'sate', 'soto', 'gulai', 'rendang', 'sambal', 'pepes', 'bakar'
+        ];
+        const isGeneralMatch = generalIndoKws.some(kw => nameLow.includes(kw) || cuisineLow.includes(kw) || descLow.includes(kw));
+
+        if (region === 'sumatera') {
+          const sumateraFoodKws = [
+            'lapo', 'bpk', 'babi panggang', 'saksang', 'arsik', 'naniura', 'lomok', 'pinadar', 'pagoda', 'karo', 'toba', 'simalungun', 'batak', 'gomak', 'lappet', 'ombus', 'tuak', 'sihiong', 'panggang',
+            'padang', 'kapau', 'minang', 'rendang', 'sate padang', 'dendeng', 'rm padang', 'salau',
+            'aceh', 'mie aceh', 'kopi gayo', 'nasi gurih aceh', 'ayam tangkap', 'kuah pliek', 'timphan',
+            'pempek', 'lempok', 'tempoyak'
+          ];
+          return isGeneralMatch || sumateraFoodKws.some(kw => nameLow.includes(kw) || cuisineLow.includes(kw) || descLow.includes(kw));
+        }
+
+        if (region === 'jawa') {
+          const jawaFoodKws = [
+            'gudeg', 'liwet', 'selat solo', 'rawon', 'cingur', 'pecel', 'tahu campur', 'angkringan', 'tumpeng', 'warung jawa', 'soto kudus', 'soto solo', 'soto lamongan', 'garang asem', 'wedangan', 'penyetan', 'lesehan',
+            'sunda', 'sundanese', 'timbel', 'karedok', 'lotek', 'tutug oncom', 'empal gentong', 'liwet sunda', 'saung', 'lalapan', 'oncom', 'tutug', 'surabi',
+            'sate madura', 'soto madura', 'bebek sinjay', 'tajin', 'lorjuk'
+          ];
+          return isGeneralMatch || jawaFoodKws.some(kw => nameLow.includes(kw) || cuisineLow.includes(kw) || descLow.includes(kw));
+        }
+
+        if (region === 'kalimantan') {
+          const kalimantanFoodKws = [
+            'soto banjar', 'ketupat kandangan', 'bingka', 'mandai', 'patin', 'baulin',
+            'juhu', 'singkah', 'rotan', 'lemang', 'kareh', 'tuak dayak',
+            'gence haruan', 'nasi bekepor', 'sate payau'
+          ];
+          return isGeneralMatch || kalimantanFoodKws.some(kw => nameLow.includes(kw) || cuisineLow.includes(kw) || descLow.includes(kw));
+        }
+
+        if (region === 'sulawesi') {
+          const sulawesiFoodKws = [
+            'coto', 'konro', 'pallubasa', 'makassar', 'bugis', 'pisang epe', 'sop saudara', 'barongko', 'kapurung', 'nasu likku',
+            'pa piong', 'papiong', 'kopi toraja', 'tuak toraja',
+            'tinutuan', 'bubur manado', 'woku', 'rica-rica', 'dabu-dabu', 'paniki', 'klappertaart'
+          ];
+          return isGeneralMatch || sulawesiFoodKws.some(kw => nameLow.includes(kw) || cuisineLow.includes(kw) || descLow.includes(kw));
+        }
+
+        if (region === 'bali-nusa-tenggara') {
+          const baliFoodKws = [
+            'babi guling', 'betutu', 'lilit', 'lawar', 'warung bali', 'balinese', 'nasi campur bali', 'urutan', 'tum bali',
+            'taliwang', 'ayam taliwang', 'plecing', 'kangkung plecing', 'beberuk',
+            'se\'i', 'sei babi', 'sei sapi', 'katemak'
+          ];
+          return isGeneralMatch || baliFoodKws.some(kw => nameLow.includes(kw) || cuisineLow.includes(kw) || descLow.includes(kw));
+        }
+
+        if (region === 'papua-maluku') {
+          const papuaFoodKws = [
+            'papeda', 'ikan kuah kuning', 'colo-colo', 'kohu-kohu', 'gohu ikan', 'nasi lapola',
+            'sagu', 'ulat sagu', 'keladi', 'ikan bakar papua'
+          ];
+          return isGeneralMatch || papuaFoodKws.some(kw => nameLow.includes(kw) || cuisineLow.includes(kw) || descLow.includes(kw));
+        }
+
+        // Fallback untuk daerah lain
+        return isGeneralMatch;
+      }
+
+      if (category === 'wisata') {
+        const hasBlacklist = wisataBlacklist.some(kw => nameLow.includes(kw));
+        if (hasBlacklist) return false;
+
+        if (historicLow || tourismLow === 'gallery' || tourismLow === 'artwork' || tourismLow === 'museum') return true;
+
+        if (region === 'sumatera') {
+          const sumateraWisataKws = ['museum tsunami', 'istana maimun', 'danau toba', 'bukittinggi', 'lubang jepang', 'samosir', 'garuda', 'singgalang', 'sipiso-piso', 'megalit', 'makam pahlawan', 'adat', 'kebudayaan', 'cagar budaya', 'ruma bolon', 'rumah gadang', 'baiturrahman', 'suku', 'cultural', 'heritage'];
+          return sumateraWisataKws.some(kw => nameLow.includes(kw) || descLow.includes(kw));
+        }
+        if (region === 'jawa') {
+          const jawaWisataKws = ['candi', 'prambanan', 'borobudur', 'kraton', 'keraton', 'radya pustaka', 'sangkiran', 'trowulan', 'lawang sewu', 'gedung sate', 'geologi', 'wayang', 'tari', 'batik', 'fatahillah', 'monas', 'kota tua', 'suku', 'cultural', 'heritage', 'adat'];
+          return jawaWisataKws.some(kw => nameLow.includes(kw) || descLow.includes(kw));
+        }
+        if (region === 'kalimantan') {
+          const kalimantanWisataKws = ['mulawarman', 'betang', 'lamin', 'dayak', 'baintan', 'tanjung puting', 'mahakam', 'suku', 'lambung mangkurat', 'cultural', 'heritage', 'adat'];
+          return kalimantanWisataKws.some(kw => nameLow.includes(kw) || descLow.includes(kw));
+        }
+        if (region === 'sulawesi') {
+          const sulawesiWisataKws = ['fort rotterdam', 'balla lompoa', 'toraja', 'londa', 'kete kesu', 'yesus memberkati', 'tongkonan', 'suku', 'cultural', 'heritage', 'adat'];
+          return sulawesiWisataKws.some(kw => nameLow.includes(kw) || descLow.includes(kw));
+        }
+        if (region === 'bali-nusa-tenggara') {
+          const baliWisataKws = ['pura', 'temple', 'tanah lot', 'uluwatu', 'ubud', 'kerta gosa', 'sade', 'sasak', 'komodo', 'kelimutu', 'kecak', 'barong', 'mayeur', 'pasifika', 'suku', 'cultural', 'heritage', 'adat'];
+          return baliWisataKws.some(kw => nameLow.includes(kw) || descLow.includes(kw));
+        }
+        if (region === 'papua-maluku') {
+          const papuaWisataKws = ['raja ampat', 'sentani', 'lorentz', 'loka budaya', 'asmat', 'fort victoria', 'siwalima', 'banda neira', 'tifa', 'suku', 'cultural', 'heritage', 'adat'];
+          return papuaWisataKws.some(kw => nameLow.includes(kw) || descLow.includes(kw));
+        }
+      }
+
+      if (category === 'museum') {
+        return !wisataBlacklist.some(kw => nameLow.includes(kw));
+      }
+
+      return true;
+    }
+
+    function getDynamicFoodLabel(name, rawCuisine, region, lat, lng) {
+      const nameLow = (name || '').toLowerCase();
+      const cuisineLow = (rawCuisine || '').toLowerCase();
+
+      if (region === 'sumatera') {
+        if (nameLow.includes('lapo') || nameLow.includes('bpk') || nameLow.includes('babi') || nameLow.includes('panggang') || nameLow.includes('karo') || nameLow.includes('toba') || nameLow.includes('saksang') || nameLow.includes('arsik') || cuisineLow.includes('batak') || (lat && lng && isBatakRegion(lat, lng))) {
+          return 'Masakan Batak (Menu Khas: BPK, Saksang, Naniura, Arsik Ikan Mas)';
+        }
+        if (nameLow.includes('padang') || nameLow.includes('kapau') || nameLow.includes('minang') || nameLow.includes('rendang') || nameLow.includes('dendeng') || cuisineLow.includes('padang') || cuisineLow.includes('minang')) {
+          return 'Kuliner Khas Minangkabau (Menu: Rendang, Nasi Kapau, Sate Padang)';
+        }
+        if (nameLow.includes('aceh') || nameLow.includes('mie aceh') || cuisineLow.includes('aceh')) {
+          return 'Kuliner Khas Aceh (Menu: Mie Aceh, Ayam Tangkap, Kuah Pliek U)';
+        }
+        if (nameLow.includes('pempek')) {
+          return 'Kuliner Palembang (Menu: Pempek Kapal Selam, Lenjer, Laksan)';
+        }
+        return 'Kuliner Khas Suku Sumatera';
+      }
+
+      if (region === 'jawa') {
+        if (nameLow.includes('gudeg') || nameLow.includes('angkringan') || cuisineLow.includes('javanese')) {
+          return 'Kuliner Khas Jawa (Menu: Gudeg Yogya, Selat Solo, Nasi Liwet)';
+        }
+        if (nameLow.includes('sunda') || nameLow.includes('timbel') || nameLow.includes('karedok') || nameLow.includes('lotek') || cuisineLow.includes('sundanese')) {
+          return 'Kuliner Khas Sunda (Menu: Nasi Timbel, Karedok, Lalap)';
+        }
+        if (nameLow.includes('sate madura') || nameLow.includes('soto madura') || nameLow.includes('sinjay')) {
+          return 'Kuliner Khas Madura (Menu: Sate Madura, Bebek Sinjay)';
+        }
+        return 'Kuliner Khas Suku Jawa';
+      }
+
+      if (region === 'kalimantan') {
+        if (nameLow.includes('soto banjar') || nameLow.includes('kandangan') || cuisineLow.includes('banjar')) {
+          return 'Kuliner Khas Banjar (Menu: Soto Banjar, Ketupat Kandangan)';
+        }
+        if (nameLow.includes('dayak') || nameLow.includes('juhu') || nameLow.includes('singkah')) {
+          return 'Kuliner Khas Dayak (Menu: Juhu Singkah Rotan, Lemang)';
+        }
+        if (nameLow.includes('bekepor') || nameLow.includes('kutai')) {
+          return 'Kuliner Khas Kutai (Menu: Nasi Bekepor, Gence Haruan)';
+        }
+        return 'Kuliner Khas Suku Kalimantan';
+      }
+
+      if (region === 'sulawesi') {
+        if (nameLow.includes('coto') || nameLow.includes('konro') || nameLow.includes('makassar') || nameLow.includes('bugis') || cuisineLow.includes('makassar')) {
+          return 'Kuliner Khas Bugis/Makassar (Menu: Coto Makassar, Sop Konro, Pallubasa)';
+        }
+        if (nameLow.includes('toraja') || nameLow.includes('papiong')) {
+          return 'Kuliner Khas Toraja (Menu: Pa Piong, Kopi Toraja)';
+        }
+        if (nameLow.includes('manado') || nameLow.includes('tinutuan') || nameLow.includes('woku') || cuisineLow.includes('manado')) {
+          return 'Kuliner Khas Minahasa/Manado (Menu: Bubur Manado, Woku, Rica-rica)';
+        }
+        return 'Kuliner Khas Suku Sulawesi';
+      }
+
+      if (region === 'bali-nusa-tenggara') {
+        if (nameLow.includes('babi guling') || nameLow.includes('betutu') || nameLow.includes('lilit') || nameLow.includes('lawar') || cuisineLow.includes('balinese') || nameLow.includes('bali')) {
+          return 'Kuliner Khas Bali (Menu: Babi Guling, Ayam Betutu, Sate Lilit)';
+        }
+        if (nameLow.includes('taliwang') || nameLow.includes('sasak')) {
+          return 'Kuliner Khas Sasak Lombok (Menu: Ayam Taliwang, Plecing Kangkung)';
+        }
+        if (nameLow.includes('sei') || nameLow.includes('katemak')) {
+          return 'Kuliner Khas Timor (Menu: Se\'i Daging Sapi/Babi, Katemak)';
+        }
+        return 'Kuliner Khas Bali & Nusa Tenggara';
+      }
+
+      if (region === 'papua-maluku') {
+        if (nameLow.includes('papeda') || nameLow.includes('colo') || nameLow.includes('ambon') || nameLow.includes('maluku')) {
+          return 'Kuliner Khas Maluku (Menu: Papeda, Ikan Kuah Kuning, Colo-colo)';
+        }
+        if (nameLow.includes('asmat') || nameLow.includes('sagu') || nameLow.includes('papua')) {
+          return 'Kuliner Khas Papua (Menu: Ulat Sagu, Ikan Bakar Papua, Sagu)';
+        }
+        return 'Kuliner Khas Suku Papua & Maluku';
+      }
+
+      return 'Kuliner Tradisional Nusantara';
     }
 
     function parseOverpassResults(elements, userLat, userLng) {
@@ -1128,30 +1426,20 @@ out center 100;
         const dist = haversine(userLat, userLng, lat, lng);
         const cat  = classifyCategory(el.tags);
 
+        // Filter wisata dan kuliner agar sesuai adat suku asli daerah tersebut yang muncul
+        if (!matchesRegionCulture(name, el, cat, currentRegion)) {
+          continue; // Lewati tempat yang tidak selaras dengan kebudayaan/kuliner daerah setempat
+        }
+
         // Rating: dari stars atau rating tag
         const ratingRaw = el.tags?.stars || el.tags?.['rating'] || el.tags?.['review:rating'] || null;
         const rating = ratingRaw ? parseFloat(ratingRaw) : null;
 
-        // Makanan: deteksi dari nama + tag cuisine
-        const rawCuisine = el.tags?.cuisine || null;
-        let foodLabel = detectFoodLabel(name, rawCuisine);
-
-        // Jika berada di wilayah Batak (Toba, Samosir, dll), rekomendasikan masakan khas Batak secara dinamis
-        if (isBatakRegion(userLat, userLng) && cat === 'kuliner') {
-          const nameLow = name.toLowerCase();
-          if (nameLow.includes('lapo') || nameLow.includes('bpk') || nameLow.includes('babi') || nameLow.includes('panggang') || nameLow.includes('karo') || nameLow.includes('toba') || nameLow.includes('saksang') || nameLow.includes('arsik') || (rawCuisine && (rawCuisine.includes('batak') || rawCuisine.includes('karo') || rawCuisine.includes('toba')))) {
-            foodLabel = 'Masakan Batak (Menu Khas: Babi Panggang Karo, Saksang, Naniura, Arsik Ikan Mas)';
-          } else if (nameLow.includes('kopi') || nameLow.includes('cafe') || nameLow.includes('warkop') || nameLow.includes('bakmi') || nameLow.includes('mie') || nameLow.includes('gomak') || nameLow.includes('kedai')) {
-            foodLabel = 'Kuliner Lokal Batak (Menu: Mie Gomak, Lappet, Kopi Sihiong)';
-          } else if (nameLow.includes('warung') || nameLow.includes('rumah makan') || nameLow.includes('rm ') || nameLow.includes('r.m.')) {
-            if (!nameLow.includes('padang') && !nameLow.includes('minang') && !nameLow.includes('rodabaru')) {
-              foodLabel = 'Kuliner Tradisional Toba (Sedia: Arsik Ikan Mas, Mie Gomak, Lappet)';
-            }
-          } else {
-            if (!nameLow.includes('padang') && !nameLow.includes('minang') && !nameLow.includes('rodabaru')) {
-              foodLabel = 'Kuliner Lokal (Menu Khas Batak: Mie Gomak, Lappet, Arsik)';
-            }
-          }
+        // Makanan: deteksi label kuliner tradisional sesuai suku daerah setempat secara dinamis
+        let foodLabel = null;
+        if (cat === 'kuliner') {
+          const rawCuisine = el.tags?.cuisine || null;
+          foodLabel = getDynamicFoodLabel(name, rawCuisine, currentRegion, lat, lng);
         }
 
         const opening = el.tags?.opening_hours || null;
@@ -1178,7 +1466,9 @@ out center 100;
       if (tags.historic) return 'museum'; // monument, ruins, castle, dll → museum
       if (tags.amenity === 'restaurant' || tags.amenity === 'cafe'
         || tags.amenity === 'fast_food' || tags.amenity === 'food_court'
-        || tags.amenity === 'bar') return 'kuliner';
+        || tags.amenity === 'bar'
+        || tags.shop === 'convenience' || tags.shop === 'kiosk'
+        || tags.shop === 'food' || tags.shop === 'marketplace') return 'kuliner';
       if (tags.tourism) return 'wisata';
       return 'wisata';
     }
@@ -1244,7 +1534,9 @@ out center 100;
       // Filter
       const filtered = activeFilter === 'all'
         ? destinations
-        : destinations.filter(d => d.cat === activeFilter);
+        : activeFilter === 'wisata'
+          ? destinations.filter(d => d.cat === 'wisata' || d.cat === 'museum')
+          : destinations.filter(d => d.cat === activeFilter);
 
       countBadge.textContent = filtered.length;
 
@@ -1329,11 +1621,16 @@ out center 100;
           const geoData = await geoRes.json();
           const placeName = geoData.display_name || geoData.name || '';
           if (placeName) {
-            coordsEl.innerHTML = `📍 ${placeName} (${lat.toFixed(5)}, ${lng.toFixed(5)})`;
+            coordsEl.innerHTML = `📍 ${placeName}`;
           }
+          currentRegion = detectRegion(geoData.address, lat, lng);
+          console.log('[Explorer] Detected region:', currentRegion);
+        } else {
+          currentRegion = detectRegion(null, lat, lng);
         }
       } catch (err) {
         console.warn('Reverse geocoding failed:', err);
+        currentRegion = detectRegion(null, lat, lng);
       }
 
       // Show explorer panel
@@ -1346,6 +1643,7 @@ out center 100;
         placeUserMarker(lat, lng);
         map.setView([lat, lng], 14);
       }
+      setTimeout(() => { if (map) map.invalidateSize(); }, 300);
 
       // Skeleton shown while fetching
       skeleton.style.display = 'flex';
@@ -1403,7 +1701,44 @@ out center 100;
       errorCard.classList.add('is-visible');
     }
 
+    function resetToInactive() {
+      isGpsActive = false;
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+      }
+
+      // Hancurkan objek peta Leaflet
+      if (map) {
+        map.remove();
+        map = null;
+        userMarker = null;
+        radiusCircle = null;
+        destMarkers = [];
+      }
+
+      // Sembunyikan explorer panel
+      explorer.classList.remove('is-visible');
+
+      // Reset tombol ke bentuk awal
+      btnText.textContent = 'Aktifkan GPS & Tampilkan Peta';
+      btnActivate.style.background = ''; // reset ke CSS gradient oranye default
+      
+      // Reset variables
+      lastQueryLat = null;
+      lastQueryLng = null;
+      userLat = null;
+      userLng = null;
+
+      stopLoading();
+    }
+
     btnActivate.addEventListener('click', () => {
+      if (isGpsActive) {
+        resetToInactive();
+        return;
+      }
+
       if (!navigator.geolocation) {
         showError('GPS Tidak Didukung', 'Browser kamu tidak mendukung Geolocation API. Coba gunakan Chrome atau Firefox versi terbaru.');
         return;
@@ -1414,8 +1749,9 @@ out center 100;
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           stopLoading();
-          btnText.textContent = 'GPS Aktif ✓';
-          btnActivate.style.background = 'linear-gradient(135deg, #16a34a, #22c55e)';
+          isGpsActive = true;
+          btnText.textContent = 'Nonaktifkan GPS ✕';
+          btnActivate.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)'; // Tombol merah sebagai sinyal menonaktifkan
 
           const { latitude: lat, longitude: lng } = pos.coords;
           await showExplorer(lat, lng);
@@ -1424,6 +1760,7 @@ out center 100;
           if (watchId) navigator.geolocation.clearWatch(watchId);
           watchId = navigator.geolocation.watchPosition(
             async (newPos) => {
+              if (!isGpsActive) return;
               const newLat = newPos.coords.latitude;
               const newLng = newPos.coords.longitude;
               userLat = newLat;
@@ -1449,11 +1786,14 @@ out center 100;
                 }
               }
             },
-            null,
+            (watchErr) => {
+              console.warn('Watch position error:', watchErr);
+            },
             { enableHighAccuracy: true, maximumAge: 10000 }
           );
         },
         (err) => {
+          isGpsActive = false;
           let title = 'Lokasi Tidak Tersedia';
           let msg = 'Terjadi kesalahan saat mengakses GPS.';
           if (err.code === 1) {
