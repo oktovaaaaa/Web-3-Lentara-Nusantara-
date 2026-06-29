@@ -24,6 +24,20 @@ class TestimonialController extends Controller
             'rating'  => 'required|integer|min:1|max:5',
             'message' => 'required|string|max:1000',
             'photo'   => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+        ], [
+            'name.required'    => 'Kolom nama lengkap wajib diisi.',
+            'name.string'      => 'Nama harus berupa teks.',
+            'name.max'         => 'Nama tidak boleh lebih dari :max karakter.',
+            'rating.required'  => 'Rating pengalaman wajib dipilih.',
+            'rating.integer'   => 'Rating harus berupa angka.',
+            'rating.min'       => 'Rating minimal 1 bintang.',
+            'rating.max'       => 'Rating maksimal 5 bintang.',
+            'message.required' => 'Pesan testimoni wajib diisi.',
+            'message.string'   => 'Pesan testimoni harus berupa teks.',
+            'message.max'      => 'Pesan testimoni tidak boleh lebih dari :max karakter.',
+            'photo.image'      => 'File foto profil harus berupa gambar.',
+            'photo.mimes'      => 'Format foto profil harus JPG, JPEG, atau PNG.',
+            'photo.max'        => 'Ukuran foto profil tidak boleh lebih dari 5MB.',
         ]);
 
         // ===============================

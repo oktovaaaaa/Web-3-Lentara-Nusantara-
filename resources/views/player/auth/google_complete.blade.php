@@ -27,12 +27,13 @@
 
             {{-- Google User Info Card --}}
             <div style="margin: 10px 22px; padding: 12px; border-radius: 14px; background: rgba(255,107,0,0.06); border: 1px solid rgba(255,107,0,0.2); display: flex; align-items: center; gap: 12px;">
-                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--brand); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0;">
                     {{ substr($nickname, 0, 1) }}
                 </div>
                 <div style="flex: 1; min-width: 0;">
-                    <div style="font-size: 0.85rem; font-weight: 800; color: var(--txt-body);">{{ $nickname }}</div>
+                    <div style="font-size: 0.88rem; font-weight: 800; color: var(--txt-body);">{{ $nickname }}</div>
                     <div style="font-size: 0.75rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $email }}</div>
+                    <div style="font-size: 0.75rem; font-weight: 800; color: var(--brand2); margin-top: 2px;">Username: {{ old('username', $suggested_username) }}</div>
                 </div>
             </div>
 
@@ -63,10 +64,32 @@
                 <input type="hidden" name="email" value="{{ $email }}">
                 <input type="hidden" name="nickname" value="{{ $nickname }}">
                 <input type="hidden" name="google_id" value="{{ $google_id }}">
-                <input type="hidden" name="username" value="{{ old('username', $suggested_username) }}">
+
+                {{-- Username Input Field --}}
+                <div class="auth-field">
+                    <label class="auth-label" for="username">Username Akun Game</label>
+                    <div class="auth-inputWrap">
+                        <span class="auth-ico" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M20 21a8 8 0 0 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <input
+                            id="username"
+                            name="username"
+                            value="{{ old('username', $suggested_username) }}"
+                            required
+                            placeholder="Tulis username Anda"
+                            class="auth-input"
+                            autocomplete="username"
+                        >
+                    </div>
+                    <p style="font-size: 0.72rem; color: var(--muted); margin: 2px 0 0 4px;">Gunakan username ini & PIN 4-digit Anda jika ingin masuk manual tanpa Google.</p>
+                </div>
 
                 {{-- PIN (4 digit) --}}
-                <div class="auth-field">
+                <div class="auth-field" style="margin-top: 4px;">
                     <label class="auth-label" style="text-align: center; display: block; margin-bottom: 4px;">PIN Keamanan (4 digit)</label>
                     <div class="pin-inputs-wrapper" style="display: flex; gap: 12px; justify-content: center; margin: 6px 0 10px;">
                         <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="pin-box" required autocomplete="off">

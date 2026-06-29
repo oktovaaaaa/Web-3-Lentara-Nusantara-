@@ -77,6 +77,9 @@ class PlayerAuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Google Auth Error: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
             return redirect()->route('player.login')->withErrors(['username' => 'Gagal mengambil data dari Google.']);
         }
 

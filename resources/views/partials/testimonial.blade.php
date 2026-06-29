@@ -102,6 +102,15 @@
             transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
         }
 
+        .t-textarea {
+            resize: none;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .t-textarea::-webkit-scrollbar {
+            display: none;
+        }
+
         html[data-theme="dark"] .t-input,
         html[data-theme="dark"] .t-textarea { background: rgba(255, 255, 255, 0.05); }
 
@@ -350,18 +359,29 @@
         .t-mini-card{
             width: 520px;
             max-width: 78vw;
-            border-radius: 18px;
-            padding: 14px 14px 12px;
-            border: 1px solid rgba(15, 23, 42, 0.06);
-            box-shadow: 0 10px 26px rgba(0,0,0,.06);
-            background: rgba(255,255,255,.92);
-            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 20px 18px;
+            border: 1px solid rgba(255, 107, 0, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             text-align: left;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .t-mini-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(255, 107, 0, 0.12);
+            border-color: rgba(255, 107, 0, 0.45);
         }
         html[data-theme="dark"] .t-mini-card{
-            border: 1px solid rgba(255,255,255,.10);
-            box-shadow: 0 16px 36px rgba(0,0,0,.45);
-            background: rgba(17, 24, 39, .68);
+            border: 1px solid rgba(255, 107, 0, 0.25);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+            background: rgba(30, 41, 59, 0.45);
+        }
+        html[data-theme="dark"] .t-mini-card:hover {
+            box-shadow: 0 25px 50px rgba(255, 107, 0, 0.2);
+            border-color: rgba(255, 107, 0, 0.6);
         }
 
         .t-mini-head{
@@ -696,8 +716,13 @@ html[data-theme="dark"] .t-read-more-btn {
 }
 
 /* =========================================================
-   MODAL DETAIL TESTIMONI LENGKAP
+   MODAL DETAIL TESTIMONI LENGKAP & STACKING OVERLAY
 ========================================================= */
+html.testimonial-modal-open .site-header,
+html.testimonial-modal-open .circle-logo-container {
+    z-index: 10 !important;
+}
+
 .t-detail-modal {
     display: none;
     position: fixed;
@@ -755,22 +780,42 @@ html[data-theme="dark"] .t-status-content {
 }
 
 .t-detail-content {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
+    background-color: var(--card, #ffffff);
+    background-image: 
+      radial-gradient(circle at center, color-mix(in oklab, var(--card, #ffffff) 92%, transparent) 0%, color-mix(in oklab, var(--card, #ffffff) 98%, transparent) 100%),
+      url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='0' cy='0' r='20' fill='none' stroke='%23ff6b00' stroke-width='0.75' stroke-opacity='0.06'/%3E%3Ccircle cx='40' cy='0' r='20' fill='none' stroke='%23ff6b00' stroke-width='0.75' stroke-opacity='0.06'/%3E%3Ccircle cx='0' cy='40' r='20' fill='none' stroke='%23ff6b00' stroke-width='0.75' stroke-opacity='0.06'/%3E%3Ccircle cx='40' cy='40' r='20' fill='none' stroke='%23ff6b00' stroke-width='0.75' stroke-opacity='0.06'/%3E%3Ccircle cx='20' cy='20' r='20' fill='none' stroke='%23ff6b00' stroke-width='0.75' stroke-opacity='0.06'/%3E%3Cpath d='M0,20 Q10,10 20,20 Q10,30 0,20' fill='none' stroke='%23ff6b00' stroke-width='0.75' stroke-opacity='0.09'/%3E%3Cpath d='M20,20 Q30,10 40,20 Q30,30 20,20' fill='none' stroke='%23ff6b00' stroke-width='0.75' stroke-opacity='0.09'/%3E%3Cpath d='M20,0 Q10,10 20,20 Q30,10 20,0' fill='none' stroke='%23ff6b00' stroke-width='0.75' stroke-opacity='0.09'/%3E%3Cpath d='M20,20 Q10,30 20,40 Q30,30 20,20' fill='none' stroke='%23ff6b00' stroke-width='0.75' stroke-opacity='0.09'/%3E%3C/svg%3E");
+    background-size: cover, 40px 40px;
+    border-radius: 24px;
     padding: 24px;
     max-width: 500px;
     width: 100%;
-    max-height: 80vh;
+    max-height: 92vh;
     overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 107, 0, 0.2);
+    border: 1.5px solid rgba(255, 107, 0, 0.25);
     animation: slideUp 0.3s ease-out;
     text-align: left;
 }
 
+.t-detail-content::-webkit-scrollbar {
+    display: none;
+}
+
 html[data-theme="dark"] .t-detail-content {
-    background: rgba(17, 24, 39, 0.95);
-    border-color: rgba(255, 107, 0, 0.3);
+    background-color: #0c1524;
+    background-image: 
+      radial-gradient(circle at center, rgba(12, 21, 36, 0.92) 0%, rgba(12, 21, 36, 0.98) 100%),
+      url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='0' cy='0' r='20' fill='none' stroke='%23f97316' stroke-width='0.75' stroke-opacity='0.08'/%3E%3Ccircle cx='40' cy='0' r='20' fill='none' stroke='%23f97316' stroke-width='0.75' stroke-opacity='0.08'/%3E%3Ccircle cx='0' cy='40' r='20' fill='none' stroke='%23f97316' stroke-width='0.75' stroke-opacity='0.08'/%3E%3Ccircle cx='40' cy='40' r='20' fill='none' stroke='%23f97316' stroke-width='0.75' stroke-opacity='0.08'/%3E%3Ccircle cx='20' cy='20' r='20' fill='none' stroke='%23f97316' stroke-width='0.75' stroke-opacity='0.08'/%3E%3Cpath d='M0,20 Q10,10 20,20 Q10,30 0,20' fill='none' stroke='%23f97316' stroke-width='0.75' stroke-opacity='0.12'/%3E%3Cpath d='M20,20 Q30,10 40,20 Q30,30 20,20' fill='none' stroke='%23f97316' stroke-width='0.75' stroke-opacity='0.12'/%3E%3Cpath d='M20,0 Q10,10 20,20 Q30,10 20,0' fill='none' stroke='%23f97316' stroke-width='0.75' stroke-opacity='0.12'/%3E%3Cpath d='M20,20 Q10,30 20,40 Q30,30 20,20' fill='none' stroke='%23f97316' stroke-width='0.75' stroke-opacity='0.12'/%3E%3C/svg%3E");
+    border-color: rgba(255, 107, 0, 0.35);
+}
+
+#testimonialFormModal .t-detail-content {
+    max-height: 96vh !important;
+    overflow: hidden !important;
+    overflow-y: hidden !important;
+    padding: 20px !important;
 }
 
 .t-detail-header {
@@ -983,73 +1028,11 @@ html[data-theme="dark"] .t-detail-close {
 Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masukan membantu kami menghadirkan konten yang lebih akurat, informatif, dan bermanfaat bagi semua.
                 </p>
 
-            {{-- ===== SUMMARY (TOP) ===== --}}
-            <div class="grid gap-6 lg:grid-cols-3 mb-8 scroll-reveal reveal-fade-up delay-200" id="testimonialSummaryGrid">
-
-                {{-- Left: distribution (NEON) --}}
-                <div class="t-neon-shell lg:col-span-2">
-                    <div class="t-neon-glow"></div>
-                    <div class="t-neon-inner t-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="font-bold text-lg">Ringkasan Rating</div>
-                            <div class="t-chip">{{ $total }} Rating</div>
-                        </div>
-
-                        @for($r = 5; $r >= 1; $r--)
-                            @php $p = $pct($counts[$r]); @endphp
-                            <div class="flex items-center gap-4 mb-4">
-                                <div class="w-20 text-sm font-bold tracking-wide" style="color: #ff8c42;">
-                                    {{ $r }} ★
-                                </div>
-                                <div class="flex-1 t-bar">
-                                    <span style="width: {{ $p }}%"></span>
-                                </div>
-                                <div class="w-16 text-right text-sm font-semibold" style="color: #ff8c42;">
-                                    {{ $counts[$r] }} ({{ $p }}%)
-                                </div>
-                            </div>
-                        @endfor
-                    </div>
-                </div>
-
-                {{-- Right: average (NEON) --}}
-                <div class="t-neon-shell">
-                    <div class="t-neon-glow"></div>
-                    <div class="t-neon-inner t-card flex flex-col items-center justify-center text-center">
-                        <div class="text-5xl font-extrabold" style="color: #ff6b00;">
-                            {{ number_format($avg, 1) }}
-                        </div>
-
-                        <div class="mt-3 flex items-center justify-center gap-1">
-                            @php
-                                $full = (int) floor($avg);
-                                $dec  = $avg - $full;
-                                $half = $dec >= 0.5 ? 1 : 0;
-                                $empty = 5 - $full - $half;
-                                if ($empty < 0) $empty = 0;
-                            @endphp
-
-                            @for($i=0; $i < $full; $i++)
-                                <span class="text-3xl" style="color:#f59e0b;">★</span>
-                            @endfor
-
-                            @if($half === 1)
-                                <span class="text-3xl relative inline-block" aria-hidden="true" style="line-height:1;">
-                                    <span style="color: rgba(156, 163, 175, 0.3);">★</span>
-                                    <span style="position:absolute; left:0; top:0; width:50%; overflow:hidden; color:#f59e0b;">★</span>
-                                </span>
-                            @endif
-
-                            @for($i=0; $i < $empty; $i++)
-                                <span class="text-3xl" style="color: rgba(156, 163, 175, 0.3);">★</span>
-                            @endfor
-                        </div>
-
-                        <div class="mt-2 t-muted text-sm">
-                            Dari {{ $total }} rating
-                        </div>
-                    </div>
-                </div>
+            {{-- ===== BUTTON UNTUK MEMBUKA MODAL FORM TESTIMONI ===== --}}
+            <div class="text-center mt-6 mb-10 scroll-reveal reveal-fade-up delay-200">
+                <button type="button" class="t-btn !px-8 !py-3.5" onclick="openTestimonialFormModal()">
+                    Tambahkan Testimoni
+                </button>
             </div>
 
             {{-- ===== MARQUEE ===== --}}
@@ -1211,128 +1194,178 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
                 </div>
             </div>
 
-            {{-- ===== MAIN (BOTTOM): Tambahkan Testimoni (NEON) ===== --}}
-            <div class="grid gap-6 lg:grid-cols-1 scroll-reveal reveal-fade-up delay-100">
-                <div class="t-neon-shell">
+            {{-- ===== SUMMARY (MOVED TO BOTTOM) ===== --}}
+            <div class="grid gap-6 lg:grid-cols-3 mt-12 mb-8 scroll-reveal reveal-fade-up delay-100" id="testimonialSummaryGrid">
+                {{-- Left: distribution (NEON) --}}
+                <div class="t-neon-shell lg:col-span-2">
                     <div class="t-neon-glow"></div>
                     <div class="t-neon-inner t-card">
-                        <div class="font-bold text-xl mb-4">Tambahkan Testimoni</div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="font-bold text-lg">Ringkasan Rating</div>
+                            <div class="t-chip">{{ $total }} Rating</div>
+                        </div>
 
-                        <div id="clientAlert" class="mb-4 t-alert t-alert-error t-alert-client" role="alert" aria-live="polite"></div>
-
-                        @if(session('testimonial_success'))
-                            <div class="mb-4 t-alert t-alert-success">
-                                {{ session('testimonial_success') }}
-                            </div>
-                        @endif
-
-                        @if(session('testimonial_error'))
-                            <div class="mb-4 t-alert t-alert-error">
-                                {{ session('testimonial_error') }}
-                            </div>
-                        @endif
-
-                        @if(session('report_success'))
-                            <div class="mb-4 t-alert t-alert-success">
-                                {{ session('report_success') }}
-                            </div>
-                        @endif
-
-                        @if(session('report_error'))
-                            <div class="mb-4 t-alert t-alert-error">
-                                {{ session('report_error') }}
-                            </div>
-                        @endif
-
-                        @if(session('success') && !session('testimonial_success') && !session('report_success'))
-                            <div class="mb-4 t-alert t-alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-
-                        @if(session('error') && !session('testimonial_error') && !session('report_error'))
-                            <div class="mb-4 t-alert t-alert-error">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-
-                        @if($errors->any())
-                            <div class="mb-4 t-alert t-alert-error">
-                                <div class="font-bold mb-2">Gagal mengirim:</div>
-                                <ul class="list-disc list-inside space-y-1" style="font-weight: 700;">
-                                    @foreach($errors->all() as $e)
-                                        <li>{{ $e }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        <form method="POST"
-                              action="{{ route('testimonials.store') }}"
-                              enctype="multipart/form-data"
-                              class="space-y-4"
-                              id="testimonialForm">
-                            @csrf
-
-                            <input type="text" name="website" value="" autocomplete="off" tabindex="-1"
-                                   style="position:absolute;left:-9999px;top:-9999px;height:1px;width:1px;opacity:0;">
-
-                            <div class="t-form-grid">
-                                <div class="t-form-span-2">
-                                    <label class="text-sm font-bold">Rating <span class="text-red-500">*</span></label>
-                                    <input type="hidden" name="rating" id="ratingValue" value="{{ old('rating', 0) }}">
-
-                                    <div class="mt-2 star-row" id="starRow" aria-label="Pilih rating bintang">
-                                        @for($i=1; $i<=5; $i++)
-                                            <button
-                                                type="button"
-                                                class="star-btn"
-                                                data-star="{{ $i }}"
-                                                aria-label="Pilih {{ $i }} bintang"
-                                                title="Pilih {{ $i }} bintang"
-                                            >
-                                                <span class="star">★</span>
-                                            </button>
-                                        @endfor
-                                    </div>
-                                    <div class="t-muted text-xs mt-2">Klik bintang untuk memilih rating.</div>
+                        @for($r = 5; $r >= 1; $r--)
+                            @php $p = $pct($counts[$r]); @endphp
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-20 text-sm font-bold tracking-wide" style="color: #ff8c42;">
+                                    {{ $r }} ★
                                 </div>
-
-                                <div>
-                                    <label class="text-sm font-bold">Nama <span class="text-red-500">*</span></label>
-                                    <input class="t-input" name="name" value="{{ old('name') }}" placeholder="Nama kamu">
+                                <div class="flex-1 t-bar">
+                                    <span style="width: {{ $p }}%"></span>
                                 </div>
-
-                                <div>
-                                    <label class="text-sm font-bold">Foto Profil <span class="t-muted text-xs">(opsional, max 5MB)</span></label>
-{{-- INPUT FILE ASLI (DISEMBUNYIKAN) --}}
-<input id="photoInput" class="t-file t-file-native" type="file" name="photo" accept="image/png,image/jpeg,image/jpg">
-
-{{-- BUTTON CUSTOM --}}
-<label for="photoInput" class="t-file-btn">
-    Pilih Foto
-</label>
-
-{{-- NAMA FILE YANG DIPILIH --}}
-<div class="t-file-name" id="photoName">Belum ada foto dipilih</div>
-
-                                    <div class="t-muted text-xs mt-2">Format: JPG / JPEG / PNG.</div>
-                                </div>
-
-                                <div class="t-form-span-2">
-                                    <label class="text-sm font-bold">Pesan <span class="text-red-500">*</span></label>
-                                    <textarea class="t-textarea" name="message" rows="5" placeholder="Tulis pengalamanmu...">{{ old('message') }}</textarea>
-                                </div>
-
-                                <div class="t-form-span-2">
-                                    <button class="t-btn w-full mt-2">Kirim Testimoni</button>
+                                <div class="w-16 text-right text-sm font-semibold" style="color: #ff8c42;">
+                                    {{ $counts[$r] }} ({{ $p }}%)
                                 </div>
                             </div>
-                        </form>
+                        @endfor
+                    </div>
+                </div>
+
+                {{-- Right: average (NEON) --}}
+                <div class="t-neon-shell">
+                    <div class="t-neon-glow"></div>
+                    <div class="t-neon-inner t-card flex flex-col items-center justify-center text-center">
+                        <div class="text-5xl font-extrabold" style="color: #ff6b00;">
+                            {{ number_format($avg, 1) }}
+                        </div>
+
+                        <div class="mt-3 flex items-center justify-center gap-1">
+                            @php
+                                $full = (int) floor($avg);
+                                $dec  = $avg - $full;
+                                $half = $dec >= 0.5 ? 1 : 0;
+                                $empty = 5 - $full - $half;
+                                if ($empty < 0) $empty = 0;
+                            @endphp
+
+                            @for($i=0; $i < $full; $i++)
+                                <span class="text-3xl" style="color:#f59e0b;">★</span>
+                            @endfor
+
+                            @if($half === 1)
+                                <span class="text-3xl relative inline-block" aria-hidden="true" style="line-height:1;">
+                                    <span style="color: rgba(156, 163, 175, 0.3);">★</span>
+                                    <span style="position:absolute; left:0; top:0; width:50%; overflow:hidden; color:#f59e0b;">★</span>
+                                </span>
+                            @endif
+
+                            @for($i=0; $i < $empty; $i++)
+                                <span class="text-3xl" style="color: rgba(156, 163, 175, 0.3);">★</span>
+                            @endfor
+                        </div>
+
+                        <div class="mt-2 t-muted text-sm">
+                            Dari {{ $total }} rating
+                        </div>
                     </div>
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    {{-- ================= MODAL FORM TAMBAH TESTIMONI ================= --}}
+    <div class="t-detail-modal" id="testimonialFormModal">
+        <div class="t-detail-content !max-w-2xl relative overflow-hidden">
+            {{-- Decorative Top Accent Glow --}}
+            <div class="absolute -top-12 -left-12 w-40 h-40 bg-orange-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+            {{-- ===== BATIK HEADER BANNER MODAL ===== --}}
+            <div class="relative w-full h-16 sm:h-18 rounded-2xl overflow-hidden mb-4 border border-amber-600/30 shadow-md relative z-10" style="background-color: #1a0f03;">
+                <img src="{{ asset('images/icon/footer.JPEG') }}" class="w-full h-full object-cover opacity-90 object-center" alt="Corak Batik Nusantara">
+                <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/70"></div>
+                
+                <div class="absolute inset-y-0 left-0 w-2 bg-gradient-to-r from-amber-500 to-transparent opacity-70"></div>
+                <div class="absolute inset-y-0 right-0 w-2 bg-gradient-to-l from-amber-500 to-transparent opacity-70"></div>
+
+                <div class="absolute left-3.5 sm:left-5 top-1/2 -translate-y-1/2 flex items-center gap-3">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/30 border border-white/20 flex-shrink-0">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-base sm:text-xl tracking-tight text-white drop-shadow-md leading-tight">Tambahkan Testimoni</h3>
+                        <p class="text-[11px] sm:text-xs text-amber-200/90 font-medium">Bagikan ulasan dan pengalamanmu bersama Lentara</p>
+                    </div>
+                </div>
+
+                <button type="button" class="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 hover:bg-orange-500 text-white transition-all duration-200 flex items-center justify-center border border-white/20 focus:outline-none z-20 cursor-pointer" onclick="closeTestimonialFormModal()" aria-label="Tutup modal">&times;</button>
+            </div>
+
+            <div id="clientAlert" class="mb-3 t-alert t-alert-error t-alert-client" role="alert" aria-live="polite"></div>
+
+            <form method="POST"
+                  action="{{ route('testimonials.store') }}"
+                  enctype="multipart/form-data"
+                  class="space-y-3 relative z-10"
+                  id="testimonialForm">
+                @csrf
+
+                <input type="text" name="website" value="" autocomplete="off" tabindex="-1"
+                       style="position:absolute;left:-9999px;top:-9999px;height:1px;width:1px;opacity:0;">
+
+                <div class="t-form-grid !gap-3">
+                    <div class="t-form-span-2 bg-orange-500/5 dark:bg-orange-500/10 p-3 sm:p-3.5 rounded-xl border border-orange-500/15">
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                                <span>Rating Pengalaman</span>
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <span id="ratingText" class="text-xs font-bold text-amber-500 transition-all duration-200">Pilih bintang</span>
+                        </div>
+                        <input type="hidden" name="rating" id="ratingValue" value="{{ old('rating', 0) }}">
+
+                        <div class="mt-1.5 star-row flex items-center gap-2" id="starRow" aria-label="Pilih rating bintang">
+                            @for($i=1; $i<=5; $i++)
+                                <button
+                                    type="button"
+                                    class="star-btn"
+                                    data-star="{{ $i }}"
+                                    aria-label="Pilih {{ $i }} bintang"
+                                    title="Pilih {{ $i }} bintang"
+                                >
+                                    <span class="star">★</span>
+                                </button>
+                            @endfor
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs sm:text-sm font-bold block mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
+                        <input class="t-input !py-2 !px-3 text-xs sm:text-sm" name="name" value="{{ old('name') }}" placeholder="Tulis nama lengkapmu">
+                    </div>
+
+                    <div>
+                        <label class="text-xs sm:text-sm font-bold block mb-1">Foto Profil <span class="t-muted text-[11px] font-normal">(Opsional, Max 5MB)</span></label>
+                        <input id="photoInput" class="t-file t-file-native" type="file" name="photo" accept="image/png,image/jpeg,image/jpg">
+                        <label for="photoInput" class="t-file-btn !py-2 !px-3 text-xs sm:text-sm">
+                            <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span>Pilih Foto Profil</span>
+                        </label>
+                        <div class="t-file-name truncate max-w-full text-[11px] mt-1" id="photoName">Belum ada foto dipilih</div>
+                    </div>
+
+                    <div class="t-form-span-2">
+                        <label class="text-xs sm:text-sm font-bold block mb-1">Pesan Testimoni <span class="text-red-500">*</span></label>
+                        <textarea class="t-textarea !py-2 !px-3 text-xs sm:text-sm" name="message" rows="2.5" placeholder="Tuliskan pengalaman, kesan, atau kritik saranmu menjelajahi Lentara Nusantara...">{{ old('message') }}</textarea>
+                    </div>
+
+                    <div class="t-form-span-2 flex items-center justify-end gap-3 mt-2 pt-2.5 border-t border-orange-500/10">
+                        <button type="button" class="t-input !w-auto !px-5 !py-2 text-xs sm:text-sm font-bold cursor-pointer hover:bg-black/5 dark:hover:bg-white/10" onclick="closeTestimonialFormModal()">Batal</button>
+                        <button class="t-btn !w-auto !px-7 !py-2 text-xs sm:text-sm flex items-center gap-2 cursor-pointer">
+                            <span>Kirim Testimoni</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -1421,11 +1454,13 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
             form.action = actionUrl;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+            document.documentElement.classList.add('testimonial-modal-open');
         }
         function closeReportModal() {
             const modal = document.getElementById('reportModal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
+            document.documentElement.classList.remove('testimonial-modal-open');
         }
         document.getElementById('reportModal')?.addEventListener('click', (e) => {
             if (e.target.id === 'reportModal') closeReportModal();
@@ -1519,6 +1554,7 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
             // Tampilkan modal
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            document.documentElement.classList.add('testimonial-modal-open');
         }
 
         // Fungsi untuk menutup modal detail testimoni
@@ -1526,6 +1562,7 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
             const modal = document.getElementById('testimonialDetailModal');
             modal.classList.remove('active');
             document.body.style.overflow = '';
+            document.documentElement.classList.remove('testimonial-modal-open');
         }
 
         // Tutup modal ketika klik di luar konten
@@ -1590,6 +1627,15 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
             const textarea = form?.querySelector('textarea[name="message"]');
             const nameInput = form?.querySelector('input[name="name"]');
             const alertBox = document.getElementById('clientAlert');
+            const ratingTextEl = document.getElementById('ratingText');
+
+            const ratingLabels = {
+                1: 'Sangat Kecewa 🙁',
+                2: 'Kurang Puas 😐',
+                3: 'Cukup Baik 🙂',
+                4: 'Sangat Bagus! 😊',
+                5: 'Luar Biasa! 🌟'
+            };
 
             if (!row || !input) return;
 
@@ -1599,6 +1645,9 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
                     const n = idx + 1;
                     el.classList.toggle('is-on', n <= v);
                 });
+                if (ratingTextEl) {
+                    ratingTextEl.textContent = ratingLabels[v] || 'Pilih bintang';
+                }
             }
 
             function showAlert(msg) {
@@ -1636,7 +1685,11 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
                 paint(v);
             });
 
-            textarea?.addEventListener('input', () => hideAlert());
+            textarea?.addEventListener('input', () => {
+                hideAlert();
+                textarea.style.height = 'auto';
+                textarea.style.height = textarea.scrollHeight + 'px';
+            });
             nameInput?.addEventListener('input', () => hideAlert());
 
             // Custom Status Modal JS Functions
@@ -1678,10 +1731,38 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
                 document.body.style.overflow = 'hidden';
             };
 
+            window.openTestimonialFormModal = function() {
+                const modal = document.getElementById('testimonialFormModal');
+                if (modal) {
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    document.documentElement.classList.add('testimonial-modal-open');
+                }
+            };
+
+            window.closeTestimonialFormModal = function() {
+                const modal = document.getElementById('testimonialFormModal');
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                    document.documentElement.classList.remove('testimonial-modal-open');
+                }
+            };
+
+            document.getElementById('testimonialFormModal')?.addEventListener('click', (e) => {
+                if (e.target.id === 'testimonialFormModal') {
+                    closeTestimonialFormModal();
+                }
+            });
+
             window.closeStatusModal = function() {
                 const modal = document.getElementById('testimonialStatusModal');
                 if (modal) modal.classList.remove('active');
-                document.body.style.overflow = '';
+                // Only remove overflow & class if no other modal active
+                if (!document.querySelector('.t-detail-modal.active') && document.getElementById('reportModal')?.classList.contains('hidden')) {
+                    document.body.style.overflow = '';
+                    document.documentElement.classList.remove('testimonial-modal-open');
+                }
             };
 
             document.getElementById('testimonialStatusModal')?.addEventListener('click', (e) => {
@@ -1710,6 +1791,16 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
                     return;
                 }
 
+                // Client-side file size check during submission
+                const fileInput = document.getElementById('photoInput');
+                if (fileInput && fileInput.files && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    if (file.size > 5 * 1024 * 1024) {
+                        showStatusModal(false, 'Ukuran File Terlalu Besar', 'Gagal mengirim. Ukuran foto maksimal adalah 5MB. File yang Anda pilih berukuran <strong>' + (file.size / (1024 * 1024)).toFixed(2) + 'MB</strong>.');
+                        return;
+                    }
+                }
+
                 const submitBtn = form.querySelector('.t-btn');
                 const originalBtnText = submitBtn.textContent;
                 submitBtn.disabled = true;
@@ -1729,6 +1820,7 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
                     const data = await response.json();
                     
                     if (response.ok && data.success) {
+                        closeTestimonialFormModal();
                         showStatusModal(true, 'Berhasil', data.message || 'Terima kasih atas testimoni Anda!');
                         form.reset();
                         input.value = 0;
@@ -1802,15 +1894,32 @@ Bagikan pengalamanmu menjelajahi budaya Nusantara melalui Lentara. Setiap masuka
 
 
         (function(){
-    const input = document.getElementById('photoInput');
-    const name  = document.getElementById('photoName');
-    if(!input || !name) return;
+            const input = document.getElementById('photoInput');
+            const name  = document.getElementById('photoName');
+            if(!input || !name) return;
 
-    input.addEventListener('change', function(){
-        const file = input.files && input.files[0];
-        name.textContent = file ? file.name : 'Belum ada foto dipilih';
-    });
-})();
+            input.addEventListener('change', function(){
+                const file = input.files && input.files[0];
+                if (file) {
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                    if (!allowedTypes.includes(file.type)) {
+                        showStatusModal(false, 'Format File Tidak Sesuai', 'Gagal memilih file. Format foto yang diperbolehkan hanya <strong>JPG, JPEG, atau PNG</strong>.');
+                        input.value = '';
+                        name.textContent = 'Belum ada foto dipilih';
+                        return;
+                    }
+                    if (file.size > 5 * 1024 * 1024) {
+                        showStatusModal(false, 'Ukuran File Terlalu Besar', 'Gagal memilih file. Ukuran foto maksimal adalah 5MB. File yang Anda pilih berukuran <strong>' + (file.size / (1024 * 1024)).toFixed(2) + 'MB</strong>.');
+                        input.value = '';
+                        name.textContent = 'Belum ada foto dipilih';
+                        return;
+                    }
+                    name.textContent = file.name;
+                } else {
+                    name.textContent = 'Belum ada foto dipilih';
+                }
+            });
+        })();
 
     </script>
 </section>

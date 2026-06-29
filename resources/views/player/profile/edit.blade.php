@@ -53,21 +53,38 @@
                 <p class="auth-subtitle">Ubah nama panggilan dan pilih avatar kamu</p>
             </div>
 
-            {{-- Success / Error (session + validation) --}}
+            {{-- Success / Error Pop-up Modal --}}
             @if(session('success'))
-                <div class="auth-success" role="status">
-                    <span class="auth-success__dot" aria-hidden="true"></span>
-                    <span>{{ session('success') }}</span>
+                <div id="status-popup-modal" class="status-popup-overlay" role="dialog" aria-modal="true">
+                    <div class="status-popup-card status-popup-card--success">
+                        <div class="status-popup-icon status-popup-icon--success">
+                            <svg viewBox="0 0 24 24" fill="none" style="width: 34px; height: 34px; color: #10b981;">
+                                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h2 class="status-popup-title">Profil Diperbarui!</h2>
+                        <p class="status-popup-message">{{ session('success') }}</p>
+                        <button type="button" class="status-popup-btn status-popup-btn--success" onclick="closeStatusPopup()">Tutup</button>
+                    </div>
                 </div>
-            @elseif(session('error'))
-                <div class="auth-error" role="alert">
-                    <span class="auth-error__dot" aria-hidden="true"></span>
-                    <span>{{ session('error') }}</span>
-                </div>
-            @elseif($errors->any())
-                <div class="auth-error" role="alert">
-                    <span class="auth-error__dot" aria-hidden="true"></span>
-                    <span>{{ $errors->first() }}</span>
+            @elseif(session('error') || $errors->any())
+                <div id="status-popup-modal" class="status-popup-overlay" role="dialog" aria-modal="true">
+                    <div class="status-popup-card status-popup-card--error">
+                        <div class="status-popup-icon status-popup-icon--error">
+                            <svg viewBox="0 0 24 24" fill="none" style="width: 32px; height: 32px; color: #ef4444;">
+                                <path d="M12 9v4M12 17h.01M12 3a9 9 0 1 1-9 9 9 9 0 0 1 9-9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h2 class="status-popup-title">Pembaruan Gagal</h2>
+                        <p class="status-popup-message">
+                            @if(session('error'))
+                                {{ session('error') }}
+                            @else
+                                {{ $errors->first() }}
+                            @endif
+                        </p>
+                        <button type="button" class="status-popup-btn status-popup-btn--error" onclick="closeStatusPopup()">Tutup</button>
+                    </div>
                 </div>
             @endif
 
@@ -776,5 +793,118 @@ html[data-theme="light"]{
 .avatar-name{ display:none !important; }
 .avatar-item{ gap: 0; }
 
+/* ==========================================
+   STATUS POPUP MODAL STYLES (SUCCESS & ERROR)
+   ========================================== */
+.status-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 18, 32, 0.76);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeInModal 0.25s ease-out;
+}
+
+.status-popup-card {
+  width: min(380px, 90%);
+  background: linear-gradient(180deg, rgba(15,23,42,.92), rgba(15,23,42,.98));
+  border-radius: 24px;
+  padding: 26px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  transform: scale(0.9);
+  animation: scaleInModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.status-popup-card--success {
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(16, 185, 129, 0.15);
+}
+
+.status-popup-card--error {
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(239, 68, 68, 0.15);
+}
+
+.status-popup-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+}
+
+.status-popup-icon--success {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.status-popup-icon--error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.status-popup-title {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--txt-body);
+}
+
+.status-popup-message {
+  margin: 0 0 22px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.status-popup-btn {
+  width: 100%;
+  border: 0;
+  color: white;
+  font-weight: 950;
+  padding: 11px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.status-popup-btn--success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+}
+
+.status-popup-btn--error {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+}
+
+.status-popup-btn:hover {
+  transform: translateY(-1px);
+}
+
+@keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleInModal { to { transform: scale(1); } }
+
+html[data-theme="light"] .status-popup-card {
+  background: rgba(255, 255, 255, 0.96);
+}
 </style>
+
+<script>
+function closeStatusPopup() {
+  const modal = document.getElementById('status-popup-modal');
+  if (modal) {
+    modal.style.opacity = '0';
+    modal.style.transition = 'opacity 0.2s ease';
+    setTimeout(() => {
+      modal.remove();
+    }, 200);
+  }
+}
+</script>
 @endsection

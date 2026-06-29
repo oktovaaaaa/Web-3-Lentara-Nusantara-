@@ -12,6 +12,9 @@ class TestimonialReportController extends Controller
         $data = $request->validate([
             'reason'=>'required|string',
             'note'=>'nullable|string|max:500'
+        ], [
+            'reason.required' => 'Alasan laporan wajib dipilih.',
+            'note.max'        => 'Catatan tambahan tidak boleh lebih dari :max karakter.',
         ]);
 
         $testimonial->reports()->create($data);
