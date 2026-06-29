@@ -13,7 +13,7 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        // Kalau sudah login, langsung lempar ke halaman admin (stats)
+        // Kalau sudah login, langsung lempar ke halaman admin
         if (Auth::check()) {
             return redirect()->route('admin.testimonials.index');
         }
@@ -22,11 +22,10 @@ class LoginController extends Controller
     }
 
     /**
-     * Proses login (email + password).
+     * Proses login standar (cukup Email + Password).
      */
     public function login(Request $request)
     {
-        // Validasi sederhana: wajib email & password, dan harus ada @ di email
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
             'password' => ['required', 'string'],
@@ -35,8 +34,6 @@ class LoginController extends Controller
         // Coba login dengan guard "web" (default)
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-
-
             return redirect()->route('admin.testimonials.index');
         }
 
@@ -58,7 +55,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Setelah logout, balik ke landing/home
         return redirect()->route('home');
     }
 }

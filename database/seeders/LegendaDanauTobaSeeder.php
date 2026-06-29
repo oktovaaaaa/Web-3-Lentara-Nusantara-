@@ -24,9 +24,11 @@ class LegendaDanauTobaSeeder extends Seeder
         }
 
         // Buat atau update Level 1 Sumatera sebagai Storyline
-        $level = GameLevel::firstOrCreate(
-            ['island_id' => $island->id, 'order' => 1],
+        $level = GameLevel::updateOrCreate(
+            ['id' => 1],
             [
+                'island_id'  => $island->id,
+                'order'      => 1,
                 'title'      => 'Level 1 — Legenda Danau Toba',
                 'is_active'  => true,
                 'level_type' => 'storyline',

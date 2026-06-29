@@ -23,9 +23,11 @@ class AcehGame3DSeeder extends Seeder
         }
 
         // Buat atau update Level 2 Sumatera sebagai 3D Game
-        $level = GameLevel::firstOrCreate(
-            ['island_id' => $island->id, 'order' => 2],
+        $level = GameLevel::updateOrCreate(
+            ['id' => 2],
             [
+                'island_id'  => $island->id,
+                'order'      => 2,
                 'title'      => 'Level 2 — Ekspedisi Budaya Aceh',
                 'is_active'  => true,
                 'level_type' => 'game3d',

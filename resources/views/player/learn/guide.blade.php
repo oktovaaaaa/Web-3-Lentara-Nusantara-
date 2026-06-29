@@ -17,7 +17,7 @@
     $nickname = (string)($player->nickname ?? $player->display_name ?? 'Player');
     $avatarKey = (int) ($player->avatar_key ?? 1);
     if ($avatarKey < 1 || $avatarKey > 5) $avatarKey = 1;
-    $avatarUrl = asset('images/avatars/avatar-'.$avatarKey.'.png');
+    $avatarUrl = asset('images/avatars/avatar-'.$avatarKey.'.PNG');
 
     $safeRoute = function($name, $params = []) {
         if (\Illuminate\Support\Facades\Route::has($name)) return route($name, $params);

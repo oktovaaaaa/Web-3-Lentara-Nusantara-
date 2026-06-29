@@ -52,7 +52,7 @@ $myTierLabel = $tierLabel;
 $myAvatarKey = (int)($player->avatar_key ?? 1);
 if($myAvatarKey < 1) $myAvatarKey = 1;
 if($myAvatarKey > 5) $myAvatarKey = 5;
-$myAvatarUrl = asset('images/avatars/avatar-'.$myAvatarKey.'.png');
+$myAvatarUrl = asset('images/avatars/avatar-'.$myAvatarKey.'.PNG');
 $avatarUrl = $myAvatarUrl;
 
 // MENU (manual)
@@ -642,7 +642,7 @@ $top3 = $rows->take(3)->values();
                 $ak = $r ? (int)($r->avatar_key ?? 1) : 1;
                 if($ak < 1) $ak = 1;
                 if($ak > 5) $ak = 5;
-                $ava = asset('images/avatars/avatar-'.$ak.'.png');
+                $ava = asset('images/avatars/avatar-'.$ak.'.PNG');
               @endphp
 
 <div class="pod" data-podium-rank="{{ $rankNum }}">
@@ -684,7 +684,7 @@ $top3 = $rows->take(3)->values();
               $ak = (int)($r->avatar_key ?? 1);
               if($ak < 1) $ak = 1;
               if($ak > 5) $ak = 5;
-              $ava = asset('images/avatars/avatar-'.$ak.'.png');
+              $ava = asset('images/avatars/avatar-'.$ak.'.PNG');
             @endphp
 
 <div class="row {{ $isMe ? 'you' : '' }}" data-rank="{{ $rank }}">

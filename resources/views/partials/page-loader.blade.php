@@ -1,6 +1,6 @@
 <div id="pageLoader" class="page-loader" aria-hidden="true">
   <img
-    src="{{ asset('images/branding/loader-lentara.png') }}"
+    src="{{ asset('images/branding/loader-lentara.PNG') }}"
     alt="Lentara Nusantara"
     class="page-loader__img"
     draggable="false"

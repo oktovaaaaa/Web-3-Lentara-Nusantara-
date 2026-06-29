@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\QuizQuestionController as AdminQuizQuestionContro
 use App\Http\Controllers\Admin\IslandAboutStatsController;
 
 use App\Http\Controllers\Admin\DestinationController as AdminDestinationController;
+use App\Http\Controllers\Admin\AdminProfileController;
 
 
 
@@ -99,6 +100,11 @@ Route::prefix('admin')
     ->group(function () {
 
         Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+
+        // PROFIL & GANTI PASSWORD ADMIN
+        Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [AdminProfileController::class, 'updateProfile'])->name('profile.update');
+        Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password.update');
 
         // HISTORIES
         Route::resource('histories', HistoryController::class)

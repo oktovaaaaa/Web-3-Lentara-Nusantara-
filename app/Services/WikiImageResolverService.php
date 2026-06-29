@@ -6,29 +6,31 @@ use Illuminate\Support\Facades\Http;
 
 class WikiImageResolverService
 {
-    /**
-     * Ambil image + wiki_url + summary (sejarah/asl-usul singkat) dari Wikipedia.
-     * Lebih akurat daripada REST summary langsung karena:
-     * - bisa redirects
-     * - bisa pageimages
-     * - bisa extracts intro
-     * - bisa fullurl
-     */
+    private array $fallbackImages = [
+        'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800',
+    ];
+
     public function resolve(string $foodName, string $tribeKey = ''): array
     {
         $foodName = trim($foodName);
         $tribeKey = trim($tribeKey);
 
         if ($foodName === '') {
-            return $this->fallback();
+            return $this->fallback($foodName);
         }
 
-        // Query yang lebih akurat: pakai nama makanan + tribe (sebagai hint)
-        // tapi prioritas tetap nama makanannya.
         $searchVariants = array_values(array_unique(array_filter([
             $foodName,
             ($tribeKey !== '' ? ($foodName . ' ' . $tribeKey) : null),
-            // kadang Wikipedia pakai ejaan alternatif:
             str_replace(['–', '—'], '-', $foodName),
         ])));
 
@@ -39,8 +41,7 @@ class WikiImageResolverService
             }
         }
 
-        // kalau gagal semua
-        return $this->fallback();
+        return $this->fallback($foodName);
     }
 
     private function queryWikipedia(string $query): ?array
@@ -48,12 +49,9 @@ class WikiImageResolverService
         $query = trim($query);
         if ($query === '') return null;
 
-        // 1) Cari halaman paling relevan via "search"
-        // lalu ambil detail page (extract + pageimage + fullurl) via pageid.
         $search = Http::withOptions(['verify' => false])
-            ->timeout(20)
+            ->timeout(15)
             ->withHeaders([
-                // penting untuk beberapa konfigurasi hosting/proxy
                 'Accept' => 'application/json',
                 'User-Agent' => 'LentaraPiforrr/1.0 (contact: admin@localhost)',
             ])
@@ -74,9 +72,8 @@ class WikiImageResolverService
             return null;
         }
 
-        // 2) Ambil info halaman + intro extract + thumbnail + fullurl
         $detail = Http::withOptions(['verify' => false])
-            ->timeout(20)
+            ->timeout(15)
             ->withHeaders([
                 'Accept' => 'application/json',
                 'User-Agent' => 'LentaraPiforrr/1.0 (contact: admin@localhost)',
@@ -104,15 +101,13 @@ class WikiImageResolverService
         $extract  = data_get($page, 'extract');
         $thumb    = data_get($page, 'thumbnail.source');
 
-        // normalize
         $wikiUrl = is_string($fullUrl) && trim($fullUrl) !== '' ? trim($fullUrl) : null;
         $summary = is_string($extract) && trim($extract) !== '' ? trim($extract) : null;
         $imageUrl = is_string($thumb) && trim($thumb) !== '' ? trim($thumb) : null;
 
-        // kalau wikiUrl saja ada, itu sudah berguna (linknya benar)
         if ($wikiUrl || $summary || $imageUrl) {
             return [
-                'image_url'     => $imageUrl,
+                'image_url'     => $imageUrl ?: $this->getDynamicFallback($query),
                 'sources'       => $wikiUrl ? [$wikiUrl] : [],
                 'wiki_url'      => $wikiUrl,
                 'wiki_summary'  => $summary,
@@ -122,13 +117,20 @@ class WikiImageResolverService
         return null;
     }
 
-    private function fallback(): array
+    private function fallback(string $foodName = ''): array
     {
         return [
-            'image_url'    => 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&q=80&w=1200',
+            'image_url'    => $this->getDynamicFallback($foodName),
             'sources'      => ['https://id.wikipedia.org/'],
             'wiki_url'     => null,
             'wiki_summary' => null,
         ];
+    }
+
+    private function getDynamicFallback(string $foodName): string
+    {
+        $hash = abs(crc32($foodName));
+        $index = $hash % count($this->fallbackImages);
+        return $this->fallbackImages[$index];
     }
 }

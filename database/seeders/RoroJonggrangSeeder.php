@@ -23,9 +23,11 @@ class RoroJonggrangSeeder extends Seeder
         }
 
         // Buat atau update Level 1 Jawa sebagai Storyline
-        $level = GameLevel::firstOrCreate(
-            ['island_id' => $island->id, 'order' => 1],
+        $level = GameLevel::updateOrCreate(
+            ['id' => 3],
             [
+                'island_id'           => $island->id,
+                'order'               => 1,
                 'title'               => 'Level 1 — Roro Jonggrang',
                 'is_active'           => true,
                 'level_type'          => 'storyline',

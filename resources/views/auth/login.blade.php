@@ -52,12 +52,106 @@
                 <h1 class="auth-title">Login Admin</h1>
             </div>
 
-            {{-- Error --}}
+            {{-- POPUP MODAL ERROR --}}
             @if($errors->any())
-                <div class="auth-error" role="alert">
-                    <span class="auth-error__dot" aria-hidden="true"></span>
-                    <span>{{ $errors->first() }}</span>
+            <div id="login-error-modal" class="auth-modal-overlay" role="dialog" aria-modal="true">
+                <div class="auth-modal-content">
+                    <div class="auth-modal-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10" stroke="#ef4444" stroke-width="2" fill="rgba(239,68,68,0.15)"/>
+                            <path d="M12 8v4M12 16h.01" stroke="#ef4444" stroke-linecap="round" stroke-width="2.5"/>
+                        </svg>
+                    </div>
+                    <h3 class="auth-modal-title">Login Gagal</h3>
+                    <p class="auth-modal-text">{{ $errors->first() }}</p>
+                    <button type="button" class="auth-modal-btn" onclick="closeAuthModal()">Mengerti</button>
                 </div>
+            </div>
+
+            <style>
+            .auth-modal-overlay {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                background: rgba(11, 18, 32, 0.82);
+                backdrop-filter: blur(8px);
+                animation: fadeInAuthModal 0.25s ease-out forwards;
+            }
+            .auth-modal-content {
+                background: #0f172a;
+                border: 1px solid rgba(239, 68, 68, 0.4);
+                border-radius: 24px;
+                padding: 28px 24px;
+                width: min(380px, 100%);
+                text-align: center;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(239, 68, 68, 0.25);
+                animation: scaleInAuthModal 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            }
+            .auth-modal-icon {
+                width: 64px;
+                height: 64px;
+                margin: 0 auto 16px;
+                display: grid;
+                place-items: center;
+            }
+            .auth-modal-icon svg {
+                width: 64px;
+                height: 64px;
+            }
+            .auth-modal-title {
+                margin: 0 0 8px;
+                font-size: 1.3rem;
+                font-weight: 950;
+                color: #ffffff;
+            }
+            .auth-modal-text {
+                margin: 0 0 24px;
+                font-size: 0.92rem;
+                color: #cbd5e1;
+                line-height: 1.5;
+                font-weight: 600;
+            }
+            .auth-modal-btn {
+                width: 100%;
+                padding: 13px 20px;
+                border-radius: 999px;
+                border: 0;
+                background: linear-gradient(135deg, #ef4444, #dc2626);
+                color: #ffffff;
+                font-weight: 950;
+                font-size: 0.92rem;
+                cursor: pointer;
+                box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+                transition: transform 0.15s ease, filter 0.15s ease;
+            }
+            .auth-modal-btn:hover {
+                filter: brightness(1.1);
+                transform: translateY(-2px);
+            }
+            @keyframes fadeInAuthModal {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes scaleInAuthModal {
+                from { opacity: 0; transform: scale(0.85); }
+                to { opacity: 1; transform: scale(1); }
+            }
+            </style>
+
+            <script>
+            function closeAuthModal() {
+                const modal = document.getElementById('login-error-modal');
+                if (modal) {
+                    modal.style.opacity = '0';
+                    modal.style.transition = 'opacity 0.2s ease';
+                    setTimeout(() => modal.remove(), 200);
+                }
+            }
+            </script>
             @endif
 
             {{-- Form --}}

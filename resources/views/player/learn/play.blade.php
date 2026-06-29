@@ -29,7 +29,7 @@
     $avatarKey = (int)($player->avatar_key ?? 1);
     if ($avatarKey < 1) $avatarKey = 1;
     if ($avatarKey > 5) $avatarKey = 5;
-    $avatarUrl = asset('images/avatars/avatar-'.$avatarKey.'.png');
+    $avatarUrl = asset('images/avatars/avatar-'.$avatarKey.'.PNG');
 
     // payload untuk JS
     $payload = [];

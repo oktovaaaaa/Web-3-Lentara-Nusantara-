@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             IslandSeeder::class,
             AdminUserSeeder::class,
-            LegendaDanauTobaSeeder::class,
-            RoroJonggrangSeeder::class,
-            PangeranSamudraSeeder::class,
-            AcehGame3DSeeder::class,
+            LegendaDanauTobaSeeder::class, // ID 1 (Sumatera Level 1)
+            AcehGame3DSeeder::class,       // ID 2 (Sumatera Level 2)
+            RoroJonggrangSeeder::class,    // ID 3 (Jawa Level 1)
+            PangeranSamudraSeeder::class,  // ID 4 (Kalimantan Level 1)
             BatakTribeSeeder::class,
             AcehTribeSeeder::class,
             TraditionalTribesSeeder::class,

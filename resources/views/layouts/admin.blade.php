@@ -117,17 +117,26 @@
                 <span class="tooltip">Warisan</span>
             </li>
 
+            {{-- Profil & Password --}}
+            <li>
+                <a href="{{ route('admin.profile.edit') }}">
+                    <i class="bx bx-user-circle"></i>
+                    <span class="links_name">Profil & Password</span>
+                </a>
+                <span class="tooltip">Profil & Password</span>
+            </li>
+
 
             {{-- Profile + Logout --}}
             <li class="profile">
-                <div class="profile-details">
+                <a href="{{ route('admin.profile.edit') }}" class="profile-details hover:opacity-80 transition-opacity" style="text-decoration:none; color:inherit;">
                     <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Admin') }}"
                          alt="profileImg" />
                     <div class="name_job">
                         <div class="name">{{ optional(auth()->user())->name ?? 'Admin' }}</div>
                         <div class="job">Administrator</div>
                     </div>
-                </div>
+                </a>
 
                 {{-- Form logout: POST ke route('logout') --}}
                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
