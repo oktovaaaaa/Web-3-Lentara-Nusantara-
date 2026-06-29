@@ -17,16 +17,20 @@ class GenerateWeeklyTribeFoodRecommendations implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public ?string $targetTribe;
+
+    public function __construct(?string $targetTribe = null)
+    {
+        $this->targetTribe = $targetTribe;
+    }
+
     public function handle(
         GeminiFoodRecommenderService $gemini,
         WikiImageResolverService $wiki
     ): void {
         $now = now();
-
-        // ISO week key: contoh 2026-W01
         $weekKey = Carbon::now()->format('o-\WW');
 
-        // 1) Ambil semua pulau aktif
         $islands = Island::query()
             ->where('is_active', true)
             ->orderBy('order')
@@ -34,8 +38,6 @@ class GenerateWeeklyTribeFoodRecommendations implements ShouldQueue
 
         foreach ($islands as $island) {
             $regionSlug = (string) $island->slug;
-
-            // 2) Ambil tribes sesuai config/tribes.php
             $tribes = config('tribes.' . $regionSlug, []);
 
             if (empty($tribes)) {
@@ -46,11 +48,14 @@ class GenerateWeeklyTribeFoodRecommendations implements ShouldQueue
                 $tribeKey = trim((string) $tribeKey);
                 if ($tribeKey === '') continue;
 
+                // Jika ada target suku spesifik, abaikan suku lain
+                if ($this->targetTribe && strcasecmp($tribeKey, trim($this->targetTribe)) !== 0) {
+                    continue;
+                }
+
                 try {
-                    // 3) Generate dari Gemini
                     $items = $gemini->generateFoodsForTribe($tribeKey, $regionSlug);
 
-                    // 4) Resolve image + wiki_url + summary
                     $finalItems = [];
                     foreach ($items as $it) {
                         $name = trim((string)($it['name'] ?? ''));
@@ -62,23 +67,17 @@ class GenerateWeeklyTribeFoodRecommendations implements ShouldQueue
                         $sources  = $resolved['sources'] ?? [];
                         $wikiUrl  = $resolved['wiki_url'] ?? null;
 
-                        // ✅ FIX UTAMA: summary key bisa beda-beda tergantung service
-                        // - kamu simpan ke payload sebagai 'wiki_summary'
-                        // - jadi ambil dari beberapa kemungkinan key supaya tidak null
                         $summary = $resolved['wiki_summary']
                             ?? $resolved['summary']
                             ?? $resolved['extract']
                             ?? null;
 
-                        // fallback image saja boleh (biar UI tetap cakep)
                         if (!$imageUrl) {
                             $imageUrl = 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&q=80&w=1200';
                         }
 
-                        // IMPORTANT: kalau sources kosong, BIARKAN kosong (jangan samain semua)
                         $sources = is_array($sources) ? array_values(array_filter($sources)) : [];
 
-                        // ✅ pastikan wikiUrl jadi sumber pertama (spesifik per makanan)
                         if ($wikiUrl && is_string($wikiUrl)) {
                             array_unshift($sources, $wikiUrl);
                             $sources = array_values(array_unique(array_filter($sources)));
@@ -93,11 +92,8 @@ class GenerateWeeklyTribeFoodRecommendations implements ShouldQueue
                             'where_to_find' => array_values(array_filter((array)($it['where_to_find'] ?? []))),
                             'tags' => array_values(array_filter((array)($it['tags'] ?? []))),
                             'category' => $it['category'] ?? null,
-
                             'image_url' => $imageUrl,
                             'sources' => $sources,
-
-                            // ✅ NEW: info sejarah/asal usul dari Wikipedia intro
                             'wiki_url' => $wikiUrl,
                             'wiki_summary' => $summary,
                         ];
@@ -120,7 +116,6 @@ class GenerateWeeklyTribeFoodRecommendations implements ShouldQueue
                         ]
                     );
 
-                    // Beri jeda kecil untuk menghindari rate limiting API gratis
                     sleep(2);
                 } catch (\Exception $e) {
                     logger()->warning("Gagal membuat rekomendasi makanan untuk suku {$tribeKey}: " . $e->getMessage());

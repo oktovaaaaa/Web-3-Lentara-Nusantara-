@@ -14,8 +14,14 @@ Schedule::job(new GenerateWeeklyTribeFoodRecommendations)
     ->weeklyOn(1, '00:00')
     ->withoutOverlapping();
 
-Artisan::command('tribe:generate-food', function () {
-    $this->info('Memulai generasi rekomendasi makanan suku via AI (Gemini) dan Wikipedia...');
-    dispatch_sync(new GenerateWeeklyTribeFoodRecommendations);
+Artisan::command('tribe:generate-food {--tribe=}', function () {
+    $tribe = $this->option('tribe');
+    if ($tribe) {
+        $this->info("Memulai generasi rekomendasi makanan khusus suku [{$tribe}] via AI (Gemini) dan Wikipedia...");
+    } else {
+        $this->info('Memulai generasi rekomendasi makanan seluruh suku via AI (Gemini) dan Wikipedia...');
+    }
+
+    dispatch_sync(new GenerateWeeklyTribeFoodRecommendations($tribe));
     $this->info('Rekomendasi makanan suku berhasil diperbarui!');
 })->purpose('Generate weekly tribe food recommendations immediately via AI');

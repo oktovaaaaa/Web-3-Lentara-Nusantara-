@@ -30,7 +30,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Banda Aceh', 'Pidie'],
                         'tags' => ['Pedas', 'Rempah', 'Mie'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Mie_Aceh_Daging.jpg/800px-Mie_Aceh_Daging.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Mie_Aceh',
                         'wiki_summary' => 'Mie aceh adalah masakan mie pedas khas Aceh di Indonesia. Mie kuning tebal dengan irisan daging sapi, daging kambing atau makanan laut disajikan dalam sup sejenis kari yang gurih dan pedas.'
                     ],
@@ -43,7 +43,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Banda Aceh', 'Aceh Besar'],
                         'tags' => ['Ayam', 'Daun Kari', 'Goreng'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Ayam_tangkap.JPG/800px-Ayam_tangkap.JPG',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Ayam_tangkap',
                         'wiki_summary' => 'Ayam tangkap adalah masakan khas Aceh yang terbuat dari ayam yang digoreng dengan bumbu dan rempah-rempah khas.'
                     ]
@@ -62,7 +62,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Balige', 'Samosir'],
                         'tags' => ['Ikan', 'Andaliman', 'Pedas Getir'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Arsik_ikan_mas.JPG/800px-Arsik_ikan_mas.JPG',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Arsik',
                         'wiki_summary' => 'Arsik adalah salah satu masakan khas kawasan Tapanuli yang populer. Masakan ini menggunakan bahan utama ikan mas dengan bumbu andaliman.'
                     ],
@@ -75,7 +75,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Tarutung', 'Samosir'],
                         'tags' => ['Mie', 'Santan', 'Andaliman'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Mie_gomak.JPG/800px-Mie_gomak.JPG',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Mie_gomak',
                         'wiki_summary' => 'Mie gomak adalah makanan khas dari tanah Batak Toba. Mie ini dibuat dari mie lidi berukuran tebal mirip dengan spaghetti.'
                     ]
@@ -94,7 +94,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Payakumbuh', 'Padang'],
                         'tags' => ['Daging', 'Santan', 'Rempah'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Rendang_daging_sapi_asli_Minang.jpg/800px-Rendang_daging_sapi_asli_Minang.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Rendang',
                         'wiki_summary' => 'Rendang adalah masakan daging bercita rasa pedas yang menggunakan campuran dari berbagai bumbu dan rempah-rempah khas Minangkabau.'
                     ],
@@ -107,7 +107,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Padang Panjang', 'Padang'],
                         'tags' => ['Sate', 'Daging', 'Kuah Kental'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Sate_Padang.JPG/800px-Sate_Padang.JPG',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Sate_Padang',
                         'wiki_summary' => 'Sate Padang adalah sebutan untuk tiga jenis variasi sate di Sumatera Barat, yaitu Sate Padang, Sate Padang Panjang dan Sate Pariaman.'
                     ]
@@ -130,7 +130,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Yogyakarta', 'Solo'],
                         'tags' => ['Manis', 'Nangka Muda', 'Tradisional'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Gudeg_Jogja.jpg/800px-Gudeg_Jogja.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Gudeg',
                         'wiki_summary' => 'Gudeg adalah makanan khas Yogyakarta dan Jawa Tengah yang terbuat dari nangka muda yang dimasak dengan santan.'
                     ],
@@ -143,7 +143,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Surabaya', 'Malang'],
                         'tags' => ['Daging', 'Kluwek', 'Gurih'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Rawon_surabaya.jpg/800px-Rawon_surabaya.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Rawon',
                         'wiki_summary' => 'Rawon adalah sup daging sapi berkuah hitam khas Jawa Timur yang menggunakan campuran bumbu kluwek.'
                     ]
@@ -162,7 +162,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Bandung', 'Bogor'],
                         'tags' => ['Sayur', 'Kacang', 'Pedas Kencur'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Karedok_Sunda.jpg/800px-Karedok_Sunda.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Karedok',
                         'wiki_summary' => 'Karedok adalah salah satu makanan khas Sunda di Indonesia. Karedok dibuat dengan bahan-bahan sayuran mentah segar disiram saus kacang pedas.'
                     ],
@@ -175,7 +175,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Tasikmalaya', 'Bandung'],
                         'tags' => ['Nasi', 'Oncom', 'Tradisional'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Nasi_tutug_oncom.jpg/800px-Nasi_tutug_oncom.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Nasi_tutug_oncom',
                         'wiki_summary' => 'Nasi tutug oncom adalah makanan khas Sunda yang dibuat dari nasi yang diaduk dengan oncom goreng atau bakar.'
                     ]
@@ -194,7 +194,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Bangkalan', 'Sampang'],
                         'tags' => ['Ayam', 'Bakar', 'Kacang'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Sate_Madura.jpg/800px-Sate_Madura.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Sate_Madura',
                         'wiki_summary' => 'Sate Madura adalah sate yang memiliki bumbu khas Madura terbuat dari kacang tanah tumbuk halus yang dimasak gurih manis.'
                     ],
@@ -230,7 +230,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Banjarmasin', 'Banjarbaru'],
                         'tags' => ['Ayam', 'Kuah Rempah', 'Soto'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Soto_Banjar.jpg/800px-Soto_Banjar.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Soto_Banjar',
                         'wiki_summary' => 'Soto Banjar adalah soto khas suku Banjar, Kalimantan Selatan dengan bahan utama ayam dan beraroma harum rempah-rempah.'
                     ]
@@ -271,71 +271,6 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'image_url' => 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&q=80&w=800',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Suku_Kutai',
                         'wiki_summary' => 'Nasi bekepor adalah kuliner khas Kutai peninggalan sejarah kesultanan Kutai Kartanegara.'
-                    ],
-                    [
-                        'name' => 'Gence Ruan',
-                        'description' => 'Gence Ruan adalah hidangan ikan gabus (ruan) yang digoreng atau dibakar, kemudian disiram dengan sambal pedas manis khas Kutai.',
-                        'price_range' => '30k–60k',
-                        'rating_estimate' => 4.6,
-                        'region_hint' => 'Kalimantan Timur',
-                        'where_to_find' => ['Tenggarong', 'Samarinda'],
-                        'tags' => ['Ikan', 'Bakar', 'Sambal Pedas'],
-                        'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=800',
-                        'wiki_url' => 'https://id.wikipedia.org/wiki/Suku_Kutai',
-                        'wiki_summary' => 'Gence Ruan adalah kuliner olahan ikan gabus khas Kutai Kalimantan Timur dengan siraman bumbu gence tumis yang kaya rempah.'
-                    ],
-                    [
-                        'name' => 'Rabok Ruan',
-                        'description' => 'Rabok Ruan adalah hidangan ikan gabus (ruan) yang diasap hingga kering, kemudian diolah dengan bumbu-bumbu khas Kutai.',
-                        'price_range' => '40k–70k',
-                        'rating_estimate' => 4.4,
-                        'region_hint' => 'Kalimantan Timur',
-                        'where_to_find' => ['Tenggarong', 'Samarinda'],
-                        'tags' => ['Ikan Asap', 'Gabus', 'Garis Tradisi'],
-                        'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?auto=format&fit=crop&q=80&w=800',
-                        'wiki_url' => 'https://id.wikipedia.org/wiki/Suku_Kutai',
-                        'wiki_summary' => 'Rabok Ruan merupakan kuliner abon/daging abon ikan gabus khas Kutai Kalimantan Timur.'
-                    ],
-                    [
-                        'name' => 'Amplang',
-                        'description' => 'Amplang adalah kerupuk renyah khas Kalimantan yang terbuat dari olahan ikan, biasanya ikan tenggiri atau ikan gabus.',
-                        'price_range' => '15k–30k',
-                        'rating_estimate' => 4.3,
-                        'region_hint' => 'Kalimantan Timur',
-                        'where_to_find' => ['Tenggarong', 'Samarinda'],
-                        'tags' => ['Cemilan', 'Kerupuk Ikan', 'Renyah'],
-                        'category' => 'snack',
-                        'image_url' => 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?auto=format&fit=crop&q=80&w=800',
-                        'wiki_url' => 'https://id.wikipedia.org/wiki/Amplang',
-                        'wiki_summary' => 'Amplang adalah sejenis krupuk ikan tradisional yang terbuat dari ikan tenggiri atau ikan gabus khas Kalimantan.'
-                    ],
-                    [
-                        'name' => 'Sambal Raja',
-                        'description' => 'Sambal Raja adalah sambal khas Kutai yang unik, tidak hanya terdiri dari cabai tetapi juga campuran terong ungu, kacang panjang, dan bawang merah tumis.',
-                        'price_range' => '10k–20k',
-                        'rating_estimate' => 4.7,
-                        'region_hint' => 'Kalimantan Timur',
-                        'where_to_find' => ['Tenggarong', 'Samarinda'],
-                        'tags' => ['Sambal', 'Pedas', 'Pelengkap'],
-                        'category' => 'side_dish',
-                        'image_url' => 'https://images.unsplash.com/photo-1584270354949-c26b0d5b4a0c?auto=format&fit=crop&q=80&w=800',
-                        'wiki_url' => 'https://id.wikipedia.org/wiki/Suku_Kutai',
-                        'wiki_summary' => 'Sambal Raja adalah pelengkap makanan raja-raja Kutai Kartanegara yang kaya akan irisan sayur goreng dan telur rebus.'
-                    ],
-                    [
-                        'name' => 'Kue Cincin',
-                        'description' => 'Kue Cincin adalah kue tradisional Kutai yang bentuknya menyerupai cincin, terbuat dari tepung beras dan gula merah, memiliki tekstur legit.',
-                        'price_range' => '5k–15k',
-                        'rating_estimate' => 4.2,
-                        'region_hint' => 'Kalimantan Timur',
-                        'where_to_find' => ['Tenggarong', 'Samarinda'],
-                        'tags' => ['Kue', 'Manis', 'Jajanan Pasar'],
-                        'category' => 'dessert',
-                        'image_url' => 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800',
-                        'wiki_url' => 'https://id.wikipedia.org/wiki/Kue_cincin',
-                        'wiki_summary' => 'Kue cincin adalah kue tradisional Indonesia khas suku Kutai dan Banjar berbentuk bulat bertubuh 4 lubang atau berlubang tengah.'
                     ]
                 ]
             ],
@@ -356,7 +291,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Makassar', 'Gowa'],
                         'tags' => ['Daging', 'Kacang', 'Kuah Kental'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Coto_Makassar.jpg/800px-Coto_Makassar.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Coto_Makassar',
                         'wiki_summary' => 'Coto Makassar atau Coto Mangkasara adalah makanan tradisional Makassar, Sulawesi Selatan. Makanan ini terbuat dari jeroan dan daging sapi yang direbus dalam air cucian beras dengan kacang tanah sangrai.'
                     ]
@@ -375,7 +310,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Makassar', 'Maros'],
                         'tags' => ['Iga Sapi', 'Kluwek', 'Rempah'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sop_Konro.jpg/800px-Sop_Konro.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Sop_konro',
                         'wiki_summary' => 'Sop konro adalah masakan sup iga sapi khas Indonesia yang berasal dari tradisi Makassar, Sulawesi Selatan.'
                     ]
@@ -394,7 +329,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Rantepao', 'Makale'],
                         'tags' => ['Daging', 'Bambu Bakar', 'Daun Mayana'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Pa%27piong.jpg/800px-Pa%27piong.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Suku_Toraja',
                         'wiki_summary' => 'Pa Piong adalah masakan tradisional suku Toraja yang dimasak menggunakan wadah tabung bambu yang dibakar di atas bara api.'
                     ]
@@ -417,7 +352,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Ubud', 'Denpasar'],
                         'tags' => ['Ayam', 'Base Genep', 'Pedas'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Ayam_Betutu.jpg/800px-Ayam_Betutu.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Betutu',
                         'wiki_summary' => 'Betutu adalah lauk yang terbuat dari ayam atau bebek yang utuh yang berisi bumbu, kemudian dipanggang dalam api sekam.'
                     ],
@@ -430,7 +365,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Kuta', 'Sanur'],
                         'tags' => ['Sate', 'Cincang', 'Sereh'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Sate_lilit.jpg/800px-Sate_lilit.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Sate_lilit',
                         'wiki_summary' => 'Sate lilit adalah sebuah varian sate khas Bali. Sate ini dibuat dari daging babi, ikan, ayam, daging sapi, atau bahkan kura-kura yang dicincang halus.'
                     ]
@@ -449,7 +384,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Mataram', 'Sade'],
                         'tags' => ['Ayam', 'Bakar', 'Pedas Kencur'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Ayam_Taliwang_Lombok.jpg/800px-Ayam_Taliwang_Lombok.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Ayam_Taliwang',
                         'wiki_summary' => 'Ayam Taliwang adalah makanan khas yang berasal dari Taliwang, Sumbawa Barat, Nusa Tenggara Barat, berupa ayam bakar pedas.'
                     ]
@@ -468,7 +403,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Kupang', 'Soe'],
                         'tags' => ['Daging', 'Asap', 'Kosambi'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Sei_sapi_NTT.jpg/800px-Sei_sapi_NTT.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Se%27i',
                         'wiki_summary' => 'Se\'i adalah hidangan daging asap khas Provinsi Nusa Tenggara Timur yang dibuat menggunakan teknik pengasapan kayu kosambi.'
                     ]
@@ -491,7 +426,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Agats', 'Jayapura'],
                         'tags' => ['Sagu', 'Bubur Kental', 'Tradisional'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Papeda_ikan_kuah_kuning.jpg/800px-Papeda_ikan_kuah_kuning.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Papeda',
                         'wiki_summary' => 'Papeda adalah makanan berupa bubur sagu khas Papua dan Maluku yang biasanya disajikan dengan mubara atau ikan tongkol yang dibumbui dengan kunyit.'
                     ]
@@ -529,7 +464,7 @@ class TribeFoodRecommendationSeeder extends Seeder
                         'where_to_find' => ['Ambon', 'Banda Neira'],
                         'tags' => ['Ikan', 'Kunyit', 'Pedas Asam'],
                         'category' => 'main_course',
-                        'image_url' => 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=800',
+                        'image_url' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Papeda_ikan_kuah_kuning.jpg/800px-Papeda_ikan_kuah_kuning.jpg',
                         'wiki_url' => 'https://id.wikipedia.org/wiki/Colo-colo',
                         'wiki_summary' => 'Colo-colo adalah sambal khas daerah Maluku yang rasanya pedas asam segar, sangat populer disajikan bersama ikan bakar.'
                     ]
